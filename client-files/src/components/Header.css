@@ -1,0 +1,31 @@
+/* src/components/Header.css */
+.header-container { /* This class is now the grid area for the header */
+  /* Styles moved to App.css for grid positioning */
+  display: flex;
+  justify-content: flex-end; /* Push items to the right */
+  align-items: center;
+  /* border-bottom: 1px solid #4a5568; */
+}
+
+.header-content {
+  display: flex;
+  justify-content: flex-end; /* Aligns content to the right */
+  width: 100%; /* Take full width of its container */
+}
+
+.header-right-global span {
+  margin-left: 20px;
+  margin-right: 15px;
+  cursor: pointer;
+  color: #a0aec0; /* Ensure text color */
+
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle; /* Align with text */
+  margin-bottom: 10px;
+}
