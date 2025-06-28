@@ -26,6 +26,9 @@ import "./Header.css";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+import {FaUserCircle} from 'react-icons/fa';
+
+
 function Header() {
   const { logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -58,10 +61,8 @@ function Header() {
       <div className="header-content">
         <div className="header-right-global" ref={menuRef}>
           <span className="user-info">John Doe</span>
-          <img
-            src="https://placehold.co/40x40/045093/ffffff?text=JD"
-            className="profile-picture"
-            alt="Profile"
+          <FaUserCircle 
+            style={{ color: 'grey', fontSize: '34px' }} 
             onClick={() => setMenuOpen((prev) => !prev)}
           />
 

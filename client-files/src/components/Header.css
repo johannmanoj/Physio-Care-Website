@@ -10,6 +10,13 @@
   width: 100%;
 }
 
+.header-right-global {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+
+}
+
 .header-right-global span {
   margin-left: 20px;
   margin-right: 15px;

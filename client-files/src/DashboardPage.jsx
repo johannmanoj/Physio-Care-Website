@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './DashboardPage.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import prof_image from './assets/clinic-logo.png'
+
+import { FaRegCalendarCheck, FaStethoscope  } from 'react-icons/fa';
+import { TbListDetails } from 'react-icons/tb'
+import { BiTimeFive } from 'react-icons/bi'
 
 
 
@@ -24,11 +29,50 @@ function DashboardPage() {
   return (
     <div>
       <div className='dashboard-card-row'>
+
+        <div className='dashboard-card-single'>
+
+          <div className='dashboard-stats'>
+            <FaRegCalendarCheck style={{ color: 'grey', fontSize: '34px' }} />
+            <div className='dashboard-stats-set'>
+              <div className='dashboard-stats-header'>Today’s Appointments</div>  
+              <div>50</div>  
+            </div>
+          </div>
+
+          <div className='dashboard-stats'>
+            <FaStethoscope style={{ color: 'grey', fontSize: '34px' }} />
+            <div className='dashboard-stats-set'>
+              <div className='dashboard-stats-header'>Pending Treatments</div>  
+              <div>60</div>  
+            </div>
+          </div>
+
+          <div className='dashboard-stats'>
+            <TbListDetails style={{ color: 'grey', fontSize: '34px' }} />
+            <div className='dashboard-stats-set'>
+              <div className='dashboard-stats-header'>Completed Sessions</div>  
+              <div>25</div>  
+            </div>
+          </div>
+
+          <div className='dashboard-stats'>
+            <BiTimeFive style={{ color: 'grey', fontSize: '34px' }} />
+            <div className='dashboard-stats-set'>
+              <div className='dashboard-stats-header'>Sessions Time</div>  
+              <div>60</div>  
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div className='dashboard-card-row'>
         <div className='dashboard-card'>
           
           <div className='dashboard-card-header'>
             <div className='dashboard-card-header-name'>Appointments</div> 
-            <div className='dashboard-card-header-link' onClick={() => navigate("/appointments")}>More..</div>
+            {/* <div className='dashboard-card-header-link' onClick={() => navigate("/appointments")}>More..</div> */}
+            <button className='dashboard-card-button' onClick={() => navigate("/appointments")}>View All</button>
           </div>
           <table className='db-appointment-table'>
             <thead>
@@ -55,17 +99,17 @@ function DashboardPage() {
         </div>
         <div className='dashboard-card'>
           <div className='dashboard-card-header'>Patients</div>
-          <div></div>
+          <div className='dashboard-card-default-text'>No patients to display</div>
         </div>
       </div>
       <div className='dashboard-card-row'>
         <div className='dashboard-card'>
           <div className='dashboard-card-header'>Assessments</div>
-          <div></div>
+          <div className='dashboard-card-default-text'>No assessments to display</div>
         </div>
         <div className='dashboard-card'>
           <div className='dashboard-card-header'>Treatments</div>
-          <div></div>
+          <div className='dashboard-card-default-text'>No treatments to display</div>
         </div>
       </div>
       

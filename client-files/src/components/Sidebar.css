@@ -9,7 +9,7 @@
 .sidebar-header {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .sidebar-header img {
@@ -28,7 +28,16 @@
   padding: 0;
 }
 
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 20px 0px;
+  padding-left: 10px;
+}
+
 .sidebar-menu .menu-item {
+  
   margin-bottom: 10px;
 }
 
@@ -41,7 +50,8 @@
   border-radius: 5px;
 }
 
-.sidebar-menu .menu-item a:hover {
+.sidebar-menu .menu-item:hover {
+  border-radius: 5px;
   background-color: #4a5568;
 }
 
