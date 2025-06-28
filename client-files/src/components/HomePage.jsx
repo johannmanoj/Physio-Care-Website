@@ -4,11 +4,12 @@ import Header from './Header';
 import './HomePage.css';
 import { Routes, Route } from 'react-router-dom';
 import DashboardPage from '../DashboardPage';
-import PlayersPage from './PlayersPage';
-import TeamsPage from './TeamsPage';
+import AppointmentsPage from './AppointmentsPage';
+import PatientList from './PatientListPage';
 import ProfilePage from './ProfilePage';
 import BillingPage from './BillingPage'
-import { useState } from 'react';
+import PatientPage from './PatientPage';
+
 
 function App({}) {
   return (
@@ -18,10 +19,11 @@ function App({}) {
         <Header />
         <Routes className="testt">
           <Route path="/" element={<DashboardPage />} />
-          <Route path="/players" element={<PlayersPage />} />
-          <Route path="/teams" element={<TeamsPage />} />
+          <Route path="/appointments" element={<AppointmentsPage />} />
+          <Route path="/patientsList" element={<PatientList />} />
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/patientInfo" element={<PatientPage />} />
         </Routes>
       </div>
     </div>

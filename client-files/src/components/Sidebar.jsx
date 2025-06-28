@@ -1,13 +1,15 @@
 import React from 'react';
 import './Sidebar.css'; // For sidebar specific styles
 import { Link } from 'react-router-dom';
+import image from '../assets/clinic-logo.png'
 
 
 function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <span>Cricket Clinic</span>
+        <img src={image} alt="logo"/>
+        {/* <span>Cricket Clinic</span> */}
       </div>
       <ul className="sidebar-menu">
         <li className="menu-item">
@@ -16,20 +18,20 @@ function Sidebar() {
         </li>
         <li className="menu-item">
           <i className="icon-players"></i>
-          <Link to="/players">Appointments</Link>
+          <Link to="/appointments">Appointments</Link>
         </li>
-        <li className="menu-item">
+        {/* <li className="menu-item">
           <i className="icon-teams"></i>
           <Link to="/teams">Assessments</Link>
-        </li>
+        </li> */}
         <li className="menu-item">
           <i className="icon-teams"></i>
-          <Link to="/teams">Patients</Link>
+          <Link to="/patientsList">Patients</Link>
         </li>
-        <li className="menu-item">
+        {/* <li className="menu-item">
           <i className="icon-teams"></i>
           <Link to="/teams">Treatments</Link>
-        </li>
+        </li> */}
         <li className="menu-item">
           <i className="icon-teams"></i>
           <Link to="/billing">Billing</Link>

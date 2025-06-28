@@ -7,11 +7,11 @@ function ProfilePage() {
       <h1>Profile Page</h1>
       <div className='profile-field-row'>
         <div className='profile-field'>
-            <label htmlFor="name">Name</label>
+            <label htmlFor="therapist-id">Therapist ID</label>
             <input type="text" />
         </div>
         <div className='profile-field'>
-            <label htmlFor="role">Role</label>
+            <label htmlFor="name">Name</label>
             <input type="text" />
         </div>
       </div>
@@ -31,22 +31,13 @@ function ProfilePage() {
             <input type="text" /> 
         </div>
         <div className='profile-field'>
-            <label htmlFor="password">Password</label>
+            <label htmlFor="specialization">Specialization</label>
             <input type="text" /> 
         </div>
       </div>
       <div className='profile-save'>
         <button>Save</button>
       </div>
-      
-
-      
-      
-      
-      
-      
-      
-      
     </div>
   );
 }

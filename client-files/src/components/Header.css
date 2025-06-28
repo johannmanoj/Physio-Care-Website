@@ -1,23 +1,20 @@
-/* src/components/Header.css */
-.header-container { /* This class is now the grid area for the header */
-  /* Styles moved to App.css for grid positioning */
+.header-container { 
   display: flex;
-  justify-content: flex-end; /* Push items to the right */
+  justify-content: flex-end; 
   align-items: center;
-  /* border-bottom: 1px solid #4a5568; */
 }
 
 .header-content {
   display: flex;
-  justify-content: flex-end; /* Aligns content to the right */
-  width: 100%; /* Take full width of its container */
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .header-right-global span {
   margin-left: 20px;
   margin-right: 15px;
   cursor: pointer;
-  color: #a0aec0; /* Ensure text color */
+  color: #a0aec0; 
 
 }
 
@@ -26,6 +23,42 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  vertical-align: middle; /* Align with text */
+  vertical-align: middle; 
   margin-bottom: 10px;
+}
+
+.profile-menu {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background-color: #1d2636;           
+  border: 1px solid #2b364a;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  padding: 6px 0;
+  z-index: 100;
+  min-width: 160px;
+}
+
+/* Menu item styling */
+.profile-menu button {
+  background: none;
+  border: none;
+  color: #e2e8f0;
+  text-align: left;
+  padding: 10px 16px;
+  width: 100%;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Hover effect */
+.profile-menu button:hover {
+  background-color: #2c3a4d;
+}
+
+/* Divider between items */
+.profile-menu button + button {
+  border-top: 1px solid #324055;
 }

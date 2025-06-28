@@ -12,9 +12,19 @@
 }
 
 .dashboard-card-header{
+  display: flex;
+  flex-direction: row;
   color: white;
   font-weight: bold;
   margin: 10px;
+}
+
+.dashboard-card-header-name{
+  width: 88%;
+}
+
+.dashboard-card-header-link:hover{
+  color: bisque;
 }
 
 .db-appointment-table {

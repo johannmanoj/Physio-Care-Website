@@ -1,52 +1,54 @@
-import Sidebar from './components/Sidebar.jsx';
-import Header from './components/Header.jsx';
-import PlayersPage from './components/PlayersPage.jsx';
+import React, { useEffect, useState } from 'react';
 import './DashboardPage.css';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
+
 
 function DashboardPage() {
+  const [patientData, setPatientData] = useState([]);
+  
+  useEffect(() => {
+    axios.post('http://localhost:3000/api/players/get-players-list')
+      .then((response) => {
+        setPatientData(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching players data:', error);
+      });
+  }, []);
+
+  const navigate = useNavigate();
+  
+
   return (
     <div>
       <div className='dashboard-card-row'>
         <div className='dashboard-card'>
-          <div className='dashboard-card-header'>Appointments</div>
+          
+          <div className='dashboard-card-header'>
+            <div className='dashboard-card-header-name'>Appointments</div> 
+            <div className='dashboard-card-header-link' onClick={() => navigate("/appointments")}>More..</div>
+          </div>
           <table className='db-appointment-table'>
             <thead>
-              <th>Sl No</th>
-              <th>Name</th>
-              <th>Date</th>
-              <th>Time</th>
+              <tr>
+                <th>Appt No</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
             </thead>
             <tbody>
-              <tr key={1}>
-                <td>1</td>
-                <td>Steve</td>
-                <td>27-Jun</td>
-                <td>10 AM</td>
-              </tr>
-              <tr key={2}>
-                <td>2</td>
-                <td>Tony</td>
-                <td>27-Jun</td>
-                <td>10 AM</td>
-              </tr>
-              <tr key={3}>
-                <td>3</td>
-                <td>Natasha</td>
-                <td>27-Jun</td>
-                <td>10 AM</td>
-              </tr>
-              <tr key={4}>
-                <td>4</td>
-                <td>Bruce</td>
-                <td>27-Jun</td>
-                <td>10 AM</td>
-              </tr>
-              <tr key={5}>
-                <td>5</td>
-                <td>Clint</td>
-                <td>27-Jun</td>
-                <td>10 AM</td>
-              </tr>
+              
+              {patientData.slice(0, 5).map((patient) => (
+                <tr key={patient.id}>
+                  <td>{patient.appointment_id}</td>
+                  <td>{patient.patient_name}</td>
+                  <td>{patient.date}</td>
+                  <td>{patient.time}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
           
