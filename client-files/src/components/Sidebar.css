@@ -9,13 +9,13 @@
 .sidebar-header {
   display: flex;
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: 35px;
 }
 
 .sidebar-header img {
-  width: 150px;
-  height: 45px;
-  margin-left: 40px;
+  width: 185px;
+  height: 40px;
+  margin-left: 25px;
 }
 
 .sidebar-header span {
