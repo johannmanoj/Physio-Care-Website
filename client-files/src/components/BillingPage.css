@@ -1,0 +1,152 @@
+/* ─────────── Base Layout ─────────── */
+
+:root {
+  --bg-main:      #0e1725;
+  --bg-card:      #1b2738;
+  --bg-input:     #253349;
+  --bg-table:     #222f44;
+  --border:       #34435f;
+  --text-main:    #dbe4f3;
+  --text-muted:   #92a4c0;
+  --accent:       #3b82f6;
+  --accent-hover: #60a5fa;
+}
+
+*{ box-sizing:border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.page-wrapper {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 32px;
+  background: var(--bg-card);
+  border-radius: 8px;
+}
+
+.page-title { margin: 0 0 24px; }
+
+/* ─────────── Sections ─────────── */
+
+.section      { margin-bottom: 32px; }
+.section-title{ margin: 0 0 16px; font-size:1.25rem; color: var(--accent); }
+
+/* ─────────── Form Elements ─────────── */
+
+.form-group      { display:flex; flex-direction:column; gap:4px; }
+.form-group label{ font-size:0.85rem; color: var(--text-muted); }
+
+input, select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font: inherit;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter: invert(1);
+}
+
+.num-input{ width: 80px; text-align:right; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  gap: 20px;
+}
+
+.grid-span-2{ grid-column: span 2; }
+
+@media (max-width:600px){
+  .grid-span-2{ grid-column: span 1; }
+}
+
+/* ─────────── Table ─────────── */
+
+.table-wrapper { overflow-x:auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-table);
+  border: 1px solid var(--border);
+}
+
+th, td { padding: 10px 12px; }
+
+th {
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+td input { width: 100%; background: transparent; border: none; padding:0; }
+
+.num { text-align: right; }
+
+/* ─────────── Summary Card ─────────── */
+
+.summary-grid{
+  display:grid;
+  grid-template-columns: 1fr 260px;
+}
+
+.summary-card {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total{ font-size:1.1rem; font-weight:600; }
+
+hr{ border: none; border-top:1px solid var(--border); }
+
+/* ─────────── Buttons ─────────── */
+
+.actions   { display:flex; flex-wrap:wrap; gap:12px; }
+
+button {
+  font: inherit;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary{
+  background: var(--accent);
+  color:#fff;
+}
+.btn-primary:hover{ background: var(--accent-hover); }
+
+.btn-secondary{
+  background: var(--bg-input);
+  color: var(--text-main);
+}
+.btn-secondary:hover{ background: var(--border); }
+
+.btn-link{
+  background: transparent;
+  color: var(--text-muted);
+  margin-left:auto;
+}
+.btn-link:hover{ color: var(--accent-hover); }
