@@ -28,7 +28,7 @@ function Sidebar() {
         
         <li className="menu-item">
           <FaUserInjured  style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/patientsList">Patients</Link>
+          <Link to="/patientsPage">Patients</Link>
         </li>
         
         <li className="menu-item">

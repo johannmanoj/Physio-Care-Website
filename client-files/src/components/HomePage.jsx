@@ -9,6 +9,7 @@ import PatientList from './PatientListPage';
 import ProfilePage from './ProfilePage';
 import BillingPage from './BillingPage'
 import PatientPage from './PatientPage';
+import PatientsPage from './PatientsPage';
 
 
 function App({}) {
@@ -24,6 +25,7 @@ function App({}) {
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/patientInfo" element={<PatientPage />} />
+          <Route path="/patientsPage" element={<PatientsPage />} />
         </Routes>
       </div>
     </div>

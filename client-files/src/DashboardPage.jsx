@@ -11,20 +11,32 @@ import { BiTimeFive } from 'react-icons/bi'
 
 
 function DashboardPage() {
+  const navigate = useNavigate();
+
+  const [appointmentData, setAppointmnetData] = useState([]);
   const [patientData, setPatientData] = useState([]);
   
   useEffect(() => {
-    axios.post('http://localhost:3000/api/players/get-players-list')
+    axios.post('http://localhost:3000/api/players/get-appointment-list')
+      .then((response) => {
+        setAppointmnetData(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching appointment data:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.post('http://localhost:3000/api/players/get-patient-list')
       .then((response) => {
         setPatientData(response.data.data);
       })
       .catch((error) => {
-        console.error('Error fetching players data:', error);
+        console.error('Error fetching patient data:', error);
       });
   }, []);
 
-  const navigate = useNavigate();
-  
+
 
   return (
     <div>
@@ -71,7 +83,6 @@ function DashboardPage() {
           
           <div className='dashboard-card-header'>
             <div className='dashboard-card-header-name'>Appointments</div> 
-            {/* <div className='dashboard-card-header-link' onClick={() => navigate("/appointments")}>More..</div> */}
             <button className='dashboard-card-button' onClick={() => navigate("/appointments")}>View All</button>
           </div>
           <table className='db-appointment-table'>
@@ -85,7 +96,7 @@ function DashboardPage() {
             </thead>
             <tbody>
               
-              {patientData.slice(0, 5).map((patient) => (
+              {appointmentData.slice(0, 5).map((patient) => (
                 <tr key={patient.id}>
                   <td>{patient.appointment_id}</td>
                   <td>{patient.patient_name}</td>
@@ -98,10 +109,36 @@ function DashboardPage() {
           
         </div>
         <div className='dashboard-card'>
-          <div className='dashboard-card-header'>Patients</div>
-          <div className='dashboard-card-default-text'>No patients to display</div>
+          <div className='dashboard-card-header'>
+            <div className='dashboard-card-header-name'>Patients</div> 
+            <button className='dashboard-card-button' onClick={() => navigate("/patientsPage")}>View All</button>
+          </div>
+          <table className='db-appointment-table'>
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Last Visit</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              {patientData.slice(0, 5).map((patient) => (
+                <tr key={patient.id}>
+                  <td>{patient.patient_id}</td>
+                  <td>{patient.name}</td>
+                  <td>{patient.contact_number}</td>
+                  <td>{patient.last_visit}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          
+          
         </div>
       </div>
+
       <div className='dashboard-card-row'>
         <div className='dashboard-card'>
           <div className='dashboard-card-header'>Assessments</div>

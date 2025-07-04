@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import AppointmentsTable from './AppointmentsTable';
+import PatientsTable from './PatientsTable';
 import Pagination from '../components/Pagination';
-import './AppointmentsPage.css';
+import './PatientsPage.css';
 import axios from 'axios';
 
-function AppointmentsPage() {
+function PatientsPage() {
   const [players, setPlayers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterTeam, setFilterTeam] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [playersPerPage] = useState(10); // As seen in the image "Showing 1 to 10 of 25"
 
-  const teams = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
+  const teams = ['active', 'inactive', 'onhold'];
 
   useEffect(() => {
-    axios.post('http://localhost:3000/api/players/get-appointment-list')
+    axios.post('http://localhost:3000/api/players/get-patient-list')
       .then((response) => {
         setPlayers(response.data.data);
       })
@@ -25,7 +25,7 @@ function AppointmentsPage() {
 
   // Filtering and Searching Logic
   const filteredPlayers = players.filter(player => {
-    const matchesSearch = player.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = player.patient_id.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesTeam = filterTeam ? player.status.toLowerCase() == filterTeam : true;
 
     return matchesSearch && matchesTeam;
@@ -40,9 +40,9 @@ function AppointmentsPage() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="players-page-container">
+    <div className="patients-page-container">
       <div className="page-header">
-        <h1>Appointments</h1>
+        <h1>Patients</h1>
         <div className="filters">
           
           <select
@@ -66,7 +66,7 @@ function AppointmentsPage() {
         </div>
       </div>
 
-      <AppointmentsTable players={currentPlayers} />
+      <PatientsTable players={currentPlayers} />
 
       <div className="table-footer">
         <span className="pagination-info">
@@ -84,4 +84,4 @@ function AppointmentsPage() {
   );
 }
 
-export default AppointmentsPage;
+export default PatientsPage;
