@@ -31,7 +31,7 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  vertical-align: middle; /* Align with text */
+  vertical-align: middle;
 }
 
 .view-button {
