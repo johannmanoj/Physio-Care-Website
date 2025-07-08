@@ -1,4 +1,259 @@
-/* ─────────── Base Layout ─────────── */
+.billing-page {
+   display: flex;
+   justify-content: center;
+}
+.billing-page-card {
+    background-color: #2d3748;
+    border-radius: 10px;
+    width: 70%;
+}
+
+.billing-page h1 {
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    font-size:x-large;
+    font-weight: bold;
+}
+
+.billing-page h2 {
+    color: #00bf8a; 
+    /* color: #1772e9;  */
+    padding-left: 20px;
+    font-size:x-large;
+    font-weight: bold;
+}
+
+
+.billing-field-row {
+    display: flex;
+    flex-direction: row;
+    /* background-color: aqua; */
+}
+
+.billing-field {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px;
+}
+
+.billing-field-1 {
+  width: 100%;
+}
+.billing-field-2 {
+  background-color: #1772e9;
+  width: 50%;
+}
+
+.billing-field-3 {
+  width: 33%;
+}
+
+.billing-field label {
+    color: #cccccc;
+    margin-bottom: 8px;
+    margin-top: 5px;
+    margin-left: 2px;
+
+}
+
+.billing-field input {
+    border-radius: 5px;
+    height: 35px;
+    background-color: #3e4a64;
+    box-sizing: border-box;
+    padding: 12px;
+    border: none;
+    color: #ffffff;
+    font-size: 1em; 
+}
+
+.billing-field select {
+  border-radius: 5px;
+  height: 35px;
+  background-color: #3e4a64;
+  box-sizing: border-box;
+  /* padding: 12px; */
+  border: none;
+  color: #ffffff;
+  font-size: 1em; 
+  padding-left: 10px;
+}
+
+
+.billing-save {
+    display: flex;
+    justify-content: end;
+    padding: 20px;
+}
+
+.billing-save button {
+    width: 80px;
+    height: 35px;
+    background-color: #00bf8a; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.billing-save button:hover {
+    background-color: #00a377;
+    border-radius: 10px;
+}
+
+
+.billing-table-wrapper {
+  margin: 20px;
+}
+
+.billing-table-wrapper { overflow-x:auto; }
+
+.billing-table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #3b485e;
+
+  border: 1px solid var(--border);
+}
+
+.billing-table-wrapper th, td { padding: 10px 12px; }
+
+.billing-table-wrapper th {
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+.billing-table-wrapper td input { width: 100%; background: transparent; border: none; padding:0; color: white;}
+
+.num { text-align: right; }
+
+.billing-table-body{
+  background-color: #323d50;
+}
+
+
+
+
+
+
+
+
+.billing-summary-card {
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #3b485e;
+  /* border: 1px solid var(--border); */
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* width: 70%; */
+}
+
+.billing-summary-card input{
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  width: 60px;
+  align-items: end;
+  color: white;
+  text-align: right;
+}
+
+.billing-summary-row{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.billing-actions { 
+  display:flex; 
+  flex-wrap:wrap; 
+  gap:12px; 
+  padding: 20px
+}
+
+.billing-button {
+  font: inherit;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary{
+  background-color: #00bf8a;
+  color:#fff;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover{ background-color: #00a377; }
+
+.btn-secondary{
+  background-color: #414f68;
+  color: var(--text-main);
+  transition: background-color 0.3s ease;
+}
+.btn-secondary:hover{ background-color: #2f3a4d; }
+
+.btn-link{
+  background: transparent;
+  color: lightgray;
+  margin-left:auto;
+}
+.btn-link:hover{ color: var(--accent-hover); } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* :root {
   --bg-main:      #0e1725;
@@ -10,9 +265,9 @@
   --text-muted:   #92a4c0;
   --accent:       #3b82f6;
   --accent-hover: #60a5fa;
-}
+} */
 
-*{ box-sizing:border-box; } */
+/* *{ box-sizing:border-box; } */ 
 
 /* body {
   margin: 0;
@@ -20,7 +275,7 @@
   background: var(--bg-main);
   color: var(--text-main);
   line-height: 1.5;
-} */
+}
 
 .page-wrapper {
   max-width: 1000px;
@@ -32,12 +287,11 @@
 
 .page-title { margin: 0 0 24px; }
 
-/* ─────────── Sections ─────────── */
+
 
 .section      { margin-bottom: 32px; }
 .section-title{ margin: 0 0 16px; font-size:1.25rem; color: var(--accent); }
 
-/* ─────────── Form Elements ─────────── */
 
 .form-group      { display:flex; flex-direction:column; gap:4px; }
 .form-group label{ font-size:0.85rem; color: var(--text-muted); }
@@ -69,7 +323,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
   .grid-span-2{ grid-column: span 1; }
 }
 
-/* ─────────── Table ─────────── */
+
 
 .table-wrapper { overflow-x:auto; }
 
@@ -93,7 +347,7 @@ td input { width: 100%; background: transparent; border: none; padding:0; }
 
 .num { text-align: right; }
 
-/* ─────────── Summary Card ─────────── */
+
 
 .summary-grid{
   display:grid;
@@ -120,7 +374,7 @@ td input { width: 100%; background: transparent; border: none; padding:0; }
 
 hr{ border: none; border-top:1px solid var(--border); }
 
-/* ─────────── Buttons ─────────── */
+
 
 .actions   { display:flex; flex-wrap:wrap; gap:12px; }
 
@@ -149,4 +403,4 @@ button {
   color: var(--text-muted);
   margin-left:auto;
 }
-.btn-link:hover{ color: var(--accent-hover); }
+.btn-link:hover{ color: var(--accent-hover); } */
