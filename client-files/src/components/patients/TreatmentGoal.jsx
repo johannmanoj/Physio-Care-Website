@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 
-function MedicalInfoTab() {
-  const TABS = ['Vital Signs', 'Motor Assessment', 'Sensory Assessment'];
+function TreatmentGoal() {
+  const TABS = ['Short Term', 'Long Term', 'Treatment Plan', 'Home Programs', 'Date of Evaluation'];
   const [activeSelection , setActiveSelection] = useState(TABS[0])
 
   return (
@@ -24,4 +24,4 @@ function MedicalInfoTab() {
   );
 }
 
-export default MedicalInfoTab;
+export default TreatmentGoal;

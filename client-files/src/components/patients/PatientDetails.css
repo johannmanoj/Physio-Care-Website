@@ -1,3 +1,18 @@
+.patient-details-page-card {
+    background-color: #2d3748;
+    border-radius: 10px;
+    /* width: 70%; */
+    padding-right: 10px;
+    /* min-height: 500px; */
+}
+
+.patient-details-page h1 {
+    color: white;
+    padding: 20px;
+    font-size:x-large;
+    font-weight: bold;
+}
+
 .patient-header {
   display: flex;
   align-items: center;
@@ -11,6 +26,7 @@
 }
 
 .tab {
+  color: white;
   padding: 0.5rem 1rem;
   border: none;
   background: transparent;
@@ -27,4 +43,65 @@
 .tab--active {
   font-weight: 600;
   border-color: #007bff; /* primary colour */
+}
+
+
+.sub-tabs {
+  display: flex;
+  gap: 0.75rem;
+  padding-left: 20px;
+}
+
+.sub-tab {
+    border-radius: 5px;
+    background-color: #00bf8a;
+  color: white;
+
+  padding: 0.5rem 1rem;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  
+  transition: border-color 0.2s ease;
+}
+
+.sub-tab:hover {
+  
+    background-color: #00a377;
+
+}
+
+.sub-tab--active {
+    font-weight: 600;
+    background-color: #00a377;
+}
+
+
+
+
+
+.patient-details-save {
+    display: flex;
+    justify-content: end;
+    padding: 20px;
+}
+
+.patient-details-save button {
+  margin-left: 25px;
+    width: 80px;
+    height: 35px;
+    background-color: #00bf8a; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.patient-details-save button:hover {
+    background-color: #00a377;
+    border-radius: 10px;
 }

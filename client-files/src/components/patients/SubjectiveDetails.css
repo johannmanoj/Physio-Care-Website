@@ -1,0 +1,118 @@
+
+
+/* .subjective-details-page{
+    width: 100%;
+    background-color: aliceblue;
+} */
+
+
+
+
+.subjective-details-field-row {
+    display: flex;
+    flex-direction: row;
+    /* background-color: aqua; */
+}
+
+.subjective-details-field {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px;
+}
+
+.subjective-details-field-1 {
+  width: 100%;
+}
+.subjective-details-field-2 {
+  /* background-color: #1772e9; */
+  width: 50%;
+}
+
+.subjective-details-field-3 {
+  width: 33%;
+}
+
+.subjective-details-field label {
+    color: #cccccc;
+    margin-bottom: 8px;
+    margin-top: 5px;
+    margin-left: 2px;
+
+}
+
+.subjective-details-field input {
+    border-radius: 5px;
+    height: 35px;
+    background-color: #3e4a64;
+    box-sizing: border-box;
+    padding: 12px;
+    border: none;
+    color: #ffffff;
+    font-size: 1em; 
+}
+
+.subjective-details-field select {
+  border-radius: 5px;
+  height: 35px;
+  background-color: #3e4a64;
+  box-sizing: border-box;
+  /* padding: 12px; */
+  border: none;
+  color: #ffffff;
+  font-size: 1em; 
+  padding-left: 10px;
+}
+
+
+.subjective-details-save {
+    display: flex;
+    justify-content: end;
+    padding: 20px;
+}
+
+.subjective-details-save button {
+    width: 80px;
+    height: 35px;
+    background-color: #00bf8a; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.pain-assessment-card{
+  display: flex;
+}
+
+.pain-assessment-card-text{
+  width: 50%;
+}
+
+.pain-assessment-image-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  /* background-color: aqua; */
+  width: 50%;
+  border-radius: 10px;
+  
+}
+
+.pain-assessment-image-group img {
+  width: 320px;
+  border-radius: 10px;
+}
+
+.pain-assessment-dropdown-group{
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  /* background-color: aqua; */
+  width: 50%;
+}

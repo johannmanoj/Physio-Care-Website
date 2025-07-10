@@ -1,0 +1,27 @@
+.objective-fields-layout{
+    width: 50%;
+    display: flex;
+}
+
+
+.objective-fields-layout img {
+    border-radius: 10px;
+    width: 300px;
+    height: 500px;
+}
+
+.objective-fields-text {
+    width: 50%;
+    /* background-color: aqua; */
+}
+
+.on-palpation-image-group{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  /* background-color: aqua; */
+  width: 50%;
+  border-radius: 10px;
+}
