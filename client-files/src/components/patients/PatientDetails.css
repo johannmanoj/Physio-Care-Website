@@ -50,6 +50,7 @@
   display: flex;
   gap: 0.75rem;
   padding-left: 20px;
+  margin-bottom: 20px;
 }
 
 .sub-tab {

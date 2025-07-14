@@ -7,7 +7,42 @@ import body_image from '../../assets/body-sketch.png'
 function SubjectiveDetails() {
     const TABS = ['Demographic Data', 'History', 'Pain Assessment'];
     const [activeSelection , setActiveSelection] = useState(TABS[0])
-    const [selection, setSelection] = useState('Present History'); // Default role
+    const [selection, setSelection] = useState('Present Medical History'); // Default role
+    const [expandedIndex, setExpandedIndex] = useState(null);
+
+    const history_data = [
+      {
+        date: "25th June, 2025",
+        description:
+          "Twisted ankle while stepping off a curb. Swelling started immediately. Could not put weight on foot.",
+      },
+      {
+        date: "28th June, 2025",
+        description:
+          "Lower back pain after lifting a heavy box. Pain worsens when bending or standing for long.",
+      },
+      {
+        date: "30th June, 2025",
+        description:
+          "Sharp pain in right shoulder after sudden throw during cricket match. Limited arm movement.",
+      },
+      {
+        date: "2nd July, 2025",
+        description:
+          "Neck stiffness after sleeping in awkward position. Difficulty turning head to the left.",
+      },
+      {
+        date: "5th July, 2025",
+        description:
+          "Left knee pain after jogging. Slight swelling noticed. Pain increases while climbing stairs.",
+      },
+    ];
+
+    function truncateWords(text, wordLimit) {
+      const words = text.split(" ");
+      if (words.length <= wordLimit) return text;
+      return words.slice(0, wordLimit).join(" ") + " ...";
+    }
 
   return (
     <div className='subjective-details-page'>
@@ -137,56 +172,50 @@ function SubjectiveDetails() {
           )}
 
           {selection != "Present Medical History" && (
-            
-            <table>
-              <tbody id="itemsBody" className="billing-table-body">
-                <tr>
-                  <th>Date</th>
-                  <td>
-                    <div>25th June, 2025</div>
-                  </td>                  
-                </tr>
-                <tr>
-                  <th>Description</th>
-                  <td>
-                    <div>Pain in the right knee from yesterday morning onwards. Couldnt walk or run.Started pain after hitting a wall two days back.</div>
-                  </td>                  
-                </tr>
-              </tbody>
-              <tbody id="itemsBody" className="billing-table-body">
-                <tr>
-                  <th>Date</th>
-                  <td>
-                    <div>25th June, 2025</div>
-                  </td>                  
-                </tr>
-                <tr>
-                  <th>Description</th>
-                  <td>
-                    <div>Pain in the right knee from yesterday morning onwards. Couldnt walk or run.Started pain after hitting a wall two days back.</div>
-                  </td>                  
-                </tr>
-              </tbody>
-              <tbody id="itemsBody" className="billing-table-body">
-                <tr>
-                  <th>Date</th>
-                  <td>
-                    <div>25th June, 2025</div>
-                  </td>                  
-                </tr>
-                <tr>
-                  <th>Description</th>
-                  <td>
-                    <div>Pain in the right knee from yesterday morning onwards. Couldnt walk or run.Started pain after hitting a wall two days back.</div>
-                  </td>                  
-                </tr>
-              </tbody>
-              
-
-              
-               
-              
-            </table>
+            <div className='history-details-card'>
+              <div className='history-details-card-header'>
+                <div>
+                  <label htmlFor="search">Search</label>
+                  <input type="text" />
+                </div>
+                <div>
+                  <label htmlFor="search">Date</label>
+                  <input type="date" />
+                </div>
+                
+              </div>
+              <div className="table-container">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history_data.map((row, index) => {
+                      const isExpanded = expandedIndex === index;
+                      return (
+                        <tr key={index}>
+                          <td>{row.date}</td>
+                          <td>
+                            {isExpanded ? row.description : truncateWords(row.description, 4)}
+                            <span
+                              className="arrow-icon"
+                              onClick={() =>
+                                setExpandedIndex(isExpanded ? null : index)
+                              }
+                            >
+                              {isExpanded ? " ▲" : " ▼"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
           
           

@@ -35,7 +35,7 @@
 }
 
 .view-button {
-  background-color: #4299e1;
+  background-color: #00bf8a;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -44,7 +44,7 @@
 }
 
 .view-button:hover {
-  background-color: #3182ce;
+  background-color: #00a377;
 }
 
 .status-badge {
