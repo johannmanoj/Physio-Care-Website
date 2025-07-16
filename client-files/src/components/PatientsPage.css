@@ -1,9 +1,8 @@
 .patients-page-container {
-  /* Remove width/height/margin/padding that conflict with grid layout */
-  background-color: #2d3748; /* Inner content background */
+  background-color: #2d3748; 
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px; /* Ensure internal padding */
+  padding: 20px; 
 }
 
 .page-header {
@@ -20,8 +19,8 @@
 }
 
 .page-header .filters {
-  display: flex; /* Arrange filters horizontally */
-  gap: 10px; /* Space between filters */
+  display: flex; 
+  gap: 10px; 
 }
 
 .page-header .filters input,
@@ -31,7 +30,6 @@
   background-color: #4a5568;
   color: #edf2f7;
   border-radius: 4px;
-  /* margin-left: 10px; removed as gap handles it */
 }
 
 .player-list-controls {
@@ -63,5 +61,3 @@
   box-shadow: 0 0 0 2px #3B82F6;
   transition: box-shadow 0.15s ease;
 }
-
-/* ... rest of the CSS for players-page-container elements ... */

@@ -1,32 +1,8 @@
-// import React from 'react';
-// import './Header.css';
-// import { useAuth } from "../context/AuthContext";
-
-
-// function Header() {
-//   const { isLoggedIn, logout } = useAuth();
-
-//   return (
-//     <header className="header-container"> 
-//       <div className="header-content"> 
-//         <div className="header-right-global">
-//           <span className="user-info">John Doe</span>
-//           <img src="https://placehold.co/40x40/045093/ffffff?text=JD" className="profile-picture" onClick={logout}/>
-//         </div>
-//       </div>
-//     </header>
-//   );
-// }
-
-// export default Header;
-
-
 import React, { useState, useRef, useEffect } from "react";
 import "./Header.css";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-import {FaUserCircle} from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
 
 
 function Header() {
@@ -35,7 +11,6 @@ function Header() {
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
-  // Close on outside click
   useEffect(() => {
     const handleOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -61,8 +36,8 @@ function Header() {
       <div className="header-content">
         <div className="header-right-global" ref={menuRef}>
           <span className="user-info">John Doe</span>
-          <FaUserCircle 
-            style={{ color: 'grey', fontSize: '34px' }} 
+          <FaUserCircle
+            style={{ color: 'grey', fontSize: '34px' }}
             onClick={() => setMenuOpen((prev) => !prev)}
           />
 

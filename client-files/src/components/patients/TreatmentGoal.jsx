@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-
 function TreatmentGoal() {
   const TABS = ['Short Term', 'Long Term', 'Treatment Plan', 'Home Programs', 'Date of Evaluation'];
-  const [activeSelection , setActiveSelection] = useState(TABS[0])
+  const [activeSelection, setActiveSelection] = useState(TABS[0])
 
   return (
     <>
@@ -18,8 +17,6 @@ function TreatmentGoal() {
           </button>
         ))}
       </nav>
-      
-      
     </>
   );
 }

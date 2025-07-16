@@ -1,6 +1,6 @@
 .pagination-nav {
   display: flex;
-  justify-content: center; /* Adjust as needed */
+  justify-content: center; 
 }
 
 .pagination-list {
@@ -37,5 +37,5 @@
 .pagination-list .page-item.disabled .page-link {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #2d3748; /* Keep dark background */
+  background-color: #2d3748; 
 }

@@ -33,7 +33,7 @@ function PatientDetails() {
         </header>
 
         {/* ── tab panels ─────────────────────────────────── */}
-        {activeTab === 'Subjective'   && <SubjectiveDetails />}
+        {activeTab === 'Subjective' && <SubjectiveDetails />}
         {activeTab === 'Objective' && <ObjectiveDetails />}
         {activeTab === 'On Examination' && <OnExamination />}
         {activeTab === 'Differential Diagnosis' && <DifferentialDiagnosis />}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AppointmentsTable from './AppointmentsTable';
-import Pagination from '../components/Pagination';
+import Pagination from './common/Pagination';
 import './AppointmentsPage.css';
 import axios from 'axios';
 
@@ -319,7 +319,7 @@ function AppointmentsPage() {
         </div>
       </div>
 
-      <AppointmentsTable players={currentPlayers} />
+      <AppointmentsTable appointments={currentPlayers} />
 
       <div className="table-footer">
         <span className="pagination-info">

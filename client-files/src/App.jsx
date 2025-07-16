@@ -1,26 +1,11 @@
-// import React from 'react';
-// import LoginPage from './LoginPage.jsx';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <LoginPage />
-//   );
-// }
-
-// export default App;
-
-
-
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-import LoginPage from "./LoginPage";
-import HomePage from "./components/HomePage";
+import LoginPage from "./components/auth/LoginPage";
+import HomePage from "./components/common/HomePage";
 
 export default function App() {
   const { isLoggedIn, loading } = useAuth();
-
-  if (loading) return null;          // or a nice loader
+  if (loading) return null;         
 
   return (
     <Routes>

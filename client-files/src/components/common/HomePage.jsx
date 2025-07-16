@@ -4,14 +4,13 @@ import Header from './Header';
 import './HomePage.css';
 import { Routes, Route } from 'react-router-dom';
 import DashboardPage from '../DashboardPage';
-import AppointmentsPage from './AppointmentsPage';
-import PatientList from './PatientListPage';
-import ProfilePage from './ProfilePage';
-import BillingPage from './BillingPage'
-import PatientsPage from './PatientsPage';
-import PatientDetails from './patients/PatientDetails'
+import AppointmentsPage from '../AppointmentsPage';
+import ProfilePage from '../ProfilePage';
+import BillingPage from '../BillingPage'
+import PatientsPage from '../PatientsPage';
+import PatientDetails from '../patients/PatientDetails'
 
-function App({}) {
+function App() {
   return (
     <div className="app-container">
       <Sidebar />
@@ -20,7 +19,6 @@ function App({}) {
         <Routes className="testt">
           <Route path="/" element={<DashboardPage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
-          <Route path="/patientsList" element={<PatientList />} />
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/patientInfo" element={<PatientDetails />} />

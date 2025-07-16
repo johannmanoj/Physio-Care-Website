@@ -3,7 +3,7 @@ import './PatientsTable.css'; // For table specific styles
 import { useNavigate } from "react-router-dom";
 
 
-function PatientsTable({ players }) {
+function PatientsTable({ patients }) {
   const navigate = useNavigate();
 
   return (
@@ -22,20 +22,19 @@ function PatientsTable({ players }) {
           </tr>
         </thead>
         <tbody>
-          {players.map(player => (
-            <tr key={player.id}>
-              <td>{player.patient_id}</td>
-              <td>{player.name}</td>
-              <td>{player.gender}</td>
-              <td>{player.age}</td>
-              <td>{player.contact_number}</td>
-              <td>{player.last_visit}</td>
+          {patients.map(patient => (
+            <tr key={patient.id}>
+              <td>{patient.patient_id}</td>
+              <td>{patient.name}</td>
+              <td>{patient.gender}</td>
+              <td>{patient.age}</td>
+              <td>{patient.contact_number}</td>
+              <td>{patient.last_visit}</td>
               <td>
-                <span className={`status-badge ${player.status.toLowerCase()}`}>
-                  {player.status}
+                <span className={`status-badge ${patient.status.toLowerCase()}`}>
+                  {patient.status}
                 </span>
               </td>
-              {/* <td className='appointment-status'>{player.status}</td> */}
               <td>
                 <button className="view-button" onClick={() => navigate("/patientInfo")}>View</button>
               </td>

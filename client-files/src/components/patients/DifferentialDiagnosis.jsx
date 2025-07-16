@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 function DifferentialDiagnosis() {
   const TABS = ['Special Tests', 'Provisional Diagnosis', 'Final Diagnosis'];
-  const [activeSelection , setActiveSelection] = useState(TABS[0])
+  const [activeSelection, setActiveSelection] = useState(TABS[0])
 
   return (
     <>
@@ -18,8 +18,6 @@ function DifferentialDiagnosis() {
           </button>
         ))}
       </nav>
-      
-      
     </>
   );
 }

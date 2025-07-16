@@ -7,32 +7,32 @@ function ProfilePage() {
       <h1>Profile Page</h1>
       <div className='profile-field-row'>
         <div className='profile-field'>
-            <label htmlFor="therapist-id">Therapist ID</label>
-            <input type="text" />
+          <label htmlFor="therapist-id">Therapist ID</label>
+          <input type="text" />
         </div>
         <div className='profile-field'>
-            <label htmlFor="name">Name</label>
-            <input type="text" />
-        </div>
-      </div>
-      <div className='profile-field-row'>
-        <div className='profile-field'>
-            <label htmlFor="email">Email</label>
-            <input type="text" />
-        </div>
-        <div className='profile-field'>
-            <label htmlFor="phone">Phone</label>
-            <input type="text" />
+          <label htmlFor="name">Name</label>
+          <input type="text" />
         </div>
       </div>
       <div className='profile-field-row'>
         <div className='profile-field'>
-            <label htmlFor="password">Password</label>
-            <input type="text" /> 
+          <label htmlFor="email">Email</label>
+          <input type="text" />
         </div>
         <div className='profile-field'>
-            <label htmlFor="specialization">Specialization</label>
-            <input type="text" /> 
+          <label htmlFor="phone">Phone</label>
+          <input type="text" />
+        </div>
+      </div>
+      <div className='profile-field-row'>
+        <div className='profile-field'>
+          <label htmlFor="password">Password</label>
+          <input type="text" />
+        </div>
+        <div className='profile-field'>
+          <label htmlFor="specialization">Specialization</label>
+          <input type="text" />
         </div>
       </div>
       <div className='profile-save'>

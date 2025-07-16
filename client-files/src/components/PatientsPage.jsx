@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PatientsTable from './PatientsTable';
-import Pagination from '../components/Pagination';
+import Pagination from './common/Pagination';
 import './PatientsPage.css';
 import axios from 'axios';
 
@@ -297,29 +297,29 @@ function PatientsPage() {
       <div className="page-header">
         <h1>Patients</h1>
         <div className="filters">
-          
+
           <select
             value={filterTeam}
             onChange={(e) => setFilterTeam(e.target.value)}
           >
-          <option value="">Filter by Status</option>
-          {teams.map((team) => (
-            <option key={team} value={team}>{team}</option>
-          ))}
+            <option value="">Filter by Status</option>
+            {teams.map((team) => (
+              <option key={team} value={team}>{team}</option>
+            ))}
           </select>
           <div className="search-bar-container">
-          <input
-            type="text"
-            placeholder="Search here..."
-            value={searchTerm}
-            className='search-input'
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+            <input
+              type="text"
+              placeholder="Search here..."
+              value={searchTerm}
+              className='search-input'
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
-      <PatientsTable players={currentPlayers} />
+      <PatientsTable patients={currentPlayers} />
 
       <div className="table-footer">
         <span className="pagination-info">

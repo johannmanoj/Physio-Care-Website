@@ -37,7 +37,7 @@
 }
 
 .sidebar-menu .menu-item {
-  
+
   margin-bottom: 10px;
 }
 
@@ -56,12 +56,11 @@
 }
 
 .sidebar-menu .menu-item.active a {
-  background-color: #4299e1; 
+  background-color: #4299e1;
   color: white;
 }
 
 .sidebar-menu .menu-item i {
   margin-right: 10px;
-  font-size: 18px; 
+  font-size: 18px;
 }
-

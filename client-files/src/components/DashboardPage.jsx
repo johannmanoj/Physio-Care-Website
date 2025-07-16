@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './DashboardPage.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { FaRegCalendarCheck, FaStethoscope  } from 'react-icons/fa';
+import { FaRegCalendarCheck, FaStethoscope } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb'
 import { BiTimeFive } from 'react-icons/bi'
 
@@ -519,7 +519,7 @@ function DashboardPage() {
 
   // const [appointmentData, setAppointmnetData] = useState([]);
   // const [patientData, setPatientData] = useState([]);
-  
+
   // useEffect(() => {
   //   axios.post('http://localhost:3000/api/players/get-appointment-list')
   //     .then((response) => {
@@ -547,46 +547,42 @@ function DashboardPage() {
       <div className='dashboard-card-row'>
 
         <div className='dashboard-card-single'>
-
           <div className='dashboard-stats'>
             <FaRegCalendarCheck style={{ color: 'grey', fontSize: '34px' }} />
             <div className='dashboard-stats-set'>
-              <div className='dashboard-stats-header'>Today’s Appointments</div>  
-              <div>50</div>  
+              <div className='dashboard-stats-header'>Today’s Appointments</div>
+              <div>50</div>
             </div>
           </div>
-
           <div className='dashboard-stats'>
             <FaStethoscope style={{ color: 'grey', fontSize: '34px' }} />
             <div className='dashboard-stats-set'>
-              <div className='dashboard-stats-header'>Pending Treatments</div>  
-              <div>60</div>  
+              <div className='dashboard-stats-header'>Pending Treatments</div>
+              <div>60</div>
             </div>
           </div>
-
           <div className='dashboard-stats'>
             <TbListDetails style={{ color: 'grey', fontSize: '34px' }} />
             <div className='dashboard-stats-set'>
-              <div className='dashboard-stats-header'>Completed Sessions</div>  
-              <div>25</div>  
+              <div className='dashboard-stats-header'>Completed Sessions</div>
+              <div>25</div>
             </div>
           </div>
-
           <div className='dashboard-stats'>
             <BiTimeFive style={{ color: 'grey', fontSize: '34px' }} />
             <div className='dashboard-stats-set'>
-              <div className='dashboard-stats-header'>Sessions Time</div>  
-              <div>60</div>  
+              <div className='dashboard-stats-header'>Sessions Time</div>
+              <div>60</div>
             </div>
           </div>
-          
+
         </div>
       </div>
       <div className='dashboard-card-row'>
         <div className='dashboard-card'>
-          
+
           <div className='dashboard-card-header'>
-            <div className='dashboard-card-header-name'>Appointments</div> 
+            <div className='dashboard-card-header-name'>Appointments</div>
             <button className='dashboard-card-button' onClick={() => navigate("/appointments")}>View All</button>
           </div>
           <table className='db-appointment-table'>
@@ -599,7 +595,7 @@ function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              
+
               {appointmentData.slice(0, 5).map((appointment) => (
                 <tr key={appointment.id}>
                   <td>{appointment.appointment_id}</td>
@@ -610,11 +606,10 @@ function DashboardPage() {
               ))}
             </tbody>
           </table>
-          
         </div>
         <div className='dashboard-card'>
           <div className='dashboard-card-header'>
-            <div className='dashboard-card-header-name'>Patients</div> 
+            <div className='dashboard-card-header-name'>Patients</div>
             <button className='dashboard-card-button' onClick={() => navigate("/patientsPage")}>View All</button>
           </div>
           <table className='db-appointment-table'>
@@ -627,7 +622,6 @@ function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              
               {patientData.slice(0, 5).map((patient) => (
                 <tr key={patient.id}>
                   <td>{patient.patient_id}</td>
@@ -638,8 +632,6 @@ function DashboardPage() {
               ))}
             </tbody>
           </table>
-          
-          
         </div>
       </div>
 
@@ -653,9 +645,6 @@ function DashboardPage() {
           <div className='dashboard-card-default-text'>No treatments to display</div>
         </div>
       </div>
-      
-      
-      
     </div>
   );
 }

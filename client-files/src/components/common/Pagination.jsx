@@ -1,6 +1,5 @@
-// src/components/Pagination.js
 import React from 'react';
-import './Pagination.css'; // For pagination specific styles
+import './Pagination.css';
 
 function Pagination({ playersPerPage, totalPlayers, paginate, currentPage, totalPages }) {
   const pageNumbers = [];
