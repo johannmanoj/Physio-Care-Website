@@ -1,26 +1,25 @@
 import './LoginPage.css'
-import HomePage from './components/HomePage'
 import React, { useState } from 'react';
 import { useAuth } from "./context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const EMAIL = "alex@gmail.com"
+  const PASSWORD = "h"
+
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('Trainer'); // Default role
- 
-
+  const [role, setRole] = useState('Trainer');
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(email=="alex@gmail.com" && password=="h"){
+    if (email == EMAIL && password == PASSWORD) {
       const testToken = "abc123";
       login(testToken);
       navigate("/");
-      
-    }else{
+    } else {
       alert("Invalid credentials");
     }
   };

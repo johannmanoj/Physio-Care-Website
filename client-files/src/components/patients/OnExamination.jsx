@@ -40,7 +40,7 @@ function MedicalInfoTab() {
       </nav>
       {activeSelection === "Motor Assessment" && (
         <div>
-          <div className="billing-table-wrapper">
+          <div className="onexamination-table-wrapper">
               <table>
                 <thead>
                   <tr>
@@ -52,7 +52,7 @@ function MedicalInfoTab() {
                     <th>Limitation</th>
                   </tr>
                 </thead>
-                <tbody id="itemsBody" className="billing-table-body">
+                <tbody id="itemsBody" className="onexamination-table-body">
                   {motor_assessment_data.map((assessment_data) =>(
                     <tr>
                       <td>{assessment_data.joint}</td>
