@@ -4,8 +4,8 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const EMAIL = "alex@gmail.com"
-  const PASSWORD = "h"
+  const EMAIL = "test@gmail.com"
+  const PASSWORD = "pass"
 
   const { login } = useAuth();
   const [email, setEmail] = useState('');
