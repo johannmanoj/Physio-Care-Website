@@ -7,13 +7,13 @@ import axios from 'axios';
 function AppointmentsPage() {
   // const [players, setPlayers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterTeam, setFilterTeam] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [playersPerPage] = useState(10); // As seen in the image "Showing 1 to 10 of 25"
+  const [appointmentsPerPage] = useState(10); // As seen in the image "Showing 1 to 10 of 25"
 
-  const teams = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
+  const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
 
-  const players = [
+  const appointments = [
     {
       id: 1,
       appointment_id: 'APT-1001',
@@ -277,18 +277,18 @@ function AppointmentsPage() {
   // }, []);
 
   // Filtering and Searching Logic
-  const filteredPlayers = players.filter(player => {
-    const matchesSearch = player.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesTeam = filterTeam ? player.status.toLowerCase() == filterTeam : true;
+  const filteredAppointments = appointments.filter(appointment => {
+    const matchesSearch = appointment.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = filterStatus ? appointment.status.toLowerCase() == filterStatus : true;
 
-    return matchesSearch && matchesTeam;
+    return matchesSearch && matchesStatus;
   });
 
   // Pagination Logic
-  const indexOfLastPlayer = currentPage * playersPerPage;
-  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
-  const currentPlayers = filteredPlayers.slice(indexOfFirstPlayer, indexOfLastPlayer);
-  const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+  const indexOfLastAppointment = currentPage * appointmentsPerPage;
+  const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
+  const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
+  const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -297,37 +297,37 @@ function AppointmentsPage() {
       <div className="page-header">
         <h1>Appointments</h1>
         <div className="filters">
-          
+
           <select
-            value={filterTeam}
-            onChange={(e) => setFilterTeam(e.target.value)}
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
           >
-          <option value="">Filter by Status</option>
-          {teams.map((team) => (
-            <option key={team} value={team}>{team}</option>
-          ))}
+            <option value="">Filter by Status</option>
+            {statuses.map((team) => (
+              <option key={team} value={team}>{team}</option>
+            ))}
           </select>
           <div className="search-bar-container">
-          <input
-            type="text"
-            placeholder="Search here..."
-            value={searchTerm}
-            className='search-input'
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+            <input
+              type="text"
+              placeholder="Search here..."
+              value={searchTerm}
+              className='search-input'
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
-      <AppointmentsTable appointments={currentPlayers} />
+      <AppointmentsTable appointments={currentAppointments} />
 
       <div className="table-footer">
         <span className="pagination-info">
-          Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPlayers.length)} of {filteredPlayers.length}
+          Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
         </span>
         <Pagination
-          playersPerPage={playersPerPage}
-          totalPlayers={filteredPlayers.length}
+          playersPerPage={appointmentsPerPage}
+          totalPlayers={filteredAppointments.length}
           paginate={paginate}
           currentPage={currentPage}
           totalPages={totalPages}

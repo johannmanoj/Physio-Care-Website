@@ -7,13 +7,13 @@ import axios from 'axios';
 function PatientsPage() {
   // const [players, setPlayers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterTeam, setFilterTeam] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [playersPerPage] = useState(10); // As seen in the image "Showing 1 to 10 of 25"
+  const [patientsPerPage] = useState(10); 
 
-  const teams = ['active', 'inactive', 'onhold'];
+  const statuses = ['active', 'inactive', 'onhold'];
 
-  const players = [
+  const patients = [
     {
       id: 1,
       patient_id: 'P1001',
@@ -277,18 +277,18 @@ function PatientsPage() {
   // }, []);
 
   // Filtering and Searching Logic
-  const filteredPlayers = players.filter(player => {
+  const filteredPatients = patients.filter(player => {
     const matchesSearch = player.patient_id.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesTeam = filterTeam ? player.status.toLowerCase() == filterTeam : true;
+    const matchesStatus = filterStatus ? player.status.toLowerCase() == filterStatus : true;
 
-    return matchesSearch && matchesTeam;
+    return matchesSearch && matchesStatus;
   });
 
   // Pagination Logic
-  const indexOfLastPlayer = currentPage * playersPerPage;
-  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
-  const currentPlayers = filteredPlayers.slice(indexOfFirstPlayer, indexOfLastPlayer);
-  const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+  const indexOfLastPlayer = currentPage * patientsPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - patientsPerPage;
+  const currentPlayers = filteredPatients.slice(indexOfFirstPlayer, indexOfLastPlayer);
+  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -299,11 +299,11 @@ function PatientsPage() {
         <div className="filters">
 
           <select
-            value={filterTeam}
-            onChange={(e) => setFilterTeam(e.target.value)}
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
           >
             <option value="">Filter by Status</option>
-            {teams.map((team) => (
+            {statuses.map((team) => (
               <option key={team} value={team}>{team}</option>
             ))}
           </select>
@@ -323,11 +323,11 @@ function PatientsPage() {
 
       <div className="table-footer">
         <span className="pagination-info">
-          Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPlayers.length)} of {filteredPlayers.length}
+          Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPatients.length)} of {filteredPatients.length}
         </span>
         <Pagination
-          playersPerPage={playersPerPage}
-          totalPlayers={filteredPlayers.length}
+          playersPerPage={patientsPerPage}
+          totalPlayers={filteredPatients.length}
           paginate={paginate}
           currentPage={currentPage}
           totalPages={totalPages}
