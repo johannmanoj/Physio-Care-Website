@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SubjectiveDetails.css'
 import body_image from '../../assets/body-sketch.png'
+import PainAssessmentSketch from './PainAssessmentSketch';
 
 
 function SubjectiveDetails() {
@@ -263,10 +264,11 @@ function SubjectiveDetails() {
               </div>
             </div>
 
-
+          
           </div>
           <div className='pain-assessment-image-group'>
-            <img src={body_image} alt="" />
+            {/* <img src={body_image} alt="" /> */}
+            <PainAssessmentSketch className="pain-assessment-image-group-sketch"/>
           </div>
 
         </div>

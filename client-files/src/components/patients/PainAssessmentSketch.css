@@ -1,0 +1,42 @@
+.pain-sketch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pain-sketch-canvas {
+  border: 2px solid #ffffff44;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: crosshair;
+}
+
+.pain-sketch-button {
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  margin: 10px;
+}
+
+/* Undo - green */
+.pain-sketch-button.undo {
+  background-color: #22c55e;
+  color: white;
+}
+
+.pain-sketch-button.undo:hover {
+  background-color: #16a34a;
+}
+
+/* Clear - red */
+.pain-sketch-button.clear {
+  background-color: #ef4444;
+  color: white;
+}
+
+.pain-sketch-button.clear:hover {
+  background-color: #dc2626;
+}

@@ -88,7 +88,7 @@
   align-items: center;
   flex-direction: column;
   
-  /* background-color: aqua; */
+  /* background-color: rgb(97, 187, 187); */
   width: 50%;
   border-radius: 10px;
   
@@ -97,6 +97,12 @@
 .pain-assessment-image-group img {
   width: 320px;
   border-radius: 10px;
+}
+
+.pain-assessment-image-group-sketch {
+  width: 1320px;
+  border-radius: 10px;
+  background-color: #3b82f6;
 }
 
 .pain-assessment-dropdown-group{
