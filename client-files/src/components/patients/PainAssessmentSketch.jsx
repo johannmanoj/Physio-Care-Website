@@ -15,7 +15,7 @@ function PainAssessmentSketch() {
     canvas.height = 500;
     const ctx = canvas.getContext("2d");
     ctx.lineCap = "round";
-    ctx.strokeStyle = "red";  // 🔴 drawing color is now red
+    ctx.strokeStyle = "red";  
     ctx.lineWidth = 3;
     ctxRef.current = ctx;
 
@@ -85,6 +85,16 @@ function PainAssessmentSketch() {
     setPaths([]);
   };
 
+  const handleSave = () => {
+  const canvas = canvasRef.current;
+  const image = canvas.toDataURL("image/png");
+
+  const link = document.createElement("a");
+  link.href = image;
+  link.download = "pain-assessment.png";
+  link.click();
+};
+
   useEffect(() => {
     redraw();
   }, [paths]);
@@ -105,6 +115,9 @@ function PainAssessmentSketch() {
         </button>
         <button onClick={handleClear} className="pain-sketch-button clear">
           Clear
+        </button>
+        <button onClick={handleSave} className="pain-sketch-button save">
+          Save
         </button>
       </div>
     </div>

@@ -40,3 +40,12 @@
 .pain-sketch-button.clear:hover {
   background-color: #dc2626;
 }
+
+.pain-sketch-button.save {
+  background-color: #14b8a6; 
+  color: white;
+}
+
+.pain-sketch-button.save:hover {
+  background-color: #0d9488; 
+}
