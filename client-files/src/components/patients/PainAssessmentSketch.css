@@ -1,14 +1,38 @@
 .pain-sketch-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  /* background-color: #16a34a; */
+  justify-content: center;
 }
 
 .pain-sketch-canvas {
-  border: 2px solid #ffffff44;
   border-radius: 10px;
   background-color: transparent;
   cursor: crosshair;
+  width: 628px;
+  height: 450px;
+  /* background-color: #ffffff; */
+}
+
+.pain-sketch-buttons {
+  height: 450px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pain-assessment-button {
+  width: 65px;
+  height: 65px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin: 10px;
+  margin-left: 40px;
+  padding: 5px;
 }
 
 .pain-sketch-button {
@@ -21,31 +45,30 @@
   margin: 10px;
 }
 
-/* Undo - green */
-.pain-sketch-button.undo {
+
+.pain-assessment-button.undo {
   background-color: #22c55e;
   color: white;
 }
 
-.pain-sketch-button.undo:hover {
+.pain-assessment-button.undo:hover {
   background-color: #16a34a;
 }
 
-/* Clear - red */
-.pain-sketch-button.clear {
+.pain-assessment-button.clear {
   background-color: #ef4444;
   color: white;
 }
 
-.pain-sketch-button.clear:hover {
+.pain-assessment-button.clear:hover {
   background-color: #dc2626;
 }
 
-.pain-sketch-button.save {
-  background-color: #14b8a6; 
+.pain-assessment-button.save {
+  background-color: #14b8a6;
   color: white;
 }
 
-.pain-sketch-button.save:hover {
-  background-color: #0d9488; 
+.pain-assessment-button.save:hover {
+  background-color: #0d9488;
 }

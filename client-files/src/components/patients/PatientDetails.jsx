@@ -7,9 +7,12 @@ import ObjectiveDetails from './ObjectiveDetails';
 import OnExamination from './OnExamination'
 import DifferentialDiagnosis from './DifferentialDiagnosis';
 import TreatmentGoal from './TreatmentGoal';
+import DemographicData from './DemographicData';
+import Physio from './Physio';
 
 function PatientDetails() {
-  const TABS = ['Subjective', 'Objective', 'On Examination', 'Differential Diagnosis', 'Treatment Goals'];
+  // const TABS = ['Demographic Data', 'Physio', 'Subjective', 'Objective', 'On Examination', 'Differential Diagnosis', 'Treatment Goals'];
+  const TABS = ['Demographic Data', 'Physio', 'Differential Diagnosis', 'Treatment Goals'];
   const [activeTab, setActiveTab] = useState(TABS[0]);
 
   return (
@@ -33,6 +36,8 @@ function PatientDetails() {
         </header>
 
         {/* ── tab panels ─────────────────────────────────── */}
+        {activeTab === 'Demographic Data' && <DemographicData />}
+        {activeTab === 'Physio' && <Physio />}
         {activeTab === 'Subjective' && <SubjectiveDetails />}
         {activeTab === 'Objective' && <ObjectiveDetails />}
         {activeTab === 'On Examination' && <OnExamination />}

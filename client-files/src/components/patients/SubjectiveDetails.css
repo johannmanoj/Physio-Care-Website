@@ -1,18 +1,19 @@
 .subjective-details-field-row {
-    display: flex;
-    flex-direction: row;
-    /* background-color: aqua; */
+  display: flex;
+  flex-direction: row;
+  /* background-color: aqua; */
 }
 
 .subjective-details-field {
-    display: flex;
-    flex-direction: column;
-    margin: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 20px;
 }
 
 .subjective-details-field-1 {
   width: 100%;
 }
+
 .subjective-details-field-2 {
   /* background-color: #1772e9; */
   width: 50%;
@@ -23,22 +24,34 @@
 }
 
 .subjective-details-field label {
-    color: #cccccc;
-    margin-bottom: 8px;
-    margin-top: 5px;
-    margin-left: 2px;
+  color: #cccccc;
+  margin-bottom: 8px;
+  margin-top: 5px;
+  margin-left: 2px;
 
 }
 
+.subjective-details-field textarea  {
+  border-radius: 5px;
+  height: 150px;
+  resize: vertical;
+  background-color: #3e4a64;
+  box-sizing: border-box;
+  padding: 12px;
+  border: none;
+  color: #ffffff;
+  font-size: 1em;
+}
+
 .subjective-details-field input {
-    border-radius: 5px;
-    height: 35px;
-    background-color: #3e4a64;
-    box-sizing: border-box;
-    padding: 12px;
-    border: none;
-    color: #ffffff;
-    font-size: 1em; 
+  border-radius: 5px;
+  height: 35px;
+  background-color: #3e4a64;
+  box-sizing: border-box;
+  padding: 12px;
+  border: none;
+  color: #ffffff;
+  font-size: 1em;
 }
 
 .subjective-details-field select {
@@ -49,36 +62,36 @@
   /* padding: 12px; */
   border: none;
   color: #ffffff;
-  font-size: 1em; 
+  font-size: 1em;
   padding-left: 10px;
 }
 
 
 .subjective-details-save {
-    display: flex;
-    justify-content: end;
-    padding: 20px;
+  display: flex;
+  justify-content: end;
+  padding: 20px;
 }
 
 .subjective-details-save button {
-    width: 80px;
-    height: 35px;
-    background-color: #00bf8a; 
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-    font-size: 1em;
-    font-weight: bold;
+  width: 80px;
+  height: 35px;
+  background-color: #00bf8a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  font-weight: bold;
 }
 
-.pain-assessment-card{
+.pain-assessment-card {
   display: flex;
 }
 
-.pain-assessment-card-text{
+.pain-assessment-card-text {
   width: 50%;
 }
 
@@ -87,11 +100,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
+
   /* background-color: rgb(97, 187, 187); */
   width: 50%;
   border-radius: 10px;
-  
+
 }
 
 .pain-assessment-image-group img {
@@ -105,7 +118,7 @@
   background-color: #3b82f6;
 }
 
-.pain-assessment-dropdown-group{
+.pain-assessment-dropdown-group {
   margin: 20px;
   display: flex;
   flex-direction: column;
@@ -113,26 +126,26 @@
   width: 50%;
 }
 
-.history-details-card{
+.history-details-card {
   width: 80%;
 }
 
-.history-details-card-header{
+.history-details-card-header {
   display: flex;
   /* justify-content: center; */
   margin-left: 20px;
 }
 
 .history-details-card-header input {
-    border-radius: 5px;
-    height: 30px;
-    background-color: #3e4a64;
-    box-sizing: border-box;
-    margin-left: 10px;
-    margin-right: 50px;
-    border: none;
-    color: #ffffff;
-    font-size: 1em; 
+  border-radius: 5px;
+  height: 30px;
+  background-color: #3e4a64;
+  box-sizing: border-box;
+  margin-left: 10px;
+  margin-right: 50px;
+  border: none;
+  color: #ffffff;
+  font-size: 1em;
 }
 
 
