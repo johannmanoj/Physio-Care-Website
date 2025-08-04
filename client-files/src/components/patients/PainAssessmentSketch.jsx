@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./PainAssessmentSketch.css";
-import image from "../../assets/body-sketch-2.png";
+import image from "../../assets/body-scale-sketch.png";
 import { MdSave, MdClear, MdUndo } from "react-icons/md";
 
 function PainAssessmentSketch() {

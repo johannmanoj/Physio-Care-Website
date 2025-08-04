@@ -1,16 +1,16 @@
 .patient-details-page-card {
-    background-color: #2d3748;
-    border-radius: 10px;
-    /* width: 70%; */
-    padding-right: 10px;
-    /* min-height: 500px; */
+  background-color: #2d3748;
+  border-radius: 10px;
+  /* width: 70%; */
+  padding-right: 10px;
+  /* min-height: 500px; */
 }
 
 .patient-details-page h1 {
-    color: white;
-    padding: 20px;
-    font-size:x-large;
-    font-weight: bold;
+  color: white;
+  padding: 20px;
+  font-size: x-large;
+  font-weight: bold;
 }
 
 .patient-header {
@@ -43,7 +43,7 @@
 
 .tab--active {
   font-weight: 600;
-  border-color: #007bff; 
+  border-color: #007bff;
 }
 
 
@@ -55,27 +55,27 @@
 }
 
 .sub-tab {
-    border-radius: 5px;
-    background-color: #00bf8a;
+  border-radius: 5px;
+  background-color: #00bf8a;
   color: white;
 
   padding: 0.5rem 1rem;
   border: none;
   font-size: 0.95rem;
   cursor: pointer;
-  
+
   transition: border-color 0.2s ease;
 }
 
 .sub-tab:hover {
-  
-    background-color: #00a377;
+
+  background-color: #00a377;
 
 }
 
 .sub-tab--active {
-    font-weight: 600;
-    background-color: #00a377;
+  font-weight: 700;
+  background-color: #01aa64;
 }
 
 
@@ -83,27 +83,36 @@
 
 
 .patient-details-save {
-    display: flex;
-    justify-content: end;
-    padding: 20px;
+  display: flex;
+  justify-content: end;
+  padding: 20px;
 }
 
 .patient-details-save button {
   margin-left: 25px;
-    width: 80px;
-    height: 35px;
-    background-color: #00bf8a; 
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-    font-size: 1em;
-    font-weight: bold;
+  width: 80px;
+  height: 35px;
+  /* background-color: #00bf8a; */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  font-weight: bold;
 }
 
-.patient-details-save button:hover {
-    background-color: #00a377;
-    border-radius: 10px;
+.b-cancel {
+  background-color: #D76A5C ;
+}
+.b-cancel:hover {
+  background-color: #C46258 ;
+}
+
+.b-save {
+  background-color: #00bf8a;
+}
+.b-save:hover {
+  background-color: #00a377;
 }

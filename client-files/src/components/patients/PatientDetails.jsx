@@ -46,9 +46,8 @@ function PatientDetails() {
 
         {/* ── save ───────────────────────────────────────── */}
         <div className="patient-details-save">
-
-          <button>Cancel</button>
-          <button>Save</button>
+          <button className='b-cancel'>Cancel</button>
+          <button className='b-save'>Save</button>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function TreatmentGoal() {
-  const TABS = ['Short Term', 'Long Term', 'Treatment Plan', 'Home Programs', 'Date of Evaluation'];
+  const TABS = ['Goal', 'Program'];
   const [activeSelection, setActiveSelection] = useState(TABS[0])
 
   return (
