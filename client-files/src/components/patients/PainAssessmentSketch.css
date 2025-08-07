@@ -2,75 +2,112 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* background-color: #16a34a; */
   justify-content: center;
 }
 
-.pain-sketch-canvas {
+.pain-sketch-stage {
   border-radius: 10px;
   background-color: transparent;
-  cursor: crosshair;
-  height: 613px;
-  width: 700px;
-  /* background-color: #ffffff; */
 }
 
-.pain-sketch-buttons {
-  height: 450px;
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-}
-
-.pain-assessment-button {
-  width: 65px;
-  height: 65px;
+.pain-sketch-controls {
+  width: 220px;
+  height: 250px;
+  /* background-color: #3e4a64; */
+  padding: 20px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  margin: 10px;
-  margin-left: 40px;
-  padding: 5px;
-  border: none;
+  margin-top: 15px;
+  margin-left: 20px;
+}
+
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.toggle-switch {
+  width: 60px;
+  height: 30px;
+  background-color: grey;
+  border-radius: 30px;
+  position: relative;
+  margin: 0 10px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+.toggle-switch .slider {
+  width: 26px;
+  height: 26px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch .slider-right {
+  transform: translateX(30px);
+}
+
+.toggle-switch.active {
+  background-color: #3b82f6;
 }
 
 .pain-sketch-button {
   font-weight: 600;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1rem;
+  margin-top: 5px;
+  margin-bottom: 5px;
   border: none;
   border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
   cursor: pointer;
-  margin: 10px;
-}
-
-
-.pain-assessment-button.undo {
-  background-color: #22c55e;
-  color: white;
-}
-
-.pain-assessment-button.undo:hover {
-  background-color: #16a34a;
-}
-
-.pain-assessment-button.clear {
-  background-color: #ef4444;
-  color: white;
-}
-
-.pain-assessment-button.clear:hover {
-  background-color: #dc2626;
-}
-
-.pain-assessment-button.save {
+  transition: background-color 0.2s ease;
   background-color: #14b8a6;
   color: white;
+  width: 90%;
+  height: 35px;
 }
 
-.pain-assessment-button.save:hover {
+.pain-sketch-button:hover {
   background-color: #0d9488;
+}
+
+.pain-sketch-button.clear { background-color: #ef4444 }
+.pain-sketch-button.clear:hover { background-color: #dc2626 }
+
+.pain-sketch-button.save { background-color: #00bf8a }
+.pain-sketch-button.save:hover { background-color: #00a377 }
+
+
+
+
+.line-thickness-control {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+input[type="range"] {
+  cursor: pointer;
+}
+
+
+
+.pain-sketch-controls-variable{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  /* background-color: #16a34a; */
+  height: 150px;
+  width: 100%;
 }

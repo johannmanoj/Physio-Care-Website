@@ -1,155 +1,255 @@
-import React, { useRef, useState, useEffect } from "react";
-import "./PainAssessmentSketch.css";
-import image from "../../assets/body-scale-sketch.png";
-import { MdSave, MdClear, MdUndo } from "react-icons/md";
+import React, { useState, useRef, useEffect } from 'react';
+import { Stage, Layer, Image as KonvaImage, Ellipse, Line, Transformer } from 'react-konva';
+import useImage from 'use-image';
+import './PainAssessmentSketch.css';
+import image from '../../assets/body-scale-sketch.png';
 
-function PainAssessmentSketch() {
-  const canvasRef = useRef(null);
-  const ctxRef = useRef(null);
+const URLImage = ({ src }) => {
+  const [loadedImage] = useImage(src);
+  return <KonvaImage image={loadedImage} width={628} height={450} listening={false} />;
+};
+
+const PainAssessmentSketch = () => {
+  const [ellipses, setEllipses] = useState([]);
+  const [lines, setLines] = useState([]);
+  const [newEllipse, setNewEllipse] = useState(null);
+  const [newLine, setNewLine] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [paths, setPaths] = useState([]);
-  const [currentPath, setCurrentPath] = useState([]);
+  const [drawMode, setDrawMode] = useState('ellipse');
+  const [selectedShapeName, setSelectedShapeName] = useState(null);
+  const [lineThickness, setLineThickness] = useState(2);
+  const stageRef = useRef(null);
+  const trRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const stage = stageRef.current;
+    const selectedNode = stage.findOne(`.${selectedShapeName}`);
+    if (selectedNode) {
+      trRef.current.nodes([selectedNode]);
+      trRef.current.getLayer().batchDraw();
+    } else {
+      trRef.current.nodes([]);
+      trRef.current.getLayer().batchDraw();
+    }
+  }, [selectedShapeName, ellipses]);
 
-    // Fix for scaling issue
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    ctx.lineCap = "round";
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 3;
-
-    ctxRef.current = ctx;
-
-    const background = new Image();
-    background.src = image;
-    background.onload = () => {
-      ctx.drawImage(background, 0, 0, rect.width, rect.height);
-    };
-  }, []);
-
-  const getPointerPosition = (e) => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left);
-    const y = (e.clientY - rect.top);
-    return { x, y };
+  const simplifyPoints = (points) => {
+    if (points.length <= 4) return points;
+    const simplified = [points[0], points[1]];
+    for (let i = 2; i < points.length; i += 2) {
+      const prevX = simplified[simplified.length - 2];
+      const prevY = simplified[simplified.length - 1];
+      const currX = points[i];
+      const currY = points[i + 1];
+      if (Math.hypot(currX - prevX, currY - prevY) > 1.5) {
+        simplified.push(currX, currY);
+      }
+    }
+    return simplified;
   };
 
-  const startDrawing = (e) => {
-    const { x, y } = getPointerPosition(e);
-    setIsDrawing(true);
-    setCurrentPath([{ x, y }]);
+  const handleMouseDown = (e) => {
+    if (drawMode === 'ellipse') {
+      if (e.target === e.target.getStage()) {
+        setSelectedShapeName(null);
+        const { x, y } = e.target.getStage().getPointerPosition();
+        setNewEllipse({ x, y, radiusX: 0, radiusY: 0, name: `ellipse-${ellipses.length}` });
+        setIsDrawing(true);
+      }
+    } else if (drawMode === 'free') {
+      const pos = e.target.getStage().getPointerPosition();
+      setNewLine([pos.x, pos.y]);
+      setIsDrawing(true);
+    }
   };
 
-  const draw = (e) => {
+  const handleMouseMove = (e) => {
     if (!isDrawing) return;
-    const { x, y } = getPointerPosition(e);
-    const newPoint = { x, y };
-    const updatedPath = [...currentPath, newPoint];
-    setCurrentPath(updatedPath);
+    const { x, y } = e.target.getStage().getPointerPosition();
 
-    const ctx = ctxRef.current;
-    ctx.beginPath();
-    const prevPoint = updatedPath[updatedPath.length - 2];
-    ctx.moveTo(prevPoint.x, prevPoint.y);
-    ctx.lineTo(newPoint.x, newPoint.y);
-    ctx.stroke();
+    if (drawMode === 'ellipse' && newEllipse) {
+      const radiusX = Math.abs(x - newEllipse.x);
+      const radiusY = Math.abs(y - newEllipse.y);
+      setNewEllipse({ ...newEllipse, radiusX, radiusY });
+    } else if (drawMode === 'free') {
+      setNewLine((prevLine) => [...prevLine, x, y]);
+    }
   };
 
-  const endDrawing = () => {
+  const handleMouseUp = () => {
     if (!isDrawing) return;
+    if (drawMode === 'ellipse' && newEllipse) {
+      setEllipses([...ellipses, newEllipse]);
+      setNewEllipse(null);
+    } else if (drawMode === 'free' && newLine.length > 0) {
+      const smoothLine = simplifyPoints(newLine);
+      setLines([...lines, { points: smoothLine, strokeWidth: lineThickness }]);
+      setNewLine([]);
+    }
     setIsDrawing(false);
-    setPaths([...paths, currentPath]);
-    setCurrentPath([]);
   };
 
-  const redraw = () => {
-    const canvas = canvasRef.current;
-    const ctx = ctxRef.current;
-    const rect = canvas.getBoundingClientRect();
+  const handleSelect = (name) => {
+    setSelectedShapeName(name);
+  };
 
-    const background = new Image();
-    background.src = image;
-    background.onload = () => {
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      ctx.drawImage(background, 0, 0, rect.width, rect.height);
-      paths.forEach((path) => {
-        ctx.beginPath();
-        path.forEach((point, index) => {
-          if (index === 0) {
-            ctx.moveTo(point.x, point.y);
-          } else {
-            ctx.lineTo(point.x, point.y);
-          }
-        });
-        ctx.stroke();
-      });
-    };
+  const handleDelete = () => {
+    if (selectedShapeName !== null) {
+      const updatedEllipses = ellipses.filter((ellipse) => ellipse.name !== selectedShapeName);
+      setEllipses(updatedEllipses);
+      setSelectedShapeName(null);
+    }
   };
 
   const handleUndo = () => {
-    const updatedPaths = [...paths];
-    updatedPaths.pop();
-    setPaths(updatedPaths);
-  };
+  if (lines.length > 0) {
+    const updatedLines = lines.slice(0, -1);
+    setLines(updatedLines);
+  }
+};
 
   const handleClear = () => {
-    setPaths([]);
+    setEllipses([]);
+    setLines([]);
+    setSelectedShapeName(null);
   };
 
-  const handleSave = () => {
-    const canvas = canvasRef.current;
-    const dataURL = canvas.toDataURL("image/png");
-
-    const link = document.createElement("a");
-    link.href = dataURL;
-    link.download = "pain-assessment.png";
+  const saveAsImage = () => {
+    const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+    const link = document.createElement('a');
+    link.download = 'pain-assessment.png';
+    link.href = uri;
     link.click();
   };
 
-  useEffect(() => {
-    redraw();
-  }, [paths]);
-
   return (
     <div className="pain-sketch-container">
-      <canvas
-        ref={canvasRef}
-        className="pain-sketch-canvas"
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={endDrawing}
-        onMouseLeave={endDrawing}
-      />
-      <div className="pain-sketch-buttons">
-        
+      <Stage
+        width={628}
+        height={450}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        ref={stageRef}
+        className="pain-sketch-stage"
+      >
+        <Layer>
+          <URLImage src={image} />
+          {ellipses.map((ellipse) => (
+            <Ellipse
+              key={ellipse.name}
+              name={ellipse.name}
+              x={ellipse.x}
+              y={ellipse.y}
+              radiusX={ellipse.radiusX}
+              radiusY={ellipse.radiusY}
+              fillRadialGradientStartPoint={{ x: 0, y: 0 }}
+              fillRadialGradientEndPoint={{ x: 0, y: 0 }}
+              fillRadialGradientStartRadius={0}
+              fillRadialGradientEndRadius={Math.max(ellipse.radiusX, ellipse.radiusY)}
+              fillRadialGradientColorStops={[0, 'rgba(255,0,0,0.5)', 1, 'rgba(255,0,0,0.2)']}
+              stroke="red"
+              strokeWidth={2}
+              draggable={true}
+              onClick={() => handleSelect(ellipse.name)}
+              onTap={() => handleSelect(ellipse.name)}
+              onDragEnd={(e) => {
+                const updatedEllipses = ellipses.map((el) =>
+                  el.name === ellipse.name ? { ...el, x: e.target.x(), y: e.target.y() } : el
+                );
+                setEllipses(updatedEllipses);
+              }}
+              onTransformEnd={(e) => {
+                const node = e.target;
+                const scaleX = node.scaleX();
+                const scaleY = node.scaleY();
 
-        {/* <button onClick={handleUndo} className="pain-sketch-button undo">Undo</button>
-        <button onClick={handleClear} className="pain-sketch-button clear">Clear</button>
-        <button onClick={handleSave} className="pain-sketch-button save">Save</button> */}
-        
+                node.scaleX(1);
+                node.scaleY(1);
 
-        <button onClick={handleUndo} className="pain-assessment-button undo">
-          <MdUndo  style={{ color: 'white', fontSize: '38px' }} />
-          Undo
+                const updatedEllipses = ellipses.map((el) =>
+                  el.name === ellipse.name
+                    ? {
+                        ...el,
+                        radiusX: el.radiusX * scaleX,
+                        radiusY: el.radiusY * scaleY,
+                      }
+                    : el
+                );
+                setEllipses(updatedEllipses);
+              }}
+            />
+          ))}
+          {newEllipse && (
+            <Ellipse
+              x={newEllipse.x}
+              y={newEllipse.y}
+              radiusX={newEllipse.radiusX}
+              radiusY={newEllipse.radiusY}
+              fillRadialGradientStartPoint={{ x: 0, y: 0 }}
+              fillRadialGradientEndPoint={{ x: 0, y: 0 }}
+              fillRadialGradientStartRadius={0}
+              fillRadialGradientEndRadius={Math.max(newEllipse.radiusX, newEllipse.radiusY)}
+              fillRadialGradientColorStops={[0, 'rgba(255,0,0,0.5)', 1, 'rgba(255,0,0,0.2)']}
+              stroke="red"
+              strokeWidth={2}
+            />
+          )}
+          {lines.map((line, i) => (
+            <Line key={i} points={line.points} stroke="red" strokeWidth={line.strokeWidth} tension={0.5} lineCap="round" lineJoin="round" />
+          ))}
+          {newLine.length > 0 && (
+            <Line points={newLine} stroke="red" strokeWidth={lineThickness} tension={0.5} lineCap="round" lineJoin="round" />
+          )}
+          <Transformer ref={trRef} />
+        </Layer>
+      </Stage>
+      <div className="pain-sketch-controls">
+        <div className="mode-toggle">
+          <span>Ellipse</span>
+          <div className="toggle-switch" onClick={() => setDrawMode(drawMode === 'ellipse' ? 'free' : 'ellipse')}>
+            <div className={`slider ${drawMode === 'free' ? 'slider-right' : ''}`}></div>
+          </div>
+          <span>Free Draw</span>
+        </div>
+        <div>
+          
+        </div>
+        <div className='pain-sketch-controls-variable'>
+          {drawMode === 'ellipse' && (
+            <button onClick={handleDelete} className="pain-sketch-button">
+              Delete Selected
+            </button>
+          )}
+                  
+          {drawMode === 'free' && (
+            <div className="line-thickness-control">
+              <label>Line Thickness : {lineThickness}</label>
+              <div>
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={lineThickness}
+                  onChange={(e) => setLineThickness(Number(e.target.value))}
+                />
+              </div>
+              <button onClick={handleUndo} className="pain-sketch-button">
+                Undo Last Line
+              </button>
+            </div>
+          )}
+        </div>
+        
+        <button onClick={handleClear} className="pain-sketch-button clear">
+          Clear All
         </button>
-        <button onClick={handleClear} className="pain-assessment-button clear">
-          <MdClear style={{ color: 'white', fontSize: '38px' }} />
-          Clear
-        </button>
-        <button onClick={handleSave} className="pain-assessment-button save">
-          <MdSave style={{ color: 'white', fontSize: '38px' }} />
+        <button onClick={saveAsImage} className="pain-sketch-button save">
           Save
         </button>
       </div>
     </div>
   );
-}
+};
 
 export default PainAssessmentSketch;
