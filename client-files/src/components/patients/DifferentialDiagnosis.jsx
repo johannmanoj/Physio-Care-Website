@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DicomViewernew from './dicomViewer';
 
 function DifferentialDiagnosis() {
   const TABS = ['Special Test', 'Investigation'];
@@ -17,6 +18,10 @@ function DifferentialDiagnosis() {
           </button>
         ))}
       </nav>
+      {activeSelection === "Investigation" && (
+        <DicomViewernew />
+      )}
+      
     </>
   );
 }

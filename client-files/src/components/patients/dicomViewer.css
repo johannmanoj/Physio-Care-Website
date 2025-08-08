@@ -1,0 +1,80 @@
+.dicom-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+/* Upload UI */
+.upload-section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-button {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+  background-color: #388e3c;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+/* Tool Buttons */
+.tool-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.tool-buttons button {
+  background-color: #34495e;  /* dark slate */
+  color: #ffffff;
+  padding: 8px 14px;
+  border: 1px solid #3d566e;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tool-buttons button:hover {
+  background-color: #3d566e;
+}
+
+.tool-buttons button.active {
+  background-color: #28a745;  /* Green for active */
+  border-color: #28a745;
+  box-shadow: 0 0 4px rgba(40, 167, 69, 0.5);
+}
+
+/* Viewer */
+.dicom-viewer {
+  width: 512px;
+  height: 512px;
+  background-color: black;
+  border: 2px solid #ccc;
+}
