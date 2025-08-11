@@ -9,7 +9,7 @@ const URLImage = ({ src }) => {
   return <KonvaImage image={loadedImage} width={628} height={450} listening={false} />;
 };
 
-const PainAssessmentSketch = () => {
+const PainAssessmentSketch = ({ data, onDataChange }) => {
   const [ellipses, setEllipses] = useState([]);
   const [lines, setLines] = useState([]);
   const [newEllipse, setNewEllipse] = useState(null);
@@ -20,6 +20,19 @@ const PainAssessmentSketch = () => {
   const [lineThickness, setLineThickness] = useState(2);
   const stageRef = useRef(null);
   const trRef = useRef(null);
+
+  // Load stored sketch data from DB when component mounts
+  useEffect(() => {
+    if (data?.sketch_overlays) {
+      try {
+        const parsed = JSON.parse(data.sketch_overlays);
+        setEllipses(parsed.ellipses || []);
+        setLines(parsed.lines || []);
+      } catch (err) {
+        console.error('Error parsing saved sketch data:', err);
+      }
+    }
+  }, [data]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -102,11 +115,11 @@ const PainAssessmentSketch = () => {
   };
 
   const handleUndo = () => {
-  if (lines.length > 0) {
-    const updatedLines = lines.slice(0, -1);
-    setLines(updatedLines);
-  }
-};
+    if (lines.length > 0) {
+      const updatedLines = lines.slice(0, -1);
+      setLines(updatedLines);
+    }
+  };
 
   const handleClear = () => {
     setEllipses([]);
@@ -114,13 +127,15 @@ const PainAssessmentSketch = () => {
     setSelectedShapeName(null);
   };
 
-  const saveAsImage = () => {
-    const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
-    const link = document.createElement('a');
-    link.download = 'pain-assessment.png';
-    link.href = uri;
-    link.click();
-  };
+  // const saveToDatabase = () => {
+  //   const overlayData = JSON.stringify({ ellipses, lines });
+  //   onDataChange(overlayData); // This will send to parent, where API call is made
+  // };
+
+  const saveToDatabase = () => {
+  const overlayData = JSON.stringify({ ellipses, lines });
+  onDataChange({ sketch_overlays: overlayData }); // ✅ passes as object with key
+};
 
   return (
     <div className="pain-sketch-container">
@@ -150,7 +165,7 @@ const PainAssessmentSketch = () => {
               fillRadialGradientColorStops={[0, 'rgba(255,0,0,0.5)', 1, 'rgba(255,0,0,0.2)']}
               stroke="red"
               strokeWidth={2}
-              draggable={true}
+              draggable
               onClick={() => handleSelect(ellipse.name)}
               onTap={() => handleSelect(ellipse.name)}
               onDragEnd={(e) => {
@@ -163,10 +178,8 @@ const PainAssessmentSketch = () => {
                 const node = e.target;
                 const scaleX = node.scaleX();
                 const scaleY = node.scaleY();
-
                 node.scaleX(1);
                 node.scaleY(1);
-
                 const updatedEllipses = ellipses.map((el) =>
                   el.name === ellipse.name
                     ? {
@@ -212,16 +225,12 @@ const PainAssessmentSketch = () => {
           </div>
           <span>Free Draw</span>
         </div>
-        <div>
-          
-        </div>
         <div className='pain-sketch-controls-variable'>
           {drawMode === 'ellipse' && (
             <button onClick={handleDelete} className="pain-sketch-button">
               Delete Selected
             </button>
           )}
-                  
           {drawMode === 'free' && (
             <div className="line-thickness-control">
               <label>Line Thickness : {lineThickness}</label>
@@ -240,16 +249,16 @@ const PainAssessmentSketch = () => {
             </div>
           )}
         </div>
-        
         <button onClick={handleClear} className="pain-sketch-button clear">
           Clear All
         </button>
-        <button onClick={saveAsImage} className="pain-sketch-button save">
+        <button onClick={saveToDatabase} className="pain-sketch-button save">
           Save
         </button>
       </div>
     </div>
   );
 };
+
 
 export default PainAssessmentSketch;

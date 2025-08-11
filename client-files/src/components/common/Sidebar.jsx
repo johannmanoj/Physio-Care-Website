@@ -2,12 +2,17 @@ import React from 'react';
 import './Sidebar.css'; // For sidebar specific styles
 import { Link } from 'react-router-dom';
 import image from '../../assets/clinic-logo.png'
+import { useAuth } from "../../context/AuthContext";
 
-import { FaRegCalendarCheck, FaUserInjured, FaUserCircle } from 'react-icons/fa';
+import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers } from 'react-icons/fa';
 import { MdDashboard, MdRequestQuote } from 'react-icons/md';
 
 
 function Sidebar() {
+  const { role, isLoggedIn } = useAuth();
+  
+  
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -30,15 +35,20 @@ function Sidebar() {
           <Link to="/patientsPage">Patients</Link>
         </li>
 
-        <li className="menu-item">
+       {/* {role == "Admin" && <li className="menu-item">
           <MdRequestQuote style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/billing">Billing</Link>
-        </li>
+        </li>} */}
 
         <li className="menu-item">
           <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/profile">Profile</Link>
         </li>
+
+        {role == "Admin" && <li className="menu-item">
+          <FaUsers  style={{ color: 'grey', fontSize: '24px' }} />
+          <Link to="/usersProfile">Users</Link>
+        </li>}
       </ul>
     </div>
   );

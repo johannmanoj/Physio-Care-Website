@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 function PatientsTable({ patients }) {
   const navigate = useNavigate();
 
+  console.log("patients",patients);
+  
+
   return (
     <div className="table-wrapper">
       <table className="patients-table">
@@ -13,7 +16,7 @@ function PatientsTable({ patients }) {
           <tr>
             <th>Patient ID</th>
             <th>Name</th>
-            <th>Gender</th>
+            <th>Sex</th>
             <th>Age</th>
             <th>Contact Number</th>
             <th>Last Visit</th>
@@ -26,17 +29,19 @@ function PatientsTable({ patients }) {
             <tr key={patient.id}>
               <td>{patient.patient_id}</td>
               <td>{patient.name}</td>
-              <td>{patient.gender}</td>
+              <td>{patient.sex}</td>
               <td>{patient.age}</td>
-              <td>{patient.contact_number}</td>
-              <td>{patient.last_visit}</td>
-              <td>
+              <td>{patient.contact_num}</td>
+              <td></td>
+              <td></td>
+              {/* <td>{patient.last_visit}</td> */}
+              {/* <td>
                 <span className={`status-badge ${patient.status.toLowerCase()}`}>
                   {patient.status}
                 </span>
-              </td>
+              </td> */}
               <td>
-                <button className="view-button" onClick={() => navigate("/patientInfo")}>View</button>
+                <button className="view-button" onClick={() => navigate(`/patientInfo/${patient.patient_id}`)}>View</button>
               </td>
             </tr>
           ))}

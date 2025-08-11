@@ -1,12 +1,12 @@
-import './LoginPage.css'
+import './LoginPage.css'; // ✅ Use same CSS as LoginPage
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function LoginPage() {
+function SignupPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,59 +15,39 @@ function LoginPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   setError('');
-
-  //   try {
-  //     const response = await axios.post(`${API_URL}/api/auth/login`, {
-  //       email,
-  //       password
-  //     });
-
-  //     // Save token in AuthContext
-  //     login(response.data.token);
-  //     navigate("/");
-
-  //   } catch (err) {
-  //     const message = err.response?.data?.message || "Login failed";
-  //     setError(message);
-  //     alert(message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  setLoading(true);
-  setError('');
+    event.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await axios.post(`${API_URL}/api/auth/login`, {
-      email,
-      password
-    });
+    try {
+      const signupRes = await axios.post(`${API_URL}/api/auth/signup`, {
+        email,
+        password,
+        role
+      });
+      alert(signupRes.data.message || "Signup successful!");
 
-    // Pass token + role into context
-    login(response.data.token, response.data.role);
+      const loginRes = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password
+      });
+      login(loginRes.data.token);
+      navigate("/");
 
-    navigate("/");
-
-  } catch (err) {
-    const message = err.response?.data?.message || "Login failed";
-    setError(message);
-    alert(message);
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (err) {
+      const message = err.response?.data?.message || "Signup failed";
+      setError(message);
+      alert(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login-page">
       <div className="login-container">
-        <h1 className="login-title">Login</h1>
+        <h1 className="login-title">Sign Up</h1>
         <form onSubmit={handleSubmit} className="login-form">
           {error && <div className="error-message">{error}</div>}
 
@@ -93,7 +73,7 @@ function LoginPage() {
             />
           </div>
 
-          {/* <div className="form-group">
+          <div className="form-group">
             <label htmlFor="role">Role</label>
             <select
               id="role"
@@ -105,22 +85,19 @@ function LoginPage() {
               <option value="Admin">Admin</option>
               <option value="Therapist">Therapist</option>
             </select>
-          </div> */}
+          </div>
 
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
 
-          {/* <a href="/forgot-password" className="forgot-password">
-            Forgot Password
-          </a> */}
-          {/* <p className="redirect-signup">
-            Don’t have an account? <a href="/signup">Sign up here</a>
-          </p> */}
+          <p className="redirect-login">
+            Already have an account? <a href="/login">Login here</a>
+          </p>
         </form>
       </div>
     </div>
   );
 }
 
-export default LoginPage;
+export default SignupPage;

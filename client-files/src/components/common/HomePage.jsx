@@ -9,6 +9,7 @@ import ProfilePage from '../ProfilePage';
 import BillingPage from '../BillingPage'
 import PatientsPage from '../PatientsPage';
 import PatientDetails from '../patients/PatientDetails'
+import UsersProfile from '../admin/UsersProfile'
 
 function App() {
   return (
@@ -21,8 +22,10 @@ function App() {
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/patientInfo" element={<PatientDetails />} />
+          <Route path="/patientInfo/:patientId" element={<PatientDetails />} />
+          {/* <Route path="/patientInfo" element={<PatientDetails />} /> */}
           <Route path="/patientsPage" element={<PatientsPage />} />
+          <Route path="/usersProfile" element={<UsersProfile />} />
         </Routes>
       </div>
     </div>
