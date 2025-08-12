@@ -4,9 +4,9 @@ const pool = require('../models/index');
 
 
 router.post('/add-patient', async(req,res) =>{
-    const { name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc } = req.body;
-
     try {
+        const { name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc } = req.body;
+
         await pool.query('INSERT INTO patients (name,age,sex,occupation,contact_num,medical_allergies,address,other_ailments,subjective_desc,onexamination_desc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
             [name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc]);
             
@@ -29,11 +29,9 @@ router.post('/get-patient-list', async(req,res) =>{
 })
 
 router.post('/get-patient-details', async(req,res) =>{
-    const { patient_id } = req.body;
-    console.log("patient_id",patient_id);
-    
-
     try {
+        const { patient_id } = req.body;
+
         const [user_details] = await pool.query('SELECT * FROM patients WHERE patient_id = ?', [patient_id]);
        
         res.status(201).json({ message: 'Patient details retrieved successfully' , data:user_details});
@@ -44,12 +42,9 @@ router.post('/get-patient-details', async(req,res) =>{
 })
 
 router.post('/update-patient', async(req,res) =>{
-    const {patient_id, name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc, sketch_overlays} = req.body;
-
-    console.log("dataaaaa", req.body);
-    
-
     try {
+        const {patient_id, name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc, sketch_overlays} = req.body;
+
         await pool.query('UPDATE patients SET name=?, age=?, sex=?, occupation=?, contact_num=?, medical_allergies=?, address=?, other_ailments=?, subjective_desc=?, onexamination_desc=?, sketch_overlays=? WHERE patient_id = ?', 
             [name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc,sketch_overlays, patient_id]);
             
