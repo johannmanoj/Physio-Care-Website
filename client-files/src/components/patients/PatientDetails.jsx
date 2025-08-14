@@ -26,7 +26,10 @@ function PatientDetails(props) {
     other_ailments: '',
     subjective_desc: '',
     onexamination_desc: '',
-    sketch_overlays: ''
+    sketch_overlays: '',
+    special_test_desc: '',
+    goal_desc:'',
+    program_desc:''
   });
   
 
@@ -61,12 +64,12 @@ function PatientDetails(props) {
       <div className='patient-details-page-card'>
         <header className="patient-header">
           <h1>Patient ID : {patientData.patient_id}</h1>
-          <nav className="tabs">
+          <nav className="main-heading-tabs">
             {TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`tab ${activeTab === tab ? 'tab--active' : ''}`}
+                className={`main-heading-tab ${activeTab === tab ? 'main-heading-tab--active' : ''}`}
               >
                 {tab}
               </button>
@@ -78,8 +81,8 @@ function PatientDetails(props) {
           <DemographicData data={patientData} onDataChange={updatePatientData} />}
         {activeTab === 'Physio' && 
           <Physio data={patientData} onDataChange={updatePatientData} />}
-        {activeTab === 'Differential Diagnosis' && <DifferentialDiagnosis />}
-        {activeTab === 'Treatment Goals' && <TreatmentGoal />}
+        {activeTab === 'Differential Diagnosis' && <DifferentialDiagnosis data={patientData} onDataChange={updatePatientData}/>}
+        {activeTab === 'Treatment Goals' && <TreatmentGoal data={patientData} onDataChange={updatePatientData}/>}
 
         <div className="patient-details-save">
           <button className='b-cancel'>Cancel</button>

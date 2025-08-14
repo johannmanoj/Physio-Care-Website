@@ -21,7 +21,6 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
   const stageRef = useRef(null);
   const trRef = useRef(null);
 
-  // Load stored sketch data from DB when component mounts
   useEffect(() => {
     if (data?.sketch_overlays) {
       try {
@@ -126,11 +125,6 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
     setLines([]);
     setSelectedShapeName(null);
   };
-
-  // const saveToDatabase = () => {
-  //   const overlayData = JSON.stringify({ ellipses, lines });
-  //   onDataChange(overlayData); // This will send to parent, where API call is made
-  // };
 
   const saveToDatabase = () => {
   const overlayData = JSON.stringify({ ellipses, lines });

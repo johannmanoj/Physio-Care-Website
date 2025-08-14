@@ -8,8 +8,8 @@ function DemographicData({ data, onDataChange }) {
 
   return (
     <>
-      <div className="subjective-details-field-row">
-        <div className="subjective-details-field subjective-details-field-2">
+      <div className="data-field-row">
+        <div className="data-field data-field-2">
           <label htmlFor="Name">Name</label>
           <input
             name="name"
@@ -18,7 +18,7 @@ function DemographicData({ data, onDataChange }) {
             placeholder="Name"
           />
         </div>
-        <div className="subjective-details-field subjective-details-field-2">
+        <div className="data-field data-field-2">
           <label htmlFor="age">Age</label>
           <input
             name="age"
@@ -29,8 +29,8 @@ function DemographicData({ data, onDataChange }) {
         </div>
       </div>
 
-      <div className="subjective-details-field-row">
-        <div className="subjective-details-field subjective-details-field-2">
+      <div className="data-field-row">
+        <div className="data-field data-field-2">
           <label htmlFor="sex">Sex</label>
           <input
             name="sex"
@@ -39,7 +39,7 @@ function DemographicData({ data, onDataChange }) {
             placeholder="Sex"
           />
         </div>
-        <div className="subjective-details-field subjective-details-field-2">
+        <div className="data-field data-field-2">
           <label htmlFor="occupation">Occupation</label>
           <input
             name="occupation"
@@ -50,8 +50,8 @@ function DemographicData({ data, onDataChange }) {
         </div>
       </div>
 
-      <div className="subjective-details-field-row">
-        <div className="subjective-details-field subjective-details-field-2">
+      <div className="data-field-row">
+        <div className="data-field data-field-2">
           <label htmlFor="contact">Contact Number</label>
           <input
             name="contact_num"
@@ -60,7 +60,7 @@ function DemographicData({ data, onDataChange }) {
             placeholder="Contact Number"
           />
         </div>
-        <div className="subjective-details-field subjective-details-field-2">
+        <div className="data-field data-field-2">
           <label htmlFor="medicine-allergies">Medicine Allergies</label>
           <input
             name="medical_allergies"
@@ -71,8 +71,8 @@ function DemographicData({ data, onDataChange }) {
         </div>
       </div>
 
-      <div className="subjective-details-field-row">
-        <div className="subjective-details-field subjective-details-field-2">
+      <div className="data-field-row">
+        <div className="data-field data-field-2">
           <label htmlFor="address">Address</label>
           <input
             name="address"
@@ -81,7 +81,7 @@ function DemographicData({ data, onDataChange }) {
             placeholder="Address"
           />
         </div>
-        <div className="subjective-details-field subjective-details-field-2">
+        <div className="data-field data-field-2">
           <label htmlFor="chief_complaints">Other Ailments</label>
           <input
             name="other_ailments"

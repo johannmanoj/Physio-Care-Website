@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './SubjectiveDetails.css'
 import SubjectiveDetails from './SubjectiveDetails';
 import ObjectiveDetails from './ObjectiveDetails';
 
@@ -8,13 +7,13 @@ function Physio({ data, onDataChange }) {
   const [activeSelection, setActiveSelection] = useState(TABS[0])
 
   return (
-    <div className='subjective-details-page'>
-      <nav className="sub-tabs">
+    <div>
+      <nav className="sub-heading-tabs">
         {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveSelection(tab)}
-            className={`sub-tab ${activeSelection === tab ? 'sub-tab--active' : ''}`}
+            className={`sub-heading-tab ${activeSelection === tab ? 'sub-heading-tab--active' : ''}`}
           >
             {tab}
           </button>
@@ -23,7 +22,7 @@ function Physio({ data, onDataChange }) {
 
       {activeSelection === 'Subjective' && ( <SubjectiveDetails data={data} onDataChange={onDataChange} /> )}
       {activeSelection === 'Objective' && ( <ObjectiveDetails data={data} onDataChange={onDataChange} /> )}
-
+        
     </div>
   );
 }

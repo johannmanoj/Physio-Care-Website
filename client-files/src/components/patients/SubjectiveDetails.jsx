@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import './SubjectiveDetails.css'
 
 
 function SubjectiveDetails({ data, onDataChange }) {
   return (
     <>
-      <div className="subjective-details-field-row">
-        <div className="subjective-details-field subjective-details-field-1">
+      <div className="data-field-row">
+        <div className="data-field data-field-1">
           <label htmlFor="Desciption">Desciption</label>
           <textarea
             name="subjective_desc"

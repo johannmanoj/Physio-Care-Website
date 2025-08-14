@@ -4,6 +4,8 @@ import Pagination from './common/Pagination';
 import './AppointmentsPage.css';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL
+
 function AppointmentsPage() {
   // const [players, setPlayers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -267,7 +269,7 @@ function AppointmentsPage() {
   ]
 
   // useEffect(() => {
-  //   axios.post('http://localhost:3000/api/players/get-appointment-list')
+  //   axios.post(`${API_URL}/api/players/get-appointment-list`)
   //     .then((response) => {
   //       setPlayers(response.data.data);
   //     })

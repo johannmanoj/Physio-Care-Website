@@ -43,12 +43,27 @@ router.post('/get-patient-details', async(req,res) =>{
 
 router.post('/update-patient', async(req,res) =>{
     try {
-        const {patient_id, name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc, sketch_overlays} = req.body;
+        const {patient_id, name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc, sketch_overlays, special_test_desc, goal_desc, program_desc} = req.body;
 
-        await pool.query('UPDATE patients SET name=?, age=?, sex=?, occupation=?, contact_num=?, medical_allergies=?, address=?, other_ailments=?, subjective_desc=?, onexamination_desc=?, sketch_overlays=? WHERE patient_id = ?', 
-            [name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc,sketch_overlays, patient_id]);
+        await pool.query('UPDATE patients SET name=?, age=?, sex=?, occupation=?, contact_num=?, medical_allergies=?, address=?, other_ailments=?, subjective_desc=?, onexamination_desc=?, sketch_overlays=?, special_test_desc=?, goal_desc=? , program_desc=? WHERE patient_id = ?', 
+            [name, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc,sketch_overlays, special_test_desc, goal_desc, program_desc, patient_id]);
             
         res.status(201).json({ message: 'Patient details updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+})
+
+router.post('/get-patient-image-files-list', async(req,res) =>{
+    try {
+        console.log("patient_id",req.body);
+        
+        const { patient_id } = req.body;
+
+        const [user_details] = await pool.query('SELECT * FROM image_files WHERE patient_id = ?', [patient_id]);
+       
+        res.status(201).json({ message: 'Patient details retrieved successfully' , data:user_details});
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error' });

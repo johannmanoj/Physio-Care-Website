@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './ObjectiveDetails.css'
 import PainAssessmentSketch from './PainAssessmentSketch';
 
 function ObjectiveDetails({ data, onDataChange }) {
@@ -7,15 +6,15 @@ function ObjectiveDetails({ data, onDataChange }) {
   const [activeSelection, setActiveSelection] = useState(TABS[0])
 
   return (
-    <div className="patient-details-page">
+    <div>
       <div className='patient-details-page-card'>
         <header className="patient-header">
-          <nav className="tabs">
+          <nav className="main-heading-tabs">
             {TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveSelection(tab)}
-                className={`tab ${activeSelection === tab ? 'tab--active' : ''}`}
+                className={`main-heading-tab ${activeSelection === tab ? 'main-heading-tab--active' : ''}`}
               >
                 {tab}
               </button>
@@ -24,8 +23,8 @@ function ObjectiveDetails({ data, onDataChange }) {
         </header>
 
         {activeSelection === 'On Examination' && (
-          <div className="subjective-details-field-row">
-            <div className="subjective-details-field subjective-details-field-1">
+          <div className="data-field-row">
+            <div className="data-field data-field-1">
               <label htmlFor="Desciption">Desciption</label>
               <textarea
                 name="onexamination_desc"
@@ -40,10 +39,9 @@ function ObjectiveDetails({ data, onDataChange }) {
         )}
 
         {activeSelection === 'Pain Assessment' && (
-          <>
-            <PainAssessmentSketch className="pain-assessment-image-group-sketch" data={data} onDataChange={onDataChange}/>
-          </>
+          <PainAssessmentSketch className="pain-assessment-image-group-sketch" data={data} onDataChange={onDataChange}/>
         )}
+
       </div>
     </div>
   );
