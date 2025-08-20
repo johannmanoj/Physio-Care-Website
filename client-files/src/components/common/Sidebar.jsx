@@ -35,6 +35,11 @@ function Sidebar() {
           <Link to="/patientsPage">Patients</Link>
         </li>
 
+        {/* <li className="menu-item">
+          <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
+          <Link to="/appointmentDetails">Appointment</Link>
+        </li> */}
+
        {/* {role == "Admin" && <li className="menu-item">
           <MdRequestQuote style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/billing">Billing</Link>

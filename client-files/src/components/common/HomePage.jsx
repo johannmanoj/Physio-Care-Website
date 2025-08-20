@@ -10,6 +10,9 @@ import BillingPage from '../BillingPage'
 import PatientsPage from '../PatientsPage';
 import PatientDetails from '../patients/PatientDetails'
 import UsersProfile from '../admin/UsersProfile'
+import AppointmentDetails from '../patients/AppointmentDetails'
+import PatientAppointments from '../patients/PatientAppointments'
+import AddAppointment from '../patients/AddAppointment'
 
 function App() {
   return (
@@ -22,10 +25,13 @@ function App() {
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/patientInfo/:patientId" element={<PatientDetails />} />
+          <Route path="/patientInfo/:apptId" element={<PatientDetails />} />
           {/* <Route path="/patientInfo" element={<PatientDetails />} /> */}
           <Route path="/patientsPage" element={<PatientsPage />} />
           <Route path="/usersProfile" element={<UsersProfile />} />
+          <Route path="/appointmentDetails" element={<AppointmentDetails />} />
+          <Route path="/patientAppointments/:patientId/:patientName" element={<PatientAppointments />} />
+          <Route path="/addAppointment" element={<AddAppointment />} />
         </Routes>
       </div>
     </div>

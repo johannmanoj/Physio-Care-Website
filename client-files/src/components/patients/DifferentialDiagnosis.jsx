@@ -1,49 +1,61 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import DicomViewer from './DicomViewer'; // Make sure this file exists
 const API_URL = import.meta.env.VITE_API_URL
+import './DifferentialDiagnosis.css'
+
+import { FaUpload } from "react-icons/fa";
 
 function DifferentialDiagnosis({ data, onDataChange }) {
   const TABS = ['Special Test', 'Investigation'];
   const [activeSelection, setActiveSelection] = useState(TABS[0]);
-  const [fileList, setFileList] = useState([]);
-  const [loadingFiles, setLoadingFiles] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState({});
+  
 
-  // State for file to view
-  const [selectedDicomUrl, setSelectedDicomUrl] = useState(null);
-  const [selectedAnnotations, setSelectedAnnotations] = useState(null);
+  // useEffect(() => {
+  //   if (activeSelection === 'Investigation') {
+  //     fetchPatientFiles();
+  //   }
+  // }, [activeSelection]);
 
-  useEffect(() => {
-    if (activeSelection === 'Investigation') {
-      fetchPatientFiles();
-    }
-  }, [activeSelection]);
+  // const fetchPatientFiles = async () => {
+  //   try {
+  //     setLoadingFiles(true);
+  //     const res = await axios.post(
+  //       `${API_URL}/api/patients/get-patient-image-files-list`,
+  //       { patient_id: data.patient_id }
+  //     );
+  //     setFileList(res.data.data || []);
+  //   } catch (err) {
+  //     console.error('Error fetching patient files:', err);
+  //   } finally {
+  //     setLoadingFiles(false);
+  //   }
+  // };
+  
 
-  const fetchPatientFiles = async () => {
+
+  const handleFileUpload = async (event, key) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
     try {
-      setLoadingFiles(true);
       const res = await axios.post(
-        `${API_URL}/api/patients/get-patient-image-files-list`,
-        { patient_id: data.patient_id }
+        "http://localhost:3000/api/files/upload-file",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
-      setFileList(res.data.data || []);
-    } catch (err) {
-      console.error('Error fetching patient files:', err);
-    } finally {
-      setLoadingFiles(false);
-    }
-  };
 
-  const handleViewFile = (file) => {
-    setSelectedDicomUrl(file.original_file);
-    try {
-      const parsedAnnotations = file.annotations
-        ? JSON.parse(file.annotations)
-        : null;
-      setSelectedAnnotations(parsedAnnotations);
+      const uploadedUrl = res.data.url;
+      onDataChange({ [key]: uploadedUrl });
+
+      // Store filename for UI
+      setUploadedFiles((prev) => ({ ...prev, [key]: file.name }));
+
     } catch (err) {
-      console.error('Invalid annotation JSON:', err);
-      setSelectedAnnotations(null);
+      console.error("Upload failed:", err);
     }
   };
 
@@ -80,54 +92,117 @@ function DifferentialDiagnosis({ data, onDataChange }) {
 
       {activeSelection === 'Investigation' && (
         <>
-          {/* Always show DicomViewer with upload option */}
-          <DicomViewer
-            dicomUrl={selectedDicomUrl}
-            initialAnnotations={selectedAnnotations}
-            data={data}
-            onDataChange={onDataChange}
-          />
+          <div className="data-field-row">
 
+
+            <div className="data-field data-field-2">
+              <label htmlFor="Desciption">X-Ray</label>
+              <textarea
+                name="xray_desc"
+                value={data.xray_desc}
+                onChange={(e) =>
+                  onDataChange({ xray_desc: e.target.value })
+                }
+                placeholder="Description"
+              />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                id="xray-upload"
+                onChange={(e) => handleFileUpload(e, "xray_file")}
+              />
+              <label htmlFor="xray-upload" className="image-upload-button">
+                <FaUpload /> Upload
+              </label>
+              {uploadedFiles.xray_file && (
+                <span className="uploaded-file-name">{uploadedFiles.xray_file}</span>
+              )}
+            </div>
+
+
+            <div className="data-field data-field-2">
+              <label htmlFor="Desciption">MRI</label>
+              <textarea
+                name="mri_desc"
+                value={data.mri_desc}
+                onChange={(e) =>
+                  onDataChange({ mri_desc: e.target.value })
+                }
+                placeholder="Description"
+              />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                id="mri-upload"
+                onChange={(e) => handleFileUpload(e, "mri_file")}
+              />
+              <label htmlFor="mri-upload" className="image-upload-button">
+                <FaUpload /> Upload
+              </label>
+              {uploadedFiles.mri_file && (
+                <span className="uploaded-file-name">{uploadedFiles.mri_file}</span>
+              )}
+            </div>
+          </div>
 
           
+          
+          
+          
 
-          {/* Uploaded files list */}
-          {/* <h3 className="mt-4">Previously Uploaded Files</h3>
-          {loadingFiles ? (
-            <p>Loading files...</p>
-          ) : (
-            <table className="uploaded-files-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>File</th>
-                  <th>Classification</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {fileList.length > 0 ? (
-                  fileList.map((file) => (
-                    <tr key={file.id}>
-                      <td>{file.id}</td>
-                      <td>{file.original_file.split('/').pop()}</td>
-                      <td>{file.classification}</td>
-                      <td>
-                        <button onClick={() => handleViewFile(file)}>
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">No files uploaded yet</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          )} */}
+          
+         
+          <div className="data-field-row">
+            <div className="data-field data-field-2">
+              <label htmlFor="Desciption">Ultrasound</label>
+              <textarea
+                name="Description"
+                value={data.ultrasound_desc}
+                onChange={(e) =>
+                  onDataChange({ ultrasound_desc: e.target.value })
+                }
+                placeholder="Description"
+              />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                id="ultrasound-upload"
+                onChange={(e) => handleFileUpload(e, "ultrasound_file")}
+              />
+              <label htmlFor="ultrasound-upload" className="image-upload-button">
+                <FaUpload /> Upload
+              </label>
+              {uploadedFiles.ultrasound_file && (
+                <span className="uploaded-file-name">{uploadedFiles.ultrasound_file}</span>
+              )}
+            </div>
 
+            <div className="data-field data-field-2">
+              <label htmlFor="Desciption">Blood Report</label>
+              <textarea
+                name="Description"
+                value={data.blood_report_desc}
+                onChange={(e) =>
+                  onDataChange({ blood_report_desc: e.target.value })
+                }
+                placeholder="Description"
+              />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                id="blood-report-upload"
+                onChange={(e) => handleFileUpload(e, "blood_report_file")}
+              />
+              <label htmlFor="blood-report-upload" className="image-upload-button">
+                <FaUpload /> Upload
+              </label>
+              {uploadedFiles.blood_report_file && (
+                <span className="uploaded-file-name">{uploadedFiles.blood_report_file}</span>
+              )}
+            </div>
+
+            
+          </div>
 
         </>
       )}

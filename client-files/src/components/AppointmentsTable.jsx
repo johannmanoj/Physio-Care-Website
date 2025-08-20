@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function AppointmentsTable({ appointments }) {
   const navigate = useNavigate();
-
+  
   return (
     <div className="table-wrapper">
       <table className="player-table">
@@ -24,8 +24,8 @@ function AppointmentsTable({ appointments }) {
         <tbody>
           {appointments.map(appointment => (
             <tr key={appointment.id}>
-              <td>{appointment.appointment_id}</td>
-              <td>{appointment.patient_name}</td>
+              <td>{appointment.id}</td>
+              <td>{appointment.name}</td>
               <td>{appointment.patient_id}</td>
               <td>{appointment.date}</td>
               <td>{appointment.time}</td>
@@ -36,7 +36,7 @@ function AppointmentsTable({ appointments }) {
                 </span>
               </td>
               <td>
-                <button className="view-button" onClick={() => navigate("/patientInfo")}>View</button>
+                <button className="view-button" onClick={() => navigate(`/patientInfo/${appointment.id}`)}>View</button>
               </td>
             </tr>
           ))}

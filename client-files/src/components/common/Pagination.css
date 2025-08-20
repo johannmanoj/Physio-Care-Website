@@ -3,6 +3,7 @@
   justify-content: center; 
 }
 
+
 .pagination-list {
   list-style: none;
   padding: 0;
@@ -38,4 +39,8 @@
   opacity: 0.5;
   cursor: not-allowed;
   background-color: #2d3748; 
+}
+
+.table-footer{
+  margin-top: 10px;
 }

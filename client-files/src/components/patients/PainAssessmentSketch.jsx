@@ -3,6 +3,9 @@ import { Stage, Layer, Image as KonvaImage, Ellipse, Line, Transformer } from 'r
 import useImage from 'use-image';
 import './PainAssessmentSketch.css';
 import image from '../../assets/body-scale-sketch.png';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const URLImage = ({ src }) => {
   const [loadedImage] = useImage(src);
@@ -21,21 +24,89 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
   const stageRef = useRef(null);
   const trRef = useRef(null);
 
+  const [buttonView, setButtonView] = useState("save")
+
+  const [titleList, setTitleList] = useState([]);
+  const [selectedTitle, setSelectedTitle] = useState('');
+
+  const [selectedImage, setSelectedImage] = useState()
+
+  // Save modal
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveSketch, setSaveSketch] = useState({
+    classification: 'pain_sketch',
+    patient_id: '',
+    title: '',
+    original_file: '',
+    annotations: {},
+  });
+
+  // Load modal
+  const [showLoadModal, setShowLoadModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  // Fetch list of titles once
+  useEffect(() => {
+    axios
+      .post(`${API_URL}/api/images/get-images-title-list`, {
+        classification: 'pain_sketch',
+        patient_id: data?.patient_id,
+      })
+      .then((response) => {
+        setTitleList(response.data?.data || []);
+      })
+      .catch((error) => {
+        console.error('Error fetching title list:', error);
+      });
+  }, [API_URL, data?.patient_id]);
+
+  // Load stored sketch data coming via `data.sketch_overlays` on mount/prop change
   useEffect(() => {
     if (data?.sketch_overlays) {
       try {
-        const parsed = JSON.parse(data.sketch_overlays);
-        setEllipses(parsed.ellipses || []);
-        setLines(parsed.lines || []);
+        const incoming = data.sketch_overlays;
+        const parsed =
+          typeof incoming === 'string' ? JSON.parse(incoming) : incoming;
+
+        const normalizedEllipses = (parsed.ellipses || []).map((el, idx) => ({
+          x: el.x,
+          y: el.y,
+          radiusX: el.radiusX,
+          radiusY: el.radiusY,
+          name: el.name || `ellipse-${idx}`,
+        }));
+
+        const normalizedLines = (parsed.lines || []).map((ln) => ({
+          points: Array.isArray(ln.points)
+            ? ln.points.map((n) => Number(n))
+            : [],
+          strokeWidth: ln.strokeWidth ?? 2,
+        }));
+
+        setSelectedShapeName(null);
+        setEllipses(normalizedEllipses);
+        setLines(normalizedLines);
+
+        // detach transformer from any previous node
+        requestAnimationFrame(() => {
+          if (trRef.current) {
+            trRef.current.nodes([]);
+            trRef.current.getLayer()?.batchDraw();
+          }
+        });
       } catch (err) {
         console.error('Error parsing saved sketch data:', err);
       }
     }
-  }, [data]);
+  }, [data?.sketch_overlays]);
 
+  // Keep Transformer attached to selected ellipse
   useEffect(() => {
     const stage = stageRef.current;
-    const selectedNode = stage.findOne(`.${selectedShapeName}`);
+    if (!stage || !trRef.current) return;
+    const selectedNode =
+      selectedShapeName ? stage.findOne(`.${selectedShapeName}`) : null;
+
     if (selectedNode) {
       trRef.current.nodes([selectedNode]);
       trRef.current.getLayer().batchDraw();
@@ -44,6 +115,25 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
       trRef.current.getLayer().batchDraw();
     }
   }, [selectedShapeName, ellipses]);
+
+
+  const fetchSketches = async () => {
+    try {
+      axios
+        .post(`${API_URL}/api/images/get-images-title-list`, {
+          classification: 'pain_sketch',
+          patient_id: data?.patient_id,
+        })
+        .then((response) => {
+          setTitleList(response.data?.data || []);
+        })
+        .catch((error) => {
+          console.error('Error fetching title list:', error);
+        });
+    } catch (err) {
+      console.error("Error fetching sketches:", err);
+    }
+  };
 
   const simplifyPoints = (points) => {
     if (points.length <= 4) return points;
@@ -65,7 +155,13 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
       if (e.target === e.target.getStage()) {
         setSelectedShapeName(null);
         const { x, y } = e.target.getStage().getPointerPosition();
-        setNewEllipse({ x, y, radiusX: 0, radiusY: 0, name: `ellipse-${ellipses.length}` });
+        setNewEllipse({
+          x,
+          y,
+          radiusX: 0,
+          radiusY: 0,
+          name: `ellipse-${ellipses.length}`,
+        });
         setIsDrawing(true);
       }
     } else if (drawMode === 'free') {
@@ -91,11 +187,11 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
   const handleMouseUp = () => {
     if (!isDrawing) return;
     if (drawMode === 'ellipse' && newEllipse) {
-      setEllipses([...ellipses, newEllipse]);
+      setEllipses((prev) => [...prev, newEllipse]);
       setNewEllipse(null);
     } else if (drawMode === 'free' && newLine.length > 0) {
       const smoothLine = simplifyPoints(newLine);
-      setLines([...lines, { points: smoothLine, strokeWidth: lineThickness }]);
+      setLines((prev) => [...prev, { points: smoothLine, strokeWidth: lineThickness }]);
       setNewLine([]);
     }
     setIsDrawing(false);
@@ -107,16 +203,20 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
 
   const handleDelete = () => {
     if (selectedShapeName !== null) {
-      const updatedEllipses = ellipses.filter((ellipse) => ellipse.name !== selectedShapeName);
+      const updatedEllipses = ellipses.filter(
+        (ellipse) => ellipse.name !== selectedShapeName
+      );
       setEllipses(updatedEllipses);
       setSelectedShapeName(null);
     }
   };
 
   const handleUndo = () => {
-    if (lines.length > 0) {
-      const updatedLines = lines.slice(0, -1);
-      setLines(updatedLines);
+    if (drawMode === 'free' && lines.length > 0) {
+      setLines((prev) => prev.slice(0, -1));
+    } else if (drawMode === 'ellipse' && ellipses.length > 0) {
+      setEllipses((prev) => prev.slice(0, -1));
+      setSelectedShapeName(null);
     }
   };
 
@@ -126,10 +226,116 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
     setSelectedShapeName(null);
   };
 
-  const saveToDatabase = () => {
-  const overlayData = JSON.stringify({ ellipses, lines });
-  onDataChange({ sketch_overlays: overlayData }); // ✅ passes as object with key
-};
+
+  const handleSaveSketch = () => {
+    const annotations = { ellipses, lines }; // store as object (backend can JSON-encode)
+    axios
+      .post(`${API_URL}/api/images/add-image-record`, {
+        ...saveSketch,
+        patient_id: data?.patient_id,
+        classification: 'pain_sketch',
+        annotations: JSON.stringify(annotations),
+      })
+      .then(() => {
+        setShowSaveModal(false);
+        setSaveSketch({
+          classification: 'pain_sketch',
+          patient_id: '',
+          title: '',
+          original_file: '',
+          annotations: {},
+        });
+        handleClear()
+      })
+      .catch((error) => {
+        console.error('Error saving sketch:', error);
+      });
+  };
+
+  const handleLoadSketch = () => {
+    if (!selectedTitle) return;
+    axios
+      .post(`${API_URL}/api/images/get-images-details`, {
+        classification: 'pain_sketch',
+        patient_id: data?.patient_id,
+        title: selectedTitle,
+      })
+      .then((response) => {
+        const rec = response?.data?.data?.[0];
+        const incoming = rec?.annotations;
+
+        if (!incoming) {
+          setShowLoadModal(false);
+          return;
+        }
+
+        try {
+          const parsed =
+            typeof incoming === 'string' ? JSON.parse(incoming) : incoming;
+
+          const normalizedEllipses = (parsed.ellipses || []).map((el, idx) => ({
+            x: el.x,
+            y: el.y,
+            radiusX: el.radiusX,
+            radiusY: el.radiusY,
+            name: el.name || `ellipse-${idx}`,
+          }));
+
+          const normalizedLines = (parsed.lines || []).map((ln) => ({
+            points: Array.isArray(ln.points)
+              ? ln.points.map((n) => Number(n))
+              : [],
+            strokeWidth: ln.strokeWidth ?? 2,
+          }));
+
+          // Clear selection and apply new overlays
+          setSelectedShapeName(null);
+          setEllipses(normalizedEllipses);
+          setLines(normalizedLines);
+          setSelectedImage(rec)
+
+          // Detach transformer from any stale node
+          requestAnimationFrame(() => {
+            if (trRef.current) {
+              trRef.current.nodes([]);
+              trRef.current.getLayer()?.batchDraw();
+            }
+          });
+
+          setShowLoadModal(false);
+          setButtonView("update")
+        } catch (err) {
+          console.error('Error parsing loaded sketch data:', err);
+        }
+      })
+      .catch((error) => {
+        console.error('Error loading sketch:', error);
+      });
+  };
+
+  const handleNewSketch = () => {
+    setButtonView("save")
+    handleClear()
+  }
+
+  const handleUpdateSketch = () => {
+    const annotations = { ellipses, lines };
+
+    axios.post(`${API_URL}/api/images/update-images-details`, { id: selectedImage.id, annotations: JSON.stringify(annotations), title: selectedImage.title })
+      .then(() => {
+        setShowEditModal(false);
+        handleClear()
+        setButtonView("save")
+      })
+      .catch((error) => {
+        console.error('Error updating user:', error);
+      });
+  }
+
+  const openLoadPopup = () => {
+    fetchSketches();  // 🔥 refresh list before showing popup
+    setShowLoadModal(true)
+  };
 
   return (
     <div className="pain-sketch-container">
@@ -144,6 +350,7 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
       >
         <Layer>
           <URLImage src={image} />
+
           {ellipses.map((ellipse) => (
             <Ellipse
               key={ellipse.name}
@@ -156,17 +363,24 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
               fillRadialGradientEndPoint={{ x: 0, y: 0 }}
               fillRadialGradientStartRadius={0}
               fillRadialGradientEndRadius={Math.max(ellipse.radiusX, ellipse.radiusY)}
-              fillRadialGradientColorStops={[0, 'rgba(255,0,0,0.5)', 1, 'rgba(255,0,0,0.2)']}
+              fillRadialGradientColorStops={[
+                0,
+                'rgba(255,0,0,0.5)',
+                1,
+                'rgba(255,0,0,0.2)',
+              ]}
               stroke="red"
               strokeWidth={2}
               draggable
               onClick={() => handleSelect(ellipse.name)}
               onTap={() => handleSelect(ellipse.name)}
               onDragEnd={(e) => {
-                const updatedEllipses = ellipses.map((el) =>
-                  el.name === ellipse.name ? { ...el, x: e.target.x(), y: e.target.y() } : el
+                const updated = ellipses.map((el) =>
+                  el.name === ellipse.name
+                    ? { ...el, x: e.target.x(), y: e.target.y() }
+                    : el
                 );
-                setEllipses(updatedEllipses);
+                setEllipses(updated);
               }}
               onTransformEnd={(e) => {
                 const node = e.target;
@@ -174,19 +388,20 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
                 const scaleY = node.scaleY();
                 node.scaleX(1);
                 node.scaleY(1);
-                const updatedEllipses = ellipses.map((el) =>
+                const updated = ellipses.map((el) =>
                   el.name === ellipse.name
                     ? {
-                        ...el,
-                        radiusX: el.radiusX * scaleX,
-                        radiusY: el.radiusY * scaleY,
-                      }
+                      ...el,
+                      radiusX: Math.max(1, el.radiusX * scaleX),
+                      radiusY: Math.max(1, el.radiusY * scaleY),
+                    }
                     : el
                 );
-                setEllipses(updatedEllipses);
+                setEllipses(updated);
               }}
             />
           ))}
+
           {newEllipse && (
             <Ellipse
               x={newEllipse.x}
@@ -197,34 +412,63 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
               fillRadialGradientEndPoint={{ x: 0, y: 0 }}
               fillRadialGradientStartRadius={0}
               fillRadialGradientEndRadius={Math.max(newEllipse.radiusX, newEllipse.radiusY)}
-              fillRadialGradientColorStops={[0, 'rgba(255,0,0,0.5)', 1, 'rgba(255,0,0,0.2)']}
+              fillRadialGradientColorStops={[
+                0,
+                'rgba(255,0,0,0.5)',
+                1,
+                'rgba(255,0,0,0.2)',
+              ]}
               stroke="red"
               strokeWidth={2}
             />
           )}
+
           {lines.map((line, i) => (
-            <Line key={i} points={line.points} stroke="red" strokeWidth={line.strokeWidth} tension={0.5} lineCap="round" lineJoin="round" />
+            <Line
+              key={i}
+              points={line.points}
+              stroke="red"
+              strokeWidth={line.strokeWidth}
+              tension={0.5}
+              lineCap="round"
+              lineJoin="round"
+            />
           ))}
+
           {newLine.length > 0 && (
-            <Line points={newLine} stroke="red" strokeWidth={lineThickness} tension={0.5} lineCap="round" lineJoin="round" />
+            <Line
+              points={newLine}
+              stroke="red"
+              strokeWidth={lineThickness}
+              tension={0.5}
+              lineCap="round"
+              lineJoin="round"
+            />
           )}
+
           <Transformer ref={trRef} />
         </Layer>
       </Stage>
+
       <div className="pain-sketch-controls">
         <div className="mode-toggle">
           <span>Ellipse</span>
-          <div className="toggle-switch" onClick={() => setDrawMode(drawMode === 'ellipse' ? 'free' : 'ellipse')}>
+          <div
+            className="toggle-switch"
+            onClick={() => setDrawMode(drawMode === 'ellipse' ? 'free' : 'ellipse')}
+          >
             <div className={`slider ${drawMode === 'free' ? 'slider-right' : ''}`}></div>
           </div>
           <span>Free Draw</span>
         </div>
-        <div className='pain-sketch-controls-variable'>
+
+        <div className="pain-sketch-controls-variable">
           {drawMode === 'ellipse' && (
-            <button onClick={handleDelete} className="pain-sketch-button">
+            <button onClick={handleDelete} className="sketch-button">
               Delete Selected
             </button>
           )}
+
           {drawMode === 'free' && (
             <div className="line-thickness-control">
               <label>Line Thickness : {lineThickness}</label>
@@ -237,22 +481,124 @@ const PainAssessmentSketch = ({ data, onDataChange }) => {
                   onChange={(e) => setLineThickness(Number(e.target.value))}
                 />
               </div>
-              <button onClick={handleUndo} className="pain-sketch-button">
+              <button onClick={handleUndo} className="sketch-button">
                 Undo Last Line
               </button>
             </div>
           )}
         </div>
-        <button onClick={handleClear} className="pain-sketch-button clear">
+
+        <button onClick={handleClear} className="sketch-button">
           Clear All
         </button>
-        <button onClick={saveToDatabase} className="pain-sketch-button save">
-          Save
+
+        {buttonView == "save" && (
+          <button
+            onClick={() => setShowSaveModal(true)}
+            className="sketch-button"
+          >
+            Save
+          </button>
+        )}
+
+        {buttonView == "update" && (
+          <button
+            onClick={() => setShowEditModal(true)}
+            className="sketch-button"
+          >
+            Update
+          </button>
+        )}
+
+        {buttonView == "update" && (
+          <button
+            onClick={() => handleNewSketch()}
+            className="sketch-button"
+          >
+            New
+          </button>
+        )}
+
+        <button
+          onClick={() => openLoadPopup()}
+          className="sketch-button"
+        >
+          Load
         </button>
       </div>
+
+      {showSaveModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Save Sketch</h2>
+            <input
+              type="text"
+              placeholder="Title"
+              value={saveSketch.title}
+              onChange={(e) =>
+                setSaveSketch((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }))
+              }
+            />
+            <div className="modal-buttons">
+              <button className="view-button" onClick={handleSaveSketch}>
+                Save
+              </button>
+              <button className="cancel-button" onClick={() => setShowSaveModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLoadModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Load Sketch</h2>
+            <select value={selectedTitle} onChange={(e) => setSelectedTitle(e.target.value)}>
+              <option value="">Select Title</option>
+              {titleList.map((title) => (
+                <option key={title} value={title}>
+                  {title}
+                </option>
+              ))}
+            </select>
+            <div className="modal-buttons">
+              <button className="view-button" onClick={handleLoadSketch}>
+                Load
+              </button>
+              <button className="cancel-button" onClick={() => setShowLoadModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Update Sketch</h2>
+            <input
+              type="title"
+              label='Title'
+              placeholder="title"
+              value={selectedImage.title}
+              onChange={(e) => setSelectedImage({ ...selectedImage, title: e.target.value })}
+            />
+
+            <div className="modal-buttons">
+              <button className="view-button" onClick={handleUpdateSketch}>Update</button>
+              <button className="cancel-button" onClick={() => setShowEditModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
 
 export default PainAssessmentSketch;

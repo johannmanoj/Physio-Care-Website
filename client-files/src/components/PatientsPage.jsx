@@ -27,9 +27,11 @@ function PatientsPage() {
 
   // Filtering and Searching Logic
   const filteredPatients = patients.filter(patient => {
-    const matchesSearch = patient.patient_id.toLowerCase().includes(searchTerm.toLowerCase())
+    // console.log("patientpatientpatient", patient);
+    
+    const matchesSearch = patient.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus ? patient.status.toLowerCase() == filterStatus : true;
-
+    
     return matchesSearch && matchesStatus;
   });
 

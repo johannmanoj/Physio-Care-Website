@@ -111,3 +111,23 @@ input[type="range"] {
   height: 150px;
   width: 100%;
 }
+
+
+
+.sketch-button {
+  background-color: #34495e;  /* dark slate */
+  color: #ffffff;
+  padding: 8px 14px;
+  border: 1px solid #3d566e;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 5px;
+  width: 150px;
+}
+
+.sketch-button:hover {
+  background-color: #3d566e;
+}
