@@ -37,7 +37,7 @@ function Sidebar() {
 
         {/* <li className="menu-item">
           <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/appointmentDetails">Appointment</Link>
+          <Link to="/patientInfo/1">Appointment</Link>
         </li> */}
 
        {/* {role == "Admin" && <li className="menu-item">

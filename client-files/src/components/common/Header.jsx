@@ -3,13 +3,22 @@ import "./Header.css";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from 'react-icons/fa';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL
+
+
+
+
 
 
 function Header() {
-  const { logout } = useAuth();
+  const { logout , userId} = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+
+  const [userName, setUserName] = useState("John Doe")
 
   useEffect(() => {
     const handleOutside = (e) => {
@@ -20,6 +29,19 @@ function Header() {
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
+
+  useEffect(() => {
+    axios.post(`${API_URL}/api/users/get-user-details`,{user_id:userId})
+      .then((response) => {
+        setUserName(response.data.data[0].name);
+      })
+      .catch((error) => {
+        console.error('Error fetching patient data:', error);
+      });
+  }, []);
+
+  console.log("nameeeee",userName);
+  
 
   const handleProfile = () => {
     navigate("/profile");
@@ -35,7 +57,7 @@ function Header() {
     <header className="header-container">
       <div className="header-content">
         <div className="header-right-global" ref={menuRef}>
-          <span className="user-info">John Doe</span>
+          <span className="user-info">{userName}</span>
           <FaUserCircle
             style={{ color: 'grey', fontSize: '34px' }}
             onClick={() => setMenuOpen((prev) => !prev)}

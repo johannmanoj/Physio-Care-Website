@@ -105,15 +105,17 @@ function DifferentialDiagnosis({ data, onDataChange }) {
                 }
                 placeholder="Description"
               />
+
+              <label htmlFor="xray-upload" className="image-upload-button">
+                <FaUpload /> Upload
+              </label>
               <input
                 type="file"
                 style={{ display: "none" }}
                 id="xray-upload"
                 onChange={(e) => handleFileUpload(e, "xray_file")}
               />
-              <label htmlFor="xray-upload" className="image-upload-button">
-                <FaUpload /> Upload
-              </label>
+              
               {uploadedFiles.xray_file && (
                 <span className="uploaded-file-name">{uploadedFiles.xray_file}</span>
               )}

@@ -19,18 +19,18 @@ function DemographicData({ data, onDataChange }) {
           />
         </div>
         <div className="data-field data-field-2">
-          <label htmlFor="age">Age</label>
+          <label htmlFor="address">Address</label>
           <input
-            name="age"
-            value={data.age}
+            name="address"
+            value={data.address}
             onChange={handleChange}
-            placeholder="Age"
+            placeholder="Address"
           />
         </div>
       </div>
 
       <div className="data-field-row">
-        <div className="data-field data-field-2">
+        <div className="data-field data-field-4">
           <label htmlFor="sex">Sex</label>
           <input
             name="sex"
@@ -39,7 +39,25 @@ function DemographicData({ data, onDataChange }) {
             placeholder="Sex"
           />
         </div>
-        <div className="data-field data-field-2">
+        <div className="data-field data-field-4">
+          <label htmlFor="age">Age</label>
+          <input
+            name="age"
+            value={data.age}
+            onChange={handleChange}
+            placeholder="Age"
+          />
+        </div>
+        <div className="data-field data-field-4">
+          <label htmlFor="contact">Contact Number</label>
+          <input
+            name="contact_num"
+            value={data.contact_num}
+            onChange={handleChange}
+            placeholder="Contact Number"
+          />
+        </div>
+        <div className="data-field data-field-4">
           <label htmlFor="occupation">Occupation</label>
           <input
             name="occupation"
@@ -52,33 +70,12 @@ function DemographicData({ data, onDataChange }) {
 
       <div className="data-field-row">
         <div className="data-field data-field-2">
-          <label htmlFor="contact">Contact Number</label>
-          <input
-            name="contact_num"
-            value={data.contact_num}
-            onChange={handleChange}
-            placeholder="Contact Number"
-          />
-        </div>
-        <div className="data-field data-field-2">
           <label htmlFor="medicine-allergies">Medicine Allergies</label>
           <input
             name="medical_allergies"
             value={data.medical_allergies}
             onChange={handleChange}
             placeholder="Medical Allergies"
-          />
-        </div>
-      </div>
-
-      <div className="data-field-row">
-        <div className="data-field data-field-2">
-          <label htmlFor="address">Address</label>
-          <input
-            name="address"
-            value={data.address}
-            onChange={handleChange}
-            placeholder="Address"
           />
         </div>
         <div className="data-field data-field-2">

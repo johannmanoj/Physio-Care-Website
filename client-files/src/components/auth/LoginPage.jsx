@@ -50,8 +50,11 @@ function LoginPage() {
       password
     });
 
+    // console.log("reqqqqqq", response.data);
+    
+
     // Pass token + role into context
-    login(response.data.token, response.data.role);
+    login(response.data.token, response.data.role, response.data.email, response.data.user_id);
 
     navigate("/");
 

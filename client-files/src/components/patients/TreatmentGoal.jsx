@@ -19,33 +19,33 @@ function TreatmentGoal({ data, onDataChange }) {
       </nav>
       {activeSelection === "Goal" && (
         <div className="data-field-row">
-        <div className="data-field data-field-1">
-          <label htmlFor="Desciption">Desciption</label>
-          <textarea
-            name="subjective_desc"
-            value={data.goal_desc}
-            onChange={(e) =>
-              onDataChange({ goal_desc: e.target.value })
-            }
-            placeholder="Enter Goals description"
-          />
+          <div className="data-field data-field-1">
+            <label htmlFor="Desciption">Desciption</label>
+            <textarea
+              name="subjective_desc"
+              value={data.goal_desc}
+              onChange={(e) =>
+                onDataChange({ goal_desc: e.target.value })
+              }
+              placeholder="Enter Goals description"
+            />
+          </div>
         </div>
-      </div>
       )}
       {activeSelection === "Program" && (
         <div className="data-field-row">
-        <div className="data-field data-field-1">
-          <label htmlFor="Desciption">Desciption</label>
-          <textarea
-            name="subjective_desc"
-            value={data.program_desc}
-            onChange={(e) =>
-              onDataChange({ program_desc: e.target.value })
-            }
-            placeholder="Enter program description"
-          />
+          <div className="data-field data-field-1">
+            <label htmlFor="Desciption">Desciption</label>
+            <textarea
+              name="subjective_desc"
+              value={data.program_desc}
+              onChange={(e) =>
+                onDataChange({ program_desc: e.target.value })
+              }
+              placeholder="Enter program description"
+            />
+          </div>
         </div>
-      </div>
       )}
     </>
   );

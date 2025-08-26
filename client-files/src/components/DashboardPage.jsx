@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarCheck, FaStethoscope } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb'
 import { BiTimeFive } from 'react-icons/bi'
+import { useAuth } from "../context/AuthContext";
+
 
 const API_URL = import.meta.env.VITE_API_URL
+
+
 
 
 
@@ -269,15 +273,41 @@ function DashboardPage() {
   const [appointmentData, setAppointmnetData] = useState([]);
   const [patientData, setPatientData] = useState([]);
 
+  // useEffect(() => {
+  //   axios.post(`${API_URL}/api/appointments/get-appointments-list`)
+  //     .then((response) => {
+  //       setAppointmnetData(response.data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching appointment data:', error);
+  //     });
+  // }, []);
+  
+  const { role, loginEmail, userId } = useAuth();
+
   useEffect(() => {
-    axios.post(`${API_URL}/api/appointments/get-appointments-list`)
-      .then((response) => {
+    const fetchAppointments = async () => {
+      try {
+        let response;
+
+        if (role === "Admin") {
+          // Admin → fetch all appointments
+          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`);
+        } else {
+          // Non-admin → fetch only practitioner's appointments
+          response = await axios.post(`${API_URL}/api/appointments/get-practitioner-appointments-list`, {
+            practitioner_id: userId,
+          });
+        }
+
         setAppointmnetData(response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching appointment data:', error);
-      });
-  }, []);
+      } catch (error) {
+        console.error("Error fetching appointments data:", error);
+      }
+    };
+
+    fetchAppointments();
+  }, [role, userId]);
 
   useEffect(() => {
     axios.post(`${API_URL}/api/patients/get-patient-list`)

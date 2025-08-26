@@ -1,5 +1,5 @@
 .sidebar {
-  width: 250px;
+  width: 220px;
   background-color: #2d3748;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
@@ -15,7 +15,7 @@
 .sidebar-header img {
   width: 180px;
   height: 39px;
-  margin-left: 25px;
+  margin-left: 18px;
 }
 
 .sidebar-header span {

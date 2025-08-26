@@ -1,0 +1,73 @@
+.date-slider-wrapper {
+  position: fixed;        /* 🚀 stays on screen */
+  bottom: 0;              /* stick to bottom */
+  left: 0;
+  right: 0;
+  z-index: 1000;          /* above page content */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: white;      /* solid background */
+  padding: 10px 40px;     /* space for arrows */
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1); /* shadow on top edge */
+}
+
+.date-slider-container {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  overflow: hidden;       /* hide scrollbar */
+  max-width: 100%;
+}
+
+.date-item {
+  min-width: 80px;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.date-item:hover {
+  background: #e2e8f0;
+}
+.date-number {
+  font-size: 18px;
+  font-weight: bold;
+}
+.date-day,
+.date-month {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Arrow buttons */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1e293b;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+.scroll-btn.left {
+  left: 5px;
+}
+.scroll-btn.right {
+  right: 5px;
+}
+
+/* Global fix */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}

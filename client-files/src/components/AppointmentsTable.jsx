@@ -36,7 +36,8 @@ function AppointmentsTable({ appointments }) {
                 </span>
               </td>
               <td>
-                <button className="view-button" onClick={() => navigate(`/patientInfo/${appointment.id}`)}>View</button>
+                <button className="view-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+                {/* <button className="view-button" onClick={() => navigate(`/patientInfo/${appointment.id}`)}>View</button> */}
               </td>
             </tr>
           ))}

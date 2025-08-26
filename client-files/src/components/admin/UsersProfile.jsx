@@ -14,14 +14,14 @@ function UsersProfile() {
 
   // Add User modal
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newUser, setNewUser] = useState({ email: '', password: '', role: '' });
+  const [newUser, setNewUser] = useState({ email: '', password: '', role: '' , name: ''});
 
   // Edit User modal
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editUser, setEditUser] = useState({ id: '', email: '', role: '' });
+  const [editUser, setEditUser] = useState({ id: '', email: '', role: '' , name:''});
 
   const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient'];
-
+  
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -40,7 +40,7 @@ function UsersProfile() {
     axios.post(`${API_URL}/api/users/add-user`, newUser)
       .then(() => {
         setShowAddModal(false);
-        setNewUser({ email: '', password: '', role: '' });
+        setNewUser({ email: '', password: '', role: '' , name: ''});
         fetchUsers();
       })
       .catch((error) => {
@@ -52,7 +52,7 @@ function UsersProfile() {
     axios.post(`${API_URL}/api/users/update-user`, editUser)
       .then(() => {
         setShowEditModal(false);
-        setEditUser({ id: '', email: '', role: '' });
+        setEditUser({ id: '', email: '', role: '' , name:''});
         fetchUsers();
       })
       .catch((error) => {
@@ -105,6 +105,7 @@ function UsersProfile() {
           <thead>
             <tr>
               <th>User ID</th>
+              <th>Name</th>
               <th>Email</th>
               <th>Role</th>
               <th>Actions</th>
@@ -114,13 +115,14 @@ function UsersProfile() {
             {currentUsers.map(user => (
               <tr key={user.id}>
                 <td>{user.id}</td>
+                <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.role}</td>
                 <td>
                   <button
                     className="view-button"
                     onClick={() => {
-                      setEditUser({ id: user.id, email: user.email, role: user.role });
+                      setEditUser({ id: user.id, email: user.email, role: user.role , name:user.name});
                       setShowEditModal(true);
                     }}
                   >
@@ -151,6 +153,12 @@ function UsersProfile() {
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Add New User</h2>
+            <input
+              type="text"
+              placeholder="Name"
+              value={newUser.name}
+              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+            />
             <input
               type="email"
               placeholder="Email"
@@ -189,6 +197,12 @@ function UsersProfile() {
               type="text"
               value={editUser.id}
               readOnly
+            />
+            <input
+              type="text"
+              placeholder="Name"
+              value={editUser.name}
+              onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
             />
             <input
               type="email"

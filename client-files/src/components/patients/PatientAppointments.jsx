@@ -9,12 +9,12 @@ const API_URL = import.meta.env.VITE_API_URL
 function AppointmentsPage() {
     const navigate = useNavigate();
     const { patientId, patientName } = useParams();
-    
+
     const [appointments, setAppointments] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [appointmentsPerPage] = useState(10); 
+    const [appointmentsPerPage] = useState(10);
 
     const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
 
@@ -272,7 +272,7 @@ function AppointmentsPage() {
     // ]
 
     useEffect(() => {
-        axios.post(`${API_URL}/api/appointments/get-patient-appointment-list`,{"patient_id":patientId})
+        axios.post(`${API_URL}/api/appointments/get-patient-appointment-list`, { "patient_id": patientId })
             .then((response) => {
                 setAppointments(response.data.data);
             })
@@ -355,7 +355,9 @@ function AppointmentsPage() {
                                 </td>
                                 <td>
                                     {/* <button className="view-button" onClick={() => navigate("/patientInfo")}>View</button> */}
-                                    <button className="view-button" onClick={() => navigate(`/patientInfo/${appointment.id}`)}>View</button>
+                                    {/* <button className="view-button" onClick={() => navigate(`/patientInfo/${appointment.id}`)}>View</button> */}
+                                    <button className="view-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+
                                 </td>
                             </tr>
                         ))}
