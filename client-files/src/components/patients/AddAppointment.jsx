@@ -334,7 +334,7 @@ function AddAppointment() {
                         />
                         <label>Contact Number</label>
                         <input
-                            type="text"
+                            type="number"
                             placeholder="Contact Number"
                             onChange={(e) => setNewPatient({ ...newPatient, contact_num: e.target.value })}
                         />

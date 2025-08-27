@@ -20,7 +20,7 @@ function UsersProfile() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUser, setEditUser] = useState({ id: '', email: '', role: '' , name:''});
 
-  const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient'];
+  const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient', 'Receptionist'];
   
   useEffect(() => {
     fetchUsers();
@@ -153,24 +153,28 @@ function UsersProfile() {
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Add New User</h2>
+            <label htmlFor="Name">Name</label>
             <input
               type="text"
               placeholder="Name"
               value={newUser.name}
               onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
             />
+            <label htmlFor="Email">Email</label>
             <input
               type="email"
               placeholder="Email"
               value={newUser.email}
               onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
             />
+            <label htmlFor="Password">Password</label>
             <input
               type="password"
               placeholder="Password"
               value={newUser.password}
               onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
             />
+            <label htmlFor="Role">Role</label>
             <select
               value={newUser.role}
               onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
@@ -193,23 +197,27 @@ function UsersProfile() {
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Edit User</h2>
+            <label htmlFor="Id">User Id</label>
             <input
               type="text"
               value={editUser.id}
               readOnly
             />
+            <label htmlFor="Name">Name</label>
             <input
               type="text"
               placeholder="Name"
               value={editUser.name}
               onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
             />
+            <label htmlFor="Email">Email</label>
             <input
               type="email"
               placeholder="Email"
               value={editUser.email}
               onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
             />
+            <label htmlFor="Role">Role</label>
             <select
               value={editUser.role}
               onChange={(e) => setEditUser({ ...editUser, role: e.target.value })}

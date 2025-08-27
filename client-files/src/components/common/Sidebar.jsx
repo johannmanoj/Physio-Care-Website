@@ -45,10 +45,10 @@ function Sidebar() {
           <Link to="/billing">Billing</Link>
         </li>} */}
 
-        <li className="menu-item">
+        {/* <li className="menu-item">
           <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/profile">Profile</Link>
-        </li>
+        </li> */}
 
         {role == "Admin" && <li className="menu-item">
           <FaUsers  style={{ color: 'grey', fontSize: '24px' }} />

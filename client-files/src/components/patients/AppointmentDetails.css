@@ -48,7 +48,7 @@
   margin-left: 10px;
 
   /* Show only 17 date cards (17 * 76px approx) */
-  max-height: 1350px;
+  max-height: 1450px;
   /* each card ~68px + margin */
   overflow-y: auto;
   /* scroll inside only */
@@ -136,6 +136,7 @@
   transition: all 0.2s ease-in-out;
   white-space: nowrap;
   width: 65px;
+  height: 20px;
   margin: 5px;
 }
 
@@ -281,5 +282,61 @@
   gap: 12px;
   color: white;
 }
+
+.uploaded-file-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+  background-color: #1a65ce; 
+  background-color: #334155; 
+  border-radius: 10px;
+  width: 85px;
+  height: 35px;
+  padding-right: 5px;
+
+
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  cursor: pointer;
+  background-color: #334155; 
+  color: #f8fafc;
+  font-size: 16px;
+}
+
+
+.image-view-button:hover {
+  color: #6898db;
+  /* width: 50px; */
+}
+
+.image-remove-button:hover {
+  color: #dc2626;
+}
+
+/* .icon-button:hover {
+  background-color: #475569;
+}
+
+.view-button {
+  text-decoration: none;
+}
+
+.remove-button {
+  background-color: #ef4444; 
+  height: 40px;
+  width: 40px;
+}
+
+.remove-button:hover {
+  background-color: #dc2626;
+} */
 
 

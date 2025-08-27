@@ -15,7 +15,7 @@ function PatientsTable({ patients }) {
             <th>Sex</th>
             <th>Age</th>
             <th>Contact Number</th>
-            <th>Last Visit</th>
+            {/* <th>Last Visit</th> */}
             {/* <th>Status</th> */}
             <th>Actions</th>
           </tr>
@@ -28,7 +28,7 @@ function PatientsTable({ patients }) {
               <td>{patient.sex}</td>
               <td>{patient.age}</td>
               <td>{patient.contact_num}</td>
-              <td></td>
+              {/* <td></td> */}
               {/* <td></td> */}
               <td>
                 <button className="view-button" onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}>View</button>

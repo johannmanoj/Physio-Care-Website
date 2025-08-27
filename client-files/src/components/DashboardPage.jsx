@@ -290,7 +290,7 @@ function DashboardPage() {
       try {
         let response;
 
-        if (role === "Admin") {
+        if (role === "Admin" || role === "Receptionist") {
           // Admin → fetch all appointments
           response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`);
         } else {

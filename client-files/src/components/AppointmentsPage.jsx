@@ -26,7 +26,7 @@ function AppointmentsPage() {
       try {
         let response;
 
-        if (role === "Admin") {
+        if (role === "Admin" || role === "Receptionist") {
           // Admin → fetch all appointments
           response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`);
         } else {
@@ -48,7 +48,7 @@ function AppointmentsPage() {
 
   // Filtering and Searching Logic
   const filteredAppointments = appointments.filter(appointment => {
-    const matchesSearch = appointment.patient_id.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = appointment.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus ? appointment.status.toLowerCase() == filterStatus : true;
 
     return matchesSearch && matchesStatus;

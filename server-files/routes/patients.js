@@ -19,7 +19,7 @@ router.post('/add-new-patient', async(req,res) =>{
 
 router.post('/get-patient-list', async(req,res) =>{
     try {
-        const [user_details] = await pool.query('SELECT * FROM patients', []);
+        const [user_details] = await pool.query('SELECT * FROM patients ORDER BY id DESC', []);
        
         res.status(201).json({ message: 'Patient details retrieved successfully' , data:user_details});
     } catch (err) {
