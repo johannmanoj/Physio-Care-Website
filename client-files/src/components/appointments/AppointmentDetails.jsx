@@ -235,7 +235,7 @@ function PatientDetails() {
       {showInvoiceModal && (
         <div className="appointment-modal-overlay">
           <div className="appointment-modal-content">
-            <InvoiceModal patientData={patientData} selectedApptId={selectedApptId} setShowInvoiceModal={setShowInvoiceModal}/>
+            <InvoiceModal patientData={patientData} selectedApptId={selectedApptId} setShowInvoiceModal={setShowInvoiceModal} userId={userId}/>
             
             
           </div>

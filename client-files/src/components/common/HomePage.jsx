@@ -14,6 +14,7 @@ import AppointmentDetails from '../appointments/AppointmentDetails'
 import PatientAppointments from '../patients/PatientAppointments'
 // import AddAppointment from '../patients/AddAppointment'
 import AddAppointment from '../appointments/AddAppointment'
+import InvoiceTablePage from '../invoice/InvoiceTablePage'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/appointmentDetails/:patientId/:apptId" element={<AppointmentDetails />} />
           <Route path="/patientAppointments/:patientId/:patientName" element={<PatientAppointments />} />
           <Route path="/addAppointment" element={<AddAppointment />} />
+          <Route path="/invoiceTablePage" element={<InvoiceTablePage />} />
         </Routes>
       </div>
     </div>

@@ -70,7 +70,7 @@ const numberToWords = (num) => {
 };
 
 // --- Invoice document ---
-const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] }) => {
+const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] , invoice_id}) => {
   const totalAmount = invoiceData.reduce((sum, item) => {
     const amt = parseFloat(item.amount) || 0;
     return sum + amt;
@@ -98,7 +98,7 @@ const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] }) => {
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
             <Text>
               <Text style={styles.label}>Sl. No: </Text>
-              {selectedApptId || "097/2025"}
+              {invoice_id || "097/2025"}
             </Text>
             <Text>
               <Text style={styles.label}>Date: </Text>
@@ -165,17 +165,38 @@ const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] }) => {
 
 
 
-// --- Function to open PDF in new tab ---
-export const openInvoicePDF = async (patientData, selectedApptId, invoiceData) => {
-  const blob = await pdf(
-    <InvoiceDocument
-      patientData={patientData}
-      selectedApptId={selectedApptId}
-      invoiceData={invoiceData}
-    />
-  ).toBlob();
-  const url = URL.createObjectURL(blob);
-  window.open(url, "_blank");
+// // --- Function to open PDF in new tab ---
+// export const openInvoicePDF = async (patientData, selectedApptId, invoiceData, invoice_id) => {
+//   const blob = await pdf(
+//     <InvoiceDocument
+//       patientData={patientData}
+//       selectedApptId={selectedApptId}
+//       invoiceData={invoiceData}
+//       invoice_id={invoice_id}
+//     />
+//   ).toBlob();
+//   const url = URL.createObjectURL(blob);
+//   window.open(url, "_blank");
+// };
+
+export const openInvoicePDF = async (patientData, selectedApptId, invoiceData, invoice_id, { openInNewTab = true } = {}) => {
+    const blob = await pdf(
+        <InvoiceDocument
+            patientData={patientData}
+            selectedApptId={selectedApptId}
+            invoiceData={invoiceData}
+            invoice_id={invoice_id}
+        />
+    ).toBlob();
+
+    // Open in new tab if required
+    if (openInNewTab) {
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+    }
+
+    return blob; // Return Blob for uploading
 };
+
 
 export default InvoiceDocument;

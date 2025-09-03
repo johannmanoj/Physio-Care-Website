@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import image from '../../assets/clinic-logo.png'
 import { useAuth } from "../../context/AuthContext";
 
-import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers } from 'react-icons/fa';
+import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice} from 'react-icons/fa';
 import { MdDashboard, MdRequestQuote } from 'react-icons/md';
 
 
@@ -44,6 +44,11 @@ function Sidebar() {
           <MdRequestQuote style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/billing">Billing</Link>
         </li> */}
+       
+        <li className="menu-item">
+          <FaFileInvoice style={{ color: 'grey', fontSize: '24px' }} />
+          <Link to="/invoiceTablePage">Invoices</Link>
+        </li>
 
         <li className="menu-item">
           <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />

@@ -7,7 +7,7 @@ import { openInvoicePDF } from '../patients/Invoice';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal }) {
+function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId }) {
     const [invoiceData, setInvoiceData] = useState([]);
     const [treatmentsList, setTreatmentsList] = useState([]);
     const [selectedTreatment, setSelectedTreatment] = useState("");
@@ -65,6 +65,60 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal }) {
         const updatedData = invoiceData.filter((_, i) => i !== index);
         setInvoiceData(updatedData);
     };
+
+
+
+    const handleNewInvoice = async () => {
+        try {
+            // Step 1: Create invoice in DB
+            const createResponse = await axios.post(`${API_URL}/api/invoice/add-new-invoice`, {
+                practitioner_id: userId,
+                patient_id: patientData.id,
+                appointment_id: selectedApptId,
+            });
+
+            if (!createResponse.data?.invoice_id) {
+                toast.error("Failed to create invoice");
+                return;
+            }
+
+            const invoice_id = createResponse.data.invoice_id;
+
+            // Step 2: Generate PDF Blob
+            const pdfBlob = await openInvoicePDF(patientData, selectedApptId, invoiceData, invoice_id, { openInNewTab: false });
+
+            // Step 3: Upload the PDF
+            const formData = new FormData();
+            formData.append("file", pdfBlob, `invoice_${invoice_id}.pdf`);
+
+            const uploadResponse = await axios.post(`${API_URL}/api/files/upload-file`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            if (!uploadResponse.data?.url) {
+                toast.error("Failed to upload invoice");
+                return;
+            }
+
+            const invoice_url = uploadResponse.data.url;
+
+            // Step 4: Update invoice record with URL
+            await axios.post(`${API_URL}/api/invoice/update-invoice-url`, {
+                id: invoice_id,
+                invoice_url,
+            });
+
+            // Optionally open PDF in new tab after upload
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            window.open(pdfUrl, "_blank");
+
+            toast.success("Invoice generated, uploaded, and saved successfully");
+        } catch (error) {
+            console.error("Error generating invoice:", error);
+            toast.error("Error generating invoice");
+        }
+    };
+
 
     return (
         <div>
@@ -135,10 +189,9 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal }) {
                 </table>
             </div>
 
-
-
             <div className="modal-buttons">
-                <button onClick={() => openInvoicePDF(patientData, selectedApptId, invoiceData)}>Generate</button>
+                {/* <button onClick={() => openInvoicePDF(patientData, selectedApptId, invoiceData)}>Generate</button> */}
+                <button onClick={() => handleNewInvoice(patientData, selectedApptId, invoiceData)}>Generate</button>
 
                 <button className="cancel-button" onClick={() => setShowInvoiceModal(false)} >Cancel</button>
             </div>
