@@ -12,6 +12,7 @@ body {
 }
 
 .main-content {
+  /* margin-left: 260px; */
   flex-grow: 1;
   padding: 20px;
 }

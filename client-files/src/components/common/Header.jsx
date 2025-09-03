@@ -39,8 +39,6 @@ function Header() {
         console.error('Error fetching patient data:', error);
       });
   }, []);
-
-  console.log("nameeeee",userName);
   
 
   const handleProfile = () => {

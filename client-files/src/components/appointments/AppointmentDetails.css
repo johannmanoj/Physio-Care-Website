@@ -223,6 +223,11 @@
   font-size: 1em;
 }
 
+.appointment-field textarea::placeholder {
+  color: #a5a5a5; /* darker color for better visibility */
+  opacity: 1;  /* makes it fully opaque */
+}
+
 .appointment-pain-assessment-button {
   display: flex;
   align-items: center;
@@ -321,22 +326,16 @@
   color: #dc2626;
 }
 
-/* .icon-button:hover {
-  background-color: #475569;
+.appointment-invoice-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background-color: #3875ca;
+  /* width: 200px; */
 }
 
-.view-button {
-  text-decoration: none;
-}
 
-.remove-button {
-  background-color: #ef4444; 
-  height: 40px;
-  width: 40px;
-}
-
-.remove-button:hover {
-  background-color: #dc2626;
-} */
 
 

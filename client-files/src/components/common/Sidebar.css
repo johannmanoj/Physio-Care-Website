@@ -6,6 +6,20 @@
   color: #edf2f7;
 }
 
+/* .sidebar {
+  position: fixed;     
+  top: 0;              
+  left: 0;            
+  width: 220px;
+  height: 100vh;      
+  background-color: #2d3748;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  color: #edf2f7;
+  overflow: hidden;    
+  z-index: 1000;      
+} */
+
 .sidebar-header {
   display: flex;
   align-items: center;

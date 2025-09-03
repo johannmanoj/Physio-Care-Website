@@ -1,0 +1,130 @@
+.invoice-add-button {
+    background-color: #00bf8a;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 90px;
+
+}
+
+.invoice-header {
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.invoice-body {
+    min-height: 380px;
+}
+
+/* General */
+.invoice-container {
+    padding: 20px;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Heading */
+.invoice-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #2f3e4e;
+    padding-bottom: 5px;
+}
+
+/* Form Row */
+.invoice-field-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+}
+
+.invoice-field label {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.invoice-field select,
+.invoice-field input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #3e4c5a;
+    background-color: #1e293b;
+    color: #fff;
+}
+
+.invoice-field select:focus,
+.invoice-field input:focus {
+    border-color: #38bdf8;
+    outline: none;
+}
+
+/* Buttons */
+.invoice-add-button,
+.view-button,
+.cancel-button,
+.modal-buttons button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.invoice-add-button {
+    background-color: #10b981;
+    /* green */
+    color: white;
+    margin-left: 30px;
+    margin-bottom: 2px;
+}
+
+.invoice-add-button:hover {
+    background-color: #059669;
+}
+
+.invoice-delete-button {
+    background-color: #ef4444;
+    /* red */
+    color: white;
+}
+
+.invoice-delete-button:hover {
+    background-color: #dc2626;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    min-width: 100px;
+}
+
+.modal-buttons button:first-child {
+    background-color: #10b981;
+    /* Generate */
+    color: white;
+}
+
+.modal-buttons button:first-child:hover {
+    background-color: #059669;
+}
+
+.cancel-button {
+    background-color: #ef4444;
+    /* Cancel */
+    color: white;
+}
+
+.cancel-button:hover {
+    bac

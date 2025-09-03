@@ -10,9 +10,10 @@ import BillingPage from '../BillingPage'
 import PatientsPage from '../PatientsPage';
 import PatientDetails from '../patients/PatientDetails'
 import UsersProfile from '../admin/UsersProfile'
-import AppointmentDetails from '../patients/AppointmentDetails'
+import AppointmentDetails from '../appointments/AppointmentDetails'
 import PatientAppointments from '../patients/PatientAppointments'
-import AddAppointment from '../patients/AddAppointment'
+// import AddAppointment from '../patients/AddAppointment'
+import AddAppointment from '../appointments/AddAppointment'
 
 function App() {
   return (

@@ -40,15 +40,15 @@ function Sidebar() {
           <Link to="/patientInfo/1">Appointment</Link>
         </li> */}
 
-       {/* {role == "Admin" && <li className="menu-item">
+       {/* <li className="menu-item">
           <MdRequestQuote style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/billing">Billing</Link>
-        </li>} */}
+        </li> */}
 
-        {/* <li className="menu-item">
+        <li className="menu-item">
           <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/profile">Profile</Link>
-        </li> */}
+        </li>
 
         {role == "Admin" && <li className="menu-item">
           <FaUsers  style={{ color: 'grey', fontSize: '24px' }} />

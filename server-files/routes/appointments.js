@@ -5,11 +5,11 @@ const pool = require('../models/index');
 
 router.post('/add-new-appointment', async (req, res) => {
     try {
-        const { practitioner, patient_id, name, sex, age, contact_num, date, time, session_typ } = req.body;
+        const { practitioner, patient_id, name, sex, age, contact_num, date, time, session_typ, onexamination_desc } = req.body;
         const status = "Upcoming"
 
-        await pool.query('INSERT INTO appointments (practitioner, patient_id, name, sex, age, contact_num, date, time, session_type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [practitioner, patient_id, name, sex, age, contact_num, date, time, session_typ, status]);
+        await pool.query('INSERT INTO appointments (practitioner, patient_id, name, sex, age, contact_num, date, time, session_type, status, onexamination_desc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [practitioner, patient_id, name, sex, age, contact_num, date, time, session_typ, status, onexamination_desc]);
 
         res.status(201).json({ message: 'Patient details updated successfully' });
     } catch (err) {
@@ -41,6 +41,7 @@ router.post('/get-practitioner-appointments-list', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 })
+
 router.post('/get-practitioner-patient-appointments-list', async (req, res) => {
     try {
         const { practitioner_id , patient_id} = req.body

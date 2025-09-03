@@ -14,7 +14,16 @@ function AddAppointment() {
     const [filteredPatients, setFilteredPatients] = useState([]); // 🔥 filtered list
     const [searchPhone, setSearchPhone] = useState(""); // 🔥 phone search input
     const [newAppointment, setNewAppointment] = useState({
-        practitioner: '', patient_id: '', name: '', sex: '', age: '', contact_num: '', date: '', time: '', session_typ: ''
+        practitioner: '',
+        patient_id: '',
+        name: '',
+        sex: '',
+        age: '',
+        contact_num: '',
+        date: '',
+        time: '',
+        session_typ: '',
+        onexamination_desc: ''
     });
 
     const [showAddModal, setShowAddModal] = useState(false);
@@ -75,7 +84,18 @@ function AddAppointment() {
     const handleSessionChange = (e) => {
         const selectedSession = e.target.value;
 
-        setNewAppointment({ ...newAppointment, session_typ: selectedSession });
+        setNewAppointment({
+            ...newAppointment, session_typ: selectedSession });
+//         setNewAppointment({
+//             ...newAppointment, session_typ: selectedSession, onexamination_desc: `• Muscle Strength(MMT)
+
+// • Muscle Power
+
+// • Limb Length Discrepancies (UL)
+
+// • Any Other Findings
+
+// ` });
 
         // pass it directly here
         fetchUsers(selectedSession);
