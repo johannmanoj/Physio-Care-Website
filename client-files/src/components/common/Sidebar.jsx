@@ -57,7 +57,7 @@ function Sidebar() {
 
         {role == "Admin" && <li className="menu-item">
           <FaUsers  style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/usersProfile">Users</Link>
+          <Link to="/usersListPage">Users</Link>
         </li>}
       </ul>
     </div>

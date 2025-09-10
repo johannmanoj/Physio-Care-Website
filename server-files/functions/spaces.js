@@ -1,10 +1,9 @@
-// utils/spaces.js
 const AWS = require('aws-sdk');
 require('dotenv').config();
 
 // DigitalOcean Spaces config
 const s3 = new AWS.S3({
-  endpoint: new AWS.Endpoint(process.env.DO_SPACE_ENDPOINT), // e.g. blr1.digitaloceanspaces.com
+  endpoint: new AWS.Endpoint(process.env.DO_SPACE_ENDPOINT),
   accessKeyId: process.env.DO_SPACE_KEY,
   secretAccessKey: process.env.DO_SPACE_SECRET,
 });
@@ -16,10 +15,16 @@ const s3 = new AWS.S3({
  * @param {String} mimeType - File MIME type
  * @returns {Promise<String>} - Public URL of uploaded file
  */
-async function uploadToSpaces(fileBuffer, fileName, mimeType) {
+
+async function uploadToSpaces(fileBuffer, fileName, mimeType, type) {
+  var file_path = `files/common/${fileName}`
+
+  type == "invoices" && (file_path = `files/invoice/${fileName}`)
+  type == "medical_files" && (file_path = `files/medical_files/${fileName}`)
+
   const params = {
-    Bucket: process.env.DO_SPACE_NAME, // Space name
-    Key: `uploads/${fileName}`,        // Path inside Space
+    Bucket: process.env.DO_SPACE_NAME,
+    Key: file_path,
     Body: fileBuffer,
     ACL: 'public-read',
     ContentType: mimeType,

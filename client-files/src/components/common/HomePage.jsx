@@ -5,16 +5,17 @@ import './HomePage.css';
 import { Routes, Route } from 'react-router-dom';
 import DashboardPage from '../DashboardPage';
 import AppointmentsPage from '../AppointmentsPage';
-import ProfilePage from '../ProfilePage';
+import ProfilePage from '../profile/ProfilePage';
 import BillingPage from '../BillingPage'
 import PatientsPage from '../PatientsPage';
 import PatientDetails from '../patients/PatientDetails'
-import UsersProfile from '../admin/UsersProfile'
+import UsersListPage from '../admin/UsersListPage'
 import AppointmentDetails from '../appointments/AppointmentDetails'
 import PatientAppointments from '../patients/PatientAppointments'
 // import AddAppointment from '../patients/AddAppointment'
 import AddAppointment from '../appointments/AddAppointment'
 import InvoiceTablePage from '../invoice/InvoiceTablePage'
+import UserPage from '../admin/UserPage'
 
 function App() {
   return (
@@ -30,11 +31,12 @@ function App() {
           <Route path="/patientInfo/:apptId" element={<PatientDetails />} />
           {/* <Route path="/patientInfo" element={<PatientDetails />} /> */}
           <Route path="/patientsPage" element={<PatientsPage />} />
-          <Route path="/usersProfile" element={<UsersProfile />} />
+          <Route path="/usersListPage" element={<UsersListPage />} />
           <Route path="/appointmentDetails/:patientId/:apptId" element={<AppointmentDetails />} />
           <Route path="/patientAppointments/:patientId/:patientName" element={<PatientAppointments />} />
           <Route path="/addAppointment" element={<AddAppointment />} />
           <Route path="/invoiceTablePage" element={<InvoiceTablePage />} />
+          <Route path="/userPage/:employeeId" element={<UserPage />} />
         </Routes>
       </div>
     </div>

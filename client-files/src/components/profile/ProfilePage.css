@@ -1,0 +1,107 @@
+.profile-page {
+  background-color: #2d3748;
+  border-radius: 10px;
+}
+
+.profile-page h1 {
+  color: white;
+  padding: 20px;
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.profile-header-section-1{
+  display: flex;
+  align-items: center;
+}
+
+.profile-main-heading-tabs {
+  margin-left: 20px;
+  display: flex;
+  gap: 0.75rem;
+  margin-right: 20px;
+}
+
+.profile-main-heading-tab {
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.profile-main-heading-tab:hover {
+  border-color: #bbb;
+}
+
+.profile-main-heading-tab--active {
+  font-weight: 600;
+  border-color: #007bff;
+}
+
+
+
+
+.profile-save {
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+}
+
+.profile-save button {
+  width: 80px;
+  height: 35px;
+  /* padding: 15px; */
+  background-color: #00bf8a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.profile-save button:hover {
+  background-color: #00a377;
+}
+
+.punch-btn {
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 20px;
+  height: 38px;
+}
+
+/* Punch In state (green) */
+.punch-btn.in {
+  background-color: #00bf8a;
+  color: white;
+  /* box-shadow: 0px 4px 6px rgba(0, 191, 138, 0.3); */
+}
+
+.punch-btn.in:hover {
+  background-color: #00a377;
+  /* box-shadow: 0px 6px 10px rgba(0, 191, 138, 0.4); */
+}
+
+/* Punch Out state (red) */
+.punch-btn.out {
+  background-color: #e63946;
+  color: white;
+  /* box-shadow: 0px 4px 6px rgba(230, 57, 70, 0.3); */
+}
+
+.punch-btn.out:hover {
+  background-color: #c82333;
+  /* box-shadow: 0px 6px 10px rgba(230, 57, 70, 0.4); */
+}

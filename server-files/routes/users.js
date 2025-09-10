@@ -61,9 +61,9 @@ router.post('/add-user', async(req,res) =>{
 
 router.post('/update-user', async(req,res) =>{
     try {
-        const {id,name, email, role} = req.body
+        const {id,email,password,role,name,phone,dob,joining_date,leaving_date,monthly_salary,pf,tax,bank_name,acc_holder_name,acc_number,ifsc_code} = req.body
         
-        await pool.query('UPDATE users SET email=?, name=?, role=? WHERE id = ?', [email,name, role, id]);
+        await pool.query('UPDATE users SET email=?,password=?,role=?,name=?,phone=?,dob=?,joining_date=?,leaving_date=?,monthly_salary=?,pf=?,tax=?,bank_name=?,acc_holder_name=?,acc_number=?,ifsc_code=? WHERE id = ?', [email,password,role,name,phone,dob,joining_date,leaving_date,monthly_salary,pf,tax,bank_name,acc_holder_name,acc_number,ifsc_code,id]);
        
         res.status(201).json({ message: 'User details updated successfully'});
     } catch (err) {
@@ -74,9 +74,35 @@ router.post('/update-user', async(req,res) =>{
 
 router.post('/update-user-profile', async(req,res) =>{
     try {
-        const {id, name, email, phone} = req.body
+        const {id, name, email, phone, bank_name, acc_holder_name, acc_number, ifsc_code} = req.body
         
-        await pool.query('UPDATE users SET email=?, name=?, phone=? WHERE id = ?', [email,name, phone, id]);
+        await pool.query('UPDATE users SET email=?, name=?, phone=?, bank_name=?, acc_holder_name=?, acc_number=?, ifsc_code=? WHERE id = ?', [email,name, phone,bank_name, acc_holder_name, acc_number, ifsc_code, id]);
+        
+        res.status(201).json({ message: 'User details updated successfully'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+})
+
+router.post('/update-user-attendance', async(req,res) =>{
+    try {
+        const {id, attendance} = req.body
+        
+        await pool.query('UPDATE users SET attendance=? WHERE id = ?', [attendance, id]);
+        
+        res.status(201).json({ message: 'User details updated successfully'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+})
+
+router.post('/update-user-working-days', async(req,res) =>{
+    try {
+        const {id, monthly_working_days} = req.body
+        
+        await pool.query('UPDATE users SET monthly_working_days=? WHERE id = ?', [monthly_working_days, id]);
         
         res.status(201).json({ message: 'User details updated successfully'});
     } catch (err) {

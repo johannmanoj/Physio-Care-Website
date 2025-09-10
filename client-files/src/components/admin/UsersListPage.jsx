@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from '../common/Pagination';
 import axios from 'axios';
-import './UsersProfile.css';
+import './UsersListPage.css';
+import UserPage from './UserPage'
+import { useNavigate } from "react-router-dom";
+
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function UsersProfile() {
+  const navigate = useNavigate();
+  
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -121,10 +126,11 @@ function UsersProfile() {
                 <td>
                   <button
                     className="view-button"
-                    onClick={() => {
-                      setEditUser({ id: user.id, email: user.email, role: user.role , name:user.name});
-                      setShowEditModal(true);
-                    }}
+                    // onClick={() => {
+                    //   setEditUser({ id: user.id, email: user.email, role: user.role , name:user.name});
+                    //   setShowEditModal(true);
+                    // }}
+                    onClick={() => navigate(`/userPage/${user.id}`)}
                   >
                     Edit
                   </button>

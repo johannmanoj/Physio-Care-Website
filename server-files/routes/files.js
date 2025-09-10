@@ -48,7 +48,8 @@ router.post('/upload-file', async (req, res) => {
         const fileUrl = await uploadToSpaces(
             reqFile.data,        
             reqFile.name,        
-            reqFile.mimetype
+            reqFile.mimetype,
+            req.body.type
         );
 
         res.status(201).json({

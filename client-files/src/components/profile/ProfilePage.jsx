@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import './ProfilePage.css'
-import { useAuth } from "../context/AuthContext";
-import axios from 'axios'
+import './ProfilePage.css';
+import { useAuth } from "../../context/AuthContext";
+import axios from 'axios';
 import { Toaster, toast } from "react-hot-toast";
+import PersonalInfo from './PersonalInfo';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,21 +16,29 @@ function ProfilePage() {
     id: '',
     email: '',
     name: '',
-    phone: ''
+    phone: '',
+    attendance: {}
   });
 
-  // 🔑 state for password fields
   const [passwordData, setPasswordData] = useState({
     currentpass: "",
     newpassword: "",
     confirmpassword: ""
   });
 
+  console.log("profileData----", profileData);
+
+
   useEffect(() => {
     axios.post(`${API_URL}/api/users/get-user-details`, { "user_id": userId })
       .then((response) => {
         if (response.data.data.length > 0) {
-          setProfileData(response.data.data[0])
+          const userData = response.data.data[0];
+          setProfileData(prev => ({
+            ...prev,
+            ...userData,
+            attendance: userData.attendance || {}
+          }));
         }
       })
       .catch((error) => {
@@ -43,7 +52,7 @@ function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      const res = await axios.post(`${API_URL}/api/users/update-user-profile`, profileData);
+      await axios.post(`${API_URL}/api/users/update-user-profile`, profileData);
       toast.success("Profile updated successfully!");
     } catch (err) {
       console.error('Error updating patient:', err);
@@ -51,41 +60,87 @@ function ProfilePage() {
     }
   };
 
- const handlePasswordChange = async () => {
-  if (!passwordData.currentpass || !passwordData.newpassword || !passwordData.confirmpassword) {
-    toast.error("All fields are required");
-    return;
-  }
+  const handlePunch = async () => {
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const now = new Date().toISOString();
 
-  try {
-    const res = await axios.post(`${API_URL}/api/users/change-password`, {
-      user_id: userId,
-      currentpass: passwordData.currentpass,
-      newpassword: passwordData.newpassword,
-      confirmpassword: passwordData.confirmpassword
-    });
+    let updatedAttendance = { ...profileData.attendance };
 
-    toast.success(res.data.message || "Password updated successfully!");
-
-    // clear fields
-    setPasswordData({ currentpass: "", newpassword: "", confirmpassword: "" });
-  } catch (err) {
-    console.error("Error changing password:", err);
-
-    // 🔑 Backend custom errors come in err.response.data
-    if (err.response?.data?.errMsg) {
-      toast.error(err.response.data.errMsg);
+    if (!updatedAttendance[today]) {
+      // No record today → Punch In
+      updatedAttendance[today] = { in: now, out: "" };
+      toast.success("Punched In!");
+    } else if (!updatedAttendance[today].out) {
+      // Already punched in → Punch Out
+      updatedAttendance[today].out = now;
+      toast.success("Punched Out!");
     } else {
-      toast.error("Something went wrong!");
+      toast.error("Already punched out today!");
+      return;
     }
-  }
-};
 
+    const updatedProfile = {
+      ...profileData,
+      attendance: JSON.stringify(updatedAttendance)   // ✅ stringify before saving
+    };
+
+    setProfileData({ ...profileData, attendance: updatedAttendance }); // keep state as object for easy usage
+
+    try {
+      await axios.post(`${API_URL}/api/users/update-user-attendance`, updatedProfile);
+    } catch (err) {
+      console.error("Error updating attendance:", err);
+      toast.error("Failed to update attendance!");
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (!passwordData.currentpass || !passwordData.newpassword || !passwordData.confirmpassword) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${API_URL}/api/users/change-password`, {
+        user_id: userId,
+        currentpass: passwordData.currentpass,
+        newpassword: passwordData.newpassword,
+        confirmpassword: passwordData.confirmpassword
+      });
+
+      toast.success(res.data.message || "Password updated successfully!");
+
+      // clear fields
+      setPasswordData({ currentpass: "", newpassword: "", confirmpassword: "" });
+    } catch (err) {
+      console.error("Error changing password:", err);
+
+      // 🔑 Backend custom errors come in err.response.data
+      if (err.response?.data?.errMsg) {
+        toast.error(err.response.data.errMsg);
+      } else {
+        toast.error("Something went wrong!");
+      }
+    }
+  };
+
+
+  const today = new Date().toISOString().split("T")[0];
+  const isPunchedIn = profileData.attendance?.[today]?.in && !profileData.attendance?.[today]?.out;
 
   return (
     <div className='profile-page'>
       <header className="patient-header">
-        <h1>Profile Page</h1>
+        <div className='profile-header-section-1'>
+          <h1>Profile Page</h1>
+          <button
+            onClick={handlePunch}
+            className={`punch-btn ${isPunchedIn ? "out" : "in"}`}
+          >
+            {isPunchedIn ? "Punch Out" : "Punch In"}
+          </button>
+        </div>
+
         <nav className="profile-main-heading-tabs">
           {TABS.map((tab) => (
             <button
@@ -99,58 +154,10 @@ function ProfilePage() {
         </nav>
       </header>
 
-      {/* Personal Info */}
       {activeTab === 'Personal Info' && (
-        <div>
-          <div className='data-field-row'>
-            <div className='data-field data-field-2'>
-              <label>Employee ID</label>
-              <input
-                name="id"
-                value={profileData.id ?? ''}
-                onChange={(e) => updateProfileData({ id: e.target.value })}
-                readOnly
-              />
-            </div>
-            <div className='data-field data-field-2'>
-              <label>Name</label>
-              <input
-                name="name"
-                value={profileData.name ?? ''}
-                onChange={(e) => updateProfileData({ name: e.target.value })}
-                placeholder="Name"
-              />
-            </div>
-          </div>
-
-          <div className='data-field-row'>
-            <div className='data-field data-field-2'>
-              <label>Email</label>
-              <input
-                name="email"
-                value={profileData.email ?? ''}
-                onChange={(e) => updateProfileData({ email: e.target.value })}
-                placeholder="Email"
-              />
-            </div>
-            <div className='data-field data-field-2'>
-              <label>Phone</label>
-              <input
-                name="phone"
-                value={profileData.phone ?? ''}
-                onChange={(e) => updateProfileData({ phone: e.target.value })}
-                placeholder="Phone"
-              />
-            </div>
-          </div>
-
-          <div className='profile-save'>
-            <button onClick={handleSave}>Save</button>
-          </div>
-        </div>
+        <PersonalInfo profileData={profileData} updateProfileData={updateProfileData} handleSave={handleSave} />
       )}
 
-      {/* Change Password */}
       {activeTab === 'Change Password' && (
         <div>
           <div className='data-field-row'>

@@ -32,6 +32,7 @@ function DifferentialDiagnosisSection({ patientData, updatePatientData, isReadOn
 
     const formData = new FormData();
     formData.append("file", renamedFile);
+    formData.append("type", "medical_files");
 
     try {
       const res = await axios.post(

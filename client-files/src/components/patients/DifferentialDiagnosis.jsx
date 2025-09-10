@@ -40,6 +40,8 @@ function DifferentialDiagnosis({ data, onDataChange }) {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("type", "medical_files");
+
 
     try {
       const res = await axios.post(

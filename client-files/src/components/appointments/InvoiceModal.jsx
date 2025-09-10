@@ -90,6 +90,8 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
             // Step 3: Upload the PDF
             const formData = new FormData();
             formData.append("file", pdfBlob, `invoice_${invoice_id}.pdf`);
+            formData.append("type", "invoice");
+
 
             const uploadResponse = await axios.post(`${API_URL}/api/files/upload-file`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },

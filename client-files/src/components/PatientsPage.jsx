@@ -61,7 +61,7 @@ function PatientsPage() {
           <div className="search-bar-container">
             <input
               type="text"
-              placeholder="Search here..."
+              placeholder="Search Name here..."
               value={searchTerm}
               className='search-input'
               onChange={(e) => setSearchTerm(e.target.value)}

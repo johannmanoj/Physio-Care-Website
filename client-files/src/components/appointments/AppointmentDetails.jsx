@@ -224,10 +224,10 @@ function PatientDetails() {
       {showSketchModal && (
         <div className="appointment-modal-overlay">
           <div className="appointment-modal-content">
-            <PainAssessmentSketch data={patientData} onDataChange={updatePatientData} />
-            <div className="modal-buttons">
+            <PainAssessmentSketch data={patientData} onDataChange={updatePatientData} setShowSketchModal={setShowSketchModal}/>
+            {/* <div className="modal-buttons">
               <button className="cancel-button" onClick={() => setShowSketchModal(false)} disabled={isReadOnly}>Cancel</button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
@@ -236,8 +236,6 @@ function PatientDetails() {
         <div className="appointment-modal-overlay">
           <div className="appointment-modal-content">
             <InvoiceModal patientData={patientData} selectedApptId={selectedApptId} setShowInvoiceModal={setShowInvoiceModal} userId={userId}/>
-            
-            
           </div>
         </div>
       )}
