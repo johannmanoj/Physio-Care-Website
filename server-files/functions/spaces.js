@@ -21,6 +21,7 @@ async function uploadToSpaces(fileBuffer, fileName, mimeType, type) {
 
   type == "invoices" && (file_path = `files/invoice/${fileName}`)
   type == "medical_files" && (file_path = `files/medical_files/${fileName}`)
+  type == "exercise_files" && (file_path = `files/exercise_files/${fileName}`)
 
   const params = {
     Bucket: process.env.DO_SPACE_NAME,

@@ -62,3 +62,21 @@
   box-shadow: 0 0 0 2px #3B82F6;
   transition: box-shadow 0.15s ease;
 }
+
+.appointments-default-message{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  /* font-size: 24px; */
+  color: gray;
+}
+
+.appointments-default-logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+

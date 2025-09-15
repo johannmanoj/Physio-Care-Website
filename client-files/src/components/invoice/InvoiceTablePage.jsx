@@ -4,6 +4,9 @@ import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
+import { FaFileInvoice } from 'react-icons/fa';
+
+
 
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -17,10 +20,12 @@ function AppointmentsPage() {
     const [filterStatus, setFilterStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [appointmentsPerPage] = useState(10);
+    const [loading, setLoading] = useState(true);
+
 
     const [invoices, setInvoices] = useState([])
 
-    const { role, loginEmail, userId } = useAuth();
+    const { role, userId } = useAuth();
 
     const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
 
@@ -36,6 +41,8 @@ function AppointmentsPage() {
                 setInvoices(response.data.data);
             } catch (error) {
                 console.error("Error fetching invoices:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -58,6 +65,9 @@ function AppointmentsPage() {
     const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+      if (loading) { return <p></p>; }
+
 
     return (
         <div className="players-page-container">
@@ -129,18 +139,27 @@ function AppointmentsPage() {
                 </table>
             </div>
 
-            <div className="table-footer">
-                <span className="pagination-info">
-                    Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
-                </span>
-                <Pagination
-                    playersPerPage={appointmentsPerPage}
-                    totalPlayers={filteredAppointments.length}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                />
-            </div>
+            {invoices.length == 0 && (
+                <div className='appointments-default-message'>
+                    <FaFileInvoice className='appointments-default-logo' />
+                    <div className='appointments-default-text'>No Invoices Yet</div>
+                </div>
+            )}
+
+            {invoices.length > 0 && (
+                <div className="table-footer">
+                    <span className="pagination-info">
+                        Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
+                    </span>
+                    <Pagination
+                        playersPerPage={appointmentsPerPage}
+                        totalPlayers={filteredAppointments.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    />
+                </div>
+            )}
         </div>
     );
 }

@@ -4,6 +4,9 @@ import Pagination from './common/Pagination';
 import './PatientsPage.css';
 import axios from 'axios';
 
+import { FaUserInjured } from 'react-icons/fa';
+
+
 const API_URL = import.meta.env.VITE_API_URL
 
 function PatientsPage() {
@@ -11,27 +14,45 @@ function PatientsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [patientsPerPage] = useState(10); 
+  const [patientsPerPage] = useState(10);
+  const [loading, setLoading] = useState(true);
+
 
   const statuses = ['active', 'inactive', 'onhold'];
 
+  // useEffect(() => {
+  //   axios.post(`${API_URL}/api/patients/get-patient-list`)
+  //     .then((response) => {
+  //       setPatients(response.data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching players data:', error);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    axios.post(`${API_URL}/api/patients/get-patient-list`)
+    axios
+      .post(`${API_URL}/api/patients/get-patient-list`)
       .then((response) => {
-        setPatients(response.data.data);
+        setPatients(response.data.data || []); // make sure it's always an array
       })
       .catch((error) => {
-        console.error('Error fetching players data:', error);
+        console.error("Error fetching patients data:", error);
+      })
+      .finally(() => {
+        setLoading(false); // ✅ stop loading after request finishes
       });
   }, []);
+
+
 
   // Filtering and Searching Logic
   const filteredPatients = patients.filter(patient => {
     // console.log("patientpatientpatient", patient);
-    
+
     const matchesSearch = patient.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus ? patient.status.toLowerCase() == filterStatus : true;
-    
+
     return matchesSearch && matchesStatus;
   });
 
@@ -42,6 +63,9 @@ function PatientsPage() {
   const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  if (loading) { return <p></p>; }
+
 
   return (
     <div className="patients-page-container">
@@ -72,18 +96,27 @@ function PatientsPage() {
 
       <PatientsTable patients={currentPatients} />
 
-      <div className="table-footer">
-        <span className="pagination-info">
-          Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPatients.length)} of {filteredPatients.length}
-        </span>
-        <Pagination
-          playersPerPage={patientsPerPage}
-          totalPlayers={filteredPatients.length}
-          paginate={paginate}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
-      </div>
+      {patients.length == 0 && (
+        <div className='appointments-default-message'>
+          <FaUserInjured className='appointments-default-logo' />
+          <div className='appointments-default-text'>No Patients Yet</div>
+        </div>
+      )}
+
+      {patients.length > 0 && (
+        <div className="table-footer">
+          <span className="pagination-info">
+            Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPatients.length)} of {filteredPatients.length}
+          </span>
+          <Pagination
+            playersPerPage={patientsPerPage}
+            totalPlayers={filteredPatients.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
+        </div>
+      )}
     </div>
   );
 }

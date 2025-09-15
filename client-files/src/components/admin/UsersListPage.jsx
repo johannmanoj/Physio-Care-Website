@@ -2,31 +2,28 @@ import React, { useState, useEffect } from 'react';
 import Pagination from '../common/Pagination';
 import axios from 'axios';
 import './UsersListPage.css';
-import UserPage from './UserPage'
 import { useNavigate } from "react-router-dom";
-
+import { FaUsers } from 'react-icons/fa';
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function UsersProfile() {
   const navigate = useNavigate();
-  
+
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
+  const [loading, setLoading] = useState(true);
 
-  // Add User modal
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newUser, setNewUser] = useState({ email: '', password: '', role: '' , name: ''});
-
-  // Edit User modal
+  const [newUser, setNewUser] = useState({ email: '', password: '', role: '', name: '' });
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editUser, setEditUser] = useState({ id: '', email: '', role: '' , name:''});
+  const [editUser, setEditUser] = useState({ id: '', email: '', role: '', name: '' });
 
   const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient', 'Receptionist'];
-  
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -38,6 +35,9 @@ function UsersProfile() {
       })
       .catch((error) => {
         console.error('Error fetching users:', error);
+      })
+      .finally(() => {
+        setLoading(false); // ✅ stop loading after request finishes
       });
   };
 
@@ -45,7 +45,7 @@ function UsersProfile() {
     axios.post(`${API_URL}/api/users/add-user`, newUser)
       .then(() => {
         setShowAddModal(false);
-        setNewUser({ email: '', password: '', role: '' , name: ''});
+        setNewUser({ email: '', password: '', role: '', name: '' });
         fetchUsers();
       })
       .catch((error) => {
@@ -57,7 +57,7 @@ function UsersProfile() {
     axios.post(`${API_URL}/api/users/update-user`, editUser)
       .then(() => {
         setShowEditModal(false);
-        setEditUser({ id: '', email: '', role: '' , name:''});
+        setEditUser({ id: '', email: '', role: '', name: '' });
         fetchUsers();
       })
       .catch((error) => {
@@ -75,9 +75,10 @@ function UsersProfile() {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+
+  if (loading) { return <p></p>; }
   return (
     <div className="patients-page-container">
       <div className="page-header">
@@ -140,6 +141,13 @@ function UsersProfile() {
           </tbody>
         </table>
       </div>
+
+      {users.length == 0 && (
+        <div className='appointments-default-message'>
+          <FaUsers className='appointments-default-logo' />
+          <div className='appointments-default-text'>No Users Yet</div>
+        </div>
+      )}
 
       <div className="table-footer">
         <span className="pagination-info">

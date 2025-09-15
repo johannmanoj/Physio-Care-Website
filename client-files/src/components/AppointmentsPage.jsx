@@ -6,6 +6,9 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+import { FaRegCalendarCheck } from 'react-icons/fa';
+
+
 const API_URL = import.meta.env.VITE_API_URL
 
 function AppointmentsPage() {
@@ -15,11 +18,12 @@ function AppointmentsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [appointmentsPerPage] = useState(10); // As seen in the image "Showing 1 to 10 of 25"
+  const [appointmentsPerPage] = useState(10);
+  const [loading, setLoading] = useState(true);
 
   const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
 
-  const { role, loginEmail, userId } = useAuth();
+  const { role, userId } = useAuth();
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -27,10 +31,8 @@ function AppointmentsPage() {
         let response;
 
         if (role === "Admin" || role === "Receptionist") {
-          // Admin → fetch all appointments
           response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`);
         } else {
-          // Non-admin → fetch only practitioner's appointments
           response = await axios.post(`${API_URL}/api/appointments/get-practitioner-appointments-list`, {
             practitioner_id: userId,
           });
@@ -39,6 +41,8 @@ function AppointmentsPage() {
         setAppointments(response.data.data);
       } catch (error) {
         console.error("Error fetching appointments data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -62,7 +66,7 @@ function AppointmentsPage() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
+  if (loading) { return <p></p>; }
 
   return (
     <div className="players-page-container">
@@ -70,7 +74,7 @@ function AppointmentsPage() {
         <h1>Appointments</h1>
 
         <div className="filters">
-          {role == "Admin" && <button className='view-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
+          {role == "Admin" || role == "Receptionist" && <button className='view-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -94,18 +98,27 @@ function AppointmentsPage() {
 
       <AppointmentsTable appointments={currentAppointments} />
 
-      <div className="table-footer">
-        <span className="pagination-info">
-          Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
-        </span>
-        <Pagination
-          playersPerPage={appointmentsPerPage}
-          totalPlayers={filteredAppointments.length}
-          paginate={paginate}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
-      </div>
+      {appointments.length == 0 && (
+        <div className='appointments-default-message'>
+          <FaRegCalendarCheck className='appointments-default-logo' />
+          <div className='appointments-default-text'>No Appointments Yet</div>
+        </div>
+      )}
+
+      {appointments.length > 0 && (
+        <div className="table-footer">
+          <span className="pagination-info">
+            Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
+          </span>
+          <Pagination
+            playersPerPage={appointmentsPerPage}
+            totalPlayers={filteredAppointments.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
+        </div>
+      )}
     </div>
   );
 }

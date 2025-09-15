@@ -1,0 +1,181 @@
+.trainerAptSection-header {
+    display: flex;
+    align-items: center;
+    /* background-color: aqua; */
+    margin: 20px 0px 20px 0px;
+    justify-content: space-between;
+}
+
+.trainerAptSection-header button {
+    height: 30px;
+    margin: 0px 10px 0px 10px;
+    font-weight: 700;
+    font-size: 14px;
+    width: 80px;
+}
+
+.trainerAptSection-header h1 {
+    font-size: 20px;
+    margin: 0px 10px 10px 0px;
+}
+
+.exercise-image {
+    width: 230px;
+    height: 140px;
+    margin: 10px 2px 20px 2px;
+}
+
+
+
+
+.trainer-model-data-field-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.trainer-model-data-field {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px;
+}
+
+
+.trainer-model-data-field-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.trainer-model-data-field {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 20px;
+}
+
+.trainer-model-data-field-1 {
+    width: 100%;
+}
+
+.trainer-model-data-field-2 {
+    width: 50%;
+}
+
+.trainer-model-data-field-3 {
+    width: 33%;
+}
+
+.trainer-model-data-field-4 {
+    width: 25%;
+}
+
+.trainer-model-data-field label {
+    color: #cccccc;
+    margin-bottom: 8px;
+    margin-top: 5px;
+    margin-left: 2px;
+
+}
+
+.trainer-model-data-field textarea {
+    border-radius: 5px;
+    height: 165px;
+    /* resize: vertical; */
+    background-color: #3e4a64;
+    box-sizing: border-box;
+    padding: 12px;
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    resize: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.trainer-model-data-field input {
+    border-radius: 5px;
+    height: 35px;
+    background-color: #3e4a64;
+    box-sizing: border-box;
+    padding: 12px;
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+}
+
+.trainer-model-data-field select {
+    border-radius: 5px;
+    height: 35px;
+    background-color: #3e4a64;
+    box-sizing: border-box;
+    /* padding: 12px; */
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    padding-left: 10px;
+}
+
+.trainer-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.trainer-modal-content {
+    background-color: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+    width: 1000px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: white;
+}
+
+.trainer-modal-content h2 {
+    margin: 10px 0px 10px 20px;
+}
+
+.exercise-images-grid {
+    margin: 0px 20px 0px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.table-action-buttons-grid {
+    display: flex;
+
+}
+
+.table-action-buttons {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    border-radius: 5px;
+    margin: 2px;
+    border: none;
+    background-color: #34495e;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.table-action-buttons:hover{
+    background-color: #3d566e;
+}
+
+.table-action-buttons-icons {
+    height: 40px;
+    width: 40px;
+    /* color: white; */
+}

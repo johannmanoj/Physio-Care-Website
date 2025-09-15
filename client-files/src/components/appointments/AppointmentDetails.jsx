@@ -10,6 +10,7 @@ import PhysioSection from './PhysioSection'
 import DifferentialDiagnosisSection from './DifferentialDiagnosisSection'
 import TreatmentGoalsSection from './TreatmentGoalsSection'
 import PatientDetailsSection from './PatientDetailsSection'
+import TrainerAptSection from '../trainer/TrainerAptSection'
 
 import InvoiceModal from './InvoiceModal'
 
@@ -68,7 +69,7 @@ function PatientDetails() {
   const [appointments, setAppointments] = useState([]);
   const [selectedApptId, setSelectedApptId] = useState(apptId || null);
   const [patientData, setPatientData] = useState(INITIAL_DATA);
-  
+
 
 
   // --- fetch appointment list for the patient ---
@@ -165,24 +166,35 @@ function PatientDetails() {
         <div className="appointment-details-sub-page-card">
           <h1>Appointment Details</h1>
 
-          <PhysioSection
-            patientData={patientData}
-            updatePatientData={updatePatientData}
-            setShowSketchModal={setShowSketchModal}
-            isReadOnly={isReadOnly}
-          />
+          {patientData.session_type != "Trainer" && (
+            <div>
+              <PhysioSection
+                patientData={patientData}
+                updatePatientData={updatePatientData}
+                setShowSketchModal={setShowSketchModal}
+                isReadOnly={isReadOnly}
+              />
 
-          <DifferentialDiagnosisSection
-            patientData={patientData}
-            updatePatientData={updatePatientData}
-            isReadOnly={isReadOnly}
-          />
+              <DifferentialDiagnosisSection
+                patientData={patientData}
+                updatePatientData={updatePatientData}
+                isReadOnly={isReadOnly}
+              />
 
-          <TreatmentGoalsSection
-            patientData={patientData}
-            updatePatientData={updatePatientData}
-            isReadOnly={isReadOnly}
-          />
+              <TreatmentGoalsSection
+                patientData={patientData}
+                updatePatientData={updatePatientData}
+                isReadOnly={isReadOnly}
+              />
+            </div>
+          )}
+          
+          {patientData.session_type == "Trainer" && (
+            <div>
+              <TrainerAptSection patient_id = {patientId} appointment_id = {apptId} />
+            </div>
+          )}
+          
 
 
           <div className="patient-details-save">
@@ -193,7 +205,7 @@ function PatientDetails() {
             >
               Invoice
             </button>
-            
+
             <button className='b-save' onClick={handleSave} disabled={isReadOnly}>Save</button>
             <Toaster
               position="top-right"
@@ -224,7 +236,7 @@ function PatientDetails() {
       {showSketchModal && (
         <div className="appointment-modal-overlay">
           <div className="appointment-modal-content">
-            <PainAssessmentSketch data={patientData} onDataChange={updatePatientData} setShowSketchModal={setShowSketchModal}/>
+            <PainAssessmentSketch data={patientData} onDataChange={updatePatientData} setShowSketchModal={setShowSketchModal} />
             {/* <div className="modal-buttons">
               <button className="cancel-button" onClick={() => setShowSketchModal(false)} disabled={isReadOnly}>Cancel</button>
             </div> */}
@@ -235,7 +247,7 @@ function PatientDetails() {
       {showInvoiceModal && (
         <div className="appointment-modal-overlay">
           <div className="appointment-modal-content">
-            <InvoiceModal patientData={patientData} selectedApptId={selectedApptId} setShowInvoiceModal={setShowInvoiceModal} userId={userId}/>
+            <InvoiceModal patientData={patientData} selectedApptId={selectedApptId} setShowInvoiceModal={setShowInvoiceModal} userId={userId} />
           </div>
         </div>
       )}

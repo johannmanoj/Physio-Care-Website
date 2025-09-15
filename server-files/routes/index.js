@@ -8,6 +8,7 @@ const files = require('./files')
 const images = require('./images')
 const appointments = require('./appointments')
 const invoice = require('./invoice')
+const exercises = require('./excercises')
 
 router.use('/auth', auth)
 router.use('/patients', patients)
@@ -16,6 +17,7 @@ router.use('/files',files)
 router.use('/images',images)
 router.use('/appointments',appointments)
 router.use('/invoice',invoice)
+router.use('/exercises',exercises)
 
 
 module.exports = router;

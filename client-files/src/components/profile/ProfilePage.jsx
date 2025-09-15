@@ -26,8 +26,6 @@ function ProfilePage() {
     confirmpassword: ""
   });
 
-  console.log("profileData----", profileData);
-
 
   useEffect(() => {
     axios.post(`${API_URL}/api/users/get-user-details`, { "user_id": userId })
