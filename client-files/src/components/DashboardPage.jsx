@@ -54,7 +54,7 @@ function DashboardPage() {
 
   return (
     <div>
-      <div className='dashboard-card-row'>
+      {/* <div className='dashboard-card-row'>
         <div className='dashboard-card-single'>
           <div className='dashboard-stats'>
             <FaRegCalendarCheck style={{ color: 'grey', fontSize: '34px' }} />
@@ -85,7 +85,7 @@ function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className='dashboard-card-row'>
         <div className='dashboard-card'>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import image from '../../assets/clinic-logo.png'
 import { useAuth } from "../../context/AuthContext";
 
-import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice} from 'react-icons/fa';
+import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice, FaChartBar } from 'react-icons/fa';
 import { MdDashboard, MdRequestQuote } from 'react-icons/md';
 
 
@@ -58,6 +58,11 @@ function Sidebar() {
         {role == "Admin" && <li className="menu-item">
           <FaUsers  style={{ color: 'grey', fontSize: '24px' }} />
           <Link to="/usersListPage">Users</Link>
+        </li>}
+
+        {role == "Admin" && <li className="menu-item">
+          <FaChartBar  style={{ color: 'grey', fontSize: '24px' }} />
+          <Link to="/reports">Reports</Link>
         </li>}
       </ul>
     </div>

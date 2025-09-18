@@ -17,6 +17,7 @@ router.post('/get-treatments-list', async (req, res) => {
 router.post('/get-invoice-list', async (req, res) => {
   try {
     const { filter, practitioner_id } = req.body;
+
     console.log("req.body---",req.body);
     
 
@@ -43,11 +44,11 @@ router.post('/get-invoice-list', async (req, res) => {
 
 router.post('/add-new-invoice', async (req, res) => {
     try {
-        const { practitioner_id, patient_id, appointment_id } = req.body;
+        const { practitioner_id, patient_id, appointment_id, total} = req.body;
 
         const [result] = await pool.query(
-            'INSERT INTO invoices (practitioner_id, patient_id, appointment_id) VALUES (?, ?, ?)',
-            [practitioner_id, patient_id, appointment_id]
+            'INSERT INTO invoices (practitioner_id, patient_id, appointment_id, total) VALUES (?, ?, ?, ?)',
+            [practitioner_id, patient_id, appointment_id, total]
         );
 
         // result.insertId gives you the auto-generated ID

@@ -16,6 +16,9 @@ import PatientAppointments from '../patients/PatientAppointments'
 import AddAppointment from '../appointments/AddAppointment'
 import InvoiceTablePage from '../invoice/InvoiceTablePage'
 import UserPage from '../admin/UserPage'
+import ReportsPage from '../reports/ReportsPage'
+import AttendanceReportPage from '../reports/AttendanceReportPage'
+import InvoiceReportPage from '../reports/InvoiceReportPage'
 
 function App() {
   return (
@@ -37,6 +40,9 @@ function App() {
           <Route path="/addAppointment" element={<AddAppointment />} />
           <Route path="/invoiceTablePage" element={<InvoiceTablePage />} />
           <Route path="/userPage/:employeeId" element={<UserPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/attendanceReports" element={<AttendanceReportPage />} />
+          <Route path="/invoiceReportPage" element={<InvoiceReportPage />} />
         </Routes>
       </div>
     </div>

@@ -71,10 +71,13 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
     const handleNewInvoice = async () => {
         try {
             // Step 1: Create invoice in DB
+            const total = invoiceData.reduce((acc, item) => acc + item.amount, 0);
+
             const createResponse = await axios.post(`${API_URL}/api/invoice/add-new-invoice`, {
                 practitioner_id: userId,
                 patient_id: patientData.id,
                 appointment_id: selectedApptId,
+                total: total
             });
 
             if (!createResponse.data?.invoice_id) {

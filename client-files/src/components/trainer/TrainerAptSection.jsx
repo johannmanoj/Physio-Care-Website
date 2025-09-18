@@ -3,9 +3,7 @@ import axios from 'axios';
 import { Toaster, toast } from "react-hot-toast";
 import { FaUpload, FaTrash, FaEye } from "react-icons/fa";
 
-
 import './TrainerAptSection.css'
-
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -31,6 +29,7 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
         reps: '',
         sets: ''
     });
+
     const [appointmentExercises, setAppointmentExercises] = useState([]);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -233,7 +232,7 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
             <div className="table-wrapper">
                 <Toaster position="top-right" reverseOrder={false} />
 
-
+                
                 {showCreateModal && (
                     <div>
                         <div className="trainer-modal-overlay">
