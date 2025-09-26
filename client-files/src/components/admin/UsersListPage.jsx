@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '../common/Pagination';
-import axios from 'axios';
-import './UsersListPage.css';
 import { useNavigate } from "react-router-dom";
 import { FaUsers } from 'react-icons/fa';
+import axios from 'axios';
+
+import { useAuth } from "../../context/AuthContext";
+import Pagination from '../common/Pagination';
+import './UsersListPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function UsersProfile() {
   const navigate = useNavigate();
+  const { branchId } = useAuth();
+
 
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +22,7 @@ function UsersProfile() {
   const [loading, setLoading] = useState(true);
 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newUser, setNewUser] = useState({ email: '', password: '', role: '', name: '' });
+  const [newUser, setNewUser] = useState({ email: '', password: '', role: '', name: '', branch_id: branchId });
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUser, setEditUser] = useState({ id: '', email: '', role: '', name: '' });
 
@@ -29,7 +33,9 @@ function UsersProfile() {
   }, []);
 
   const fetchUsers = () => {
-    axios.post(`${API_URL}/api/users/get-users-list`)
+    axios.post(`${API_URL}/api/users/get-users-list`, {
+      branch_id: branchId
+    })
       .then((response) => {
         setUsers(response.data.data);
       })
@@ -106,8 +112,8 @@ function UsersProfile() {
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="patients-table">
+      <div className="common-table-wrapper">
+        <table className="common-table">
           <thead>
             <tr>
               <th>User ID</th>

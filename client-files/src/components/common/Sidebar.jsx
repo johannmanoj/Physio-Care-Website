@@ -5,65 +5,68 @@ import image from '../../assets/clinic-logo.png'
 import { useAuth } from "../../context/AuthContext";
 
 import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice, FaChartBar } from 'react-icons/fa';
-import { MdDashboard, MdRequestQuote } from 'react-icons/md';
+import { MdDashboard } from 'react-icons/md';
 
 
 function Sidebar() {
-  const { role, isLoggedIn } = useAuth();
-  
-  
+  const { role } = useAuth();
 
+  const menuItems = [
+    {
+      label: "Dashboard",
+      path: "/",
+      icon: <MdDashboard style={{ color: "grey", fontSize: "24px" }} />,
+    },
+    {
+      label: "Appointments",
+      path: "/appointments",
+      icon: <FaRegCalendarCheck style={{ color: "grey", fontSize: "24px" }} />,
+    },
+    {
+      label: "Patients",
+      path: "/patientsPage",
+      icon: <FaUserInjured style={{ color: "grey", fontSize: "24px" }} />,
+    },
+    {
+      label: "Invoices",
+      path: "/invoiceTablePage",
+      icon: <FaFileInvoice style={{ color: "grey", fontSize: "24px" }} />,
+    },
+    {
+      label: "Users",
+      path: "/usersListPage",
+      icon: <FaUsers style={{ color: "grey", fontSize: "24px" }} />,
+      roles: ["Admin"], // 👈 Only for Admin
+    },
+    {
+      label: "Reports",
+      path: "/reports",
+      icon: <FaChartBar style={{ color: "grey", fontSize: "24px" }} />,
+      roles: ["Admin"], // 👈 Only for Admin
+    },
+    {
+      label: "Profile",
+      path: "/profile",
+      icon: <FaUserCircle style={{ color: "grey", fontSize: "24px" }} />,
+    },
+  ];
+  
   return (
     <div className="sidebar">
       <div className="sidebar-header">
         <img src={image} alt="logo" />
       </div>
       <ul className="sidebar-menu">
+        {menuItems.map((item, idx) => {
+          if (item.roles && !item.roles.includes(role)) return null;
 
-        <li className="menu-item">
-          <MdDashboard style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/">Dashboard</Link>
-        </li>
-
-        <li className="menu-item">
-          <FaRegCalendarCheck style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/appointments">Appointments</Link>
-        </li>
-
-        <li className="menu-item">
-          <FaUserInjured style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/patientsPage">Patients</Link>
-        </li>
-
-        {/* <li className="menu-item">
-          <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/patientInfo/1">Appointment</Link>
-        </li> */}
-
-       {/* <li className="menu-item">
-          <MdRequestQuote style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/billing">Billing</Link>
-        </li> */}
-       
-        <li className="menu-item">
-          <FaFileInvoice style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/invoiceTablePage">Invoices</Link>
-        </li>
-
-        <li className="menu-item">
-          <FaUserCircle style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/profile">Profile</Link>
-        </li>
-
-        {role == "Admin" && <li className="menu-item">
-          <FaUsers  style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/usersListPage">Users</Link>
-        </li>}
-
-        {role == "Admin" && <li className="menu-item">
-          <FaChartBar  style={{ color: 'grey', fontSize: '24px' }} />
-          <Link to="/reports">Reports</Link>
-        </li>}
+          return (
+            <li className="menu-item" key={idx}>
+              {item.icon}
+              <Link to={item.path}>{item.label}</Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

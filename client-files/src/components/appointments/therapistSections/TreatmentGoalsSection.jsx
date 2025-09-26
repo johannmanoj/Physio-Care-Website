@@ -1,13 +1,10 @@
 import axios from 'axios';
 import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Toaster, toast } from "react-hot-toast";
-import { FaUpload, FaTrash } from "react-icons/fa";
 // import { useAuth } from "../../context/AuthContext";
 
 
 function TreatmentGoalsSection({ patientData, updatePatientData, isReadOnly }) {
-
 
     return (
         <div>

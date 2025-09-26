@@ -11,7 +11,7 @@ import { FaFileInvoice } from 'react-icons/fa';
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function AppointmentsPage() {
+function InvoiceTablePage() {
     const navigate = useNavigate();
     const { patientId, patientName } = useParams();
 
@@ -25,7 +25,7 @@ function AppointmentsPage() {
 
     const [invoices, setInvoices] = useState([])
 
-    const { role, userId } = useAuth();
+    const { role, userId, branchId } = useAuth();
 
     const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
 
@@ -34,8 +34,8 @@ function AppointmentsPage() {
             try {
                 const payload =
                     role === "Admin"
-                        ? { filter: "all" }
-                        : { filter: "practitioner", practitioner_id: userId };
+                        ? { filter: "all" , branch_id:branchId}
+                        : { filter: "practitioner", practitioner_id: userId, branch_id:branchId };
 
                 const response = await axios.post(`${API_URL}/api/invoice/get-invoice-list`, payload);
                 setInvoices(response.data.data);
@@ -97,8 +97,8 @@ function AppointmentsPage() {
                 </div> */}
             </div>
 
-            <div className="table-wrapper">
-                <table className="player-table">
+            <div className="common-table-wrapper">
+                <table className="common-table">
                     <thead>
                         <tr>
                             <th>Invoice ID</th>
@@ -111,7 +111,7 @@ function AppointmentsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {invoices.map(invoice => (
+                        {currentAppointments.map(invoice => (
                             <tr key={invoice.id}>
                                 <td>{invoice.id}</td>
                                 <td>{invoice.appointment_id}</td>
@@ -164,4 +164,4 @@ function AppointmentsPage() {
     );
 }
 
-export default AppointmentsPage;
+export default InvoiceTablePage;

@@ -1,9 +1,8 @@
 import { React, useEffect, useState } from 'react';
-import body_icon from '../../assets/body-icon.png'
+import body_icon from '../../../assets/body-icon.png'
 
 
 function PhysioSection({ patientData, updatePatientData, setShowSketchModal, isReadOnly }) {
-
 
     return (
         <div>

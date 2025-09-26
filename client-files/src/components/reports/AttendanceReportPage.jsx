@@ -1,64 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Pagination from '../common/Pagination';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './AttendanceReportPage.css';
-import { useNavigate } from "react-router-dom";
-import { FaUsers } from 'react-icons/fa';
+import EmployeesReportPage from './EmployeesReportPage'
+
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function AttendanceReportPage() {
-    const navigate = useNavigate();
-
-    const [users, setUsers] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filterStatus, setFilterStatus] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [usersPerPage] = useState(10);
-    const [loading, setLoading] = useState(true);
-
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedMonth, setSelectedMonth] = useState("");
-
-    const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient', 'Receptionist'];
-
-    useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    const fetchUsers = () => {
-        axios.post(`${API_URL}/api/users/get-users-list`)
-            .then((response) => {
-                setUsers(response.data.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching users:', error);
-            })
-            .finally(() => {
-                setLoading(false); // ✅ stop loading after request finishes
-            });
-    };
-
-    function calculateHoursWorked(attendance) {
-        if (!attendance) return { daily: {}, monthlyTotal: 0 };
-
-        const daily = {};
-        let monthlyTotal = 0;
-
-        Object.entries(attendance).forEach(([date, { in: inTime, out: outTime }]) => {
-            if (inTime && outTime) {
-                const start = new Date(inTime);
-                const end = new Date(outTime);
-                const hours = (end - start) / (1000 * 60 * 60);
-                daily[date] = hours.toFixed(2);
-                monthlyTotal += hours;
-            }
-        });
-
-        return { daily, monthlyTotal: monthlyTotal.toFixed(2) };
-    }
 
     function calculateFilteredAttendance(attendance, year, month) {
         if (!attendance) return { daily: {}, monthlyTotal: 0 };
@@ -71,12 +25,17 @@ function AttendanceReportPage() {
                 const dateObj = new Date(inTime);
                 const dYear = dateObj.getUTCFullYear().toString();
                 const dMonth = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
+                const dDay = String(dateObj.getUTCDate()).padStart(2, "0");
+
+                // ✅ Ensure key format YYYY-MM-DD
+                const key = `${dYear}-${dMonth}-${dDay}`;
 
                 if (dYear === year && dMonth === month) {
                     const start = new Date(inTime);
                     const end = new Date(outTime);
                     const hours = (end - start) / (1000 * 60 * 60);
-                    daily[date] = hours.toFixed(2);
+
+                    daily[key] = (parseFloat(daily[key] || 0) + hours).toFixed(2);
                     monthlyTotal += hours;
                 }
             }
@@ -85,101 +44,98 @@ function AttendanceReportPage() {
         return { daily, monthlyTotal: monthlyTotal.toFixed(2) };
     }
 
+    const viewfunction = (user) => {
+        setSelectedUser(user);
+        setShowAttendanceModal(true);
+    }
 
-    const filteredUsers = users.filter(user => {
-        const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStatus = filterStatus ? user.role === filterStatus : true;
-        return matchesSearch && matchesStatus;
-    });
+    function downloadPDF(user, year, month, calculateFilteredAttendance) {
+        if (!user || !year?.trim() || !month?.trim()) {
+            alert("Please select year and month before downloading.");
+            return;
+        }
 
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+        // Get daily data and monthly total
+        const { daily, monthlyTotal } = calculateFilteredAttendance(
+            user.attendance,
+            year,
+            month
+        );
 
+        const doc = new jsPDF();
 
-    if (loading) { return <p></p>; }
+        // Header
+        doc.setFontSize(16);
+        doc.text(`Attendance Report - ${user.name}`, 14, 20);
+        doc.setFontSize(12);
+        doc.text(`${year}-${month}`, 14, 28);
+
+        // ✅ Calendar-like table
+        const daysInMonth = new Date(year, parseInt(month), 0).getDate();
+        const startDay = new Date(`${year}-${month}-01`).getDay(); // Sunday = 0
+        const weeks = [];
+        let week = new Array(7).fill(""); // 7 days per week
+
+        let dayCounter = 1;
+        let daysWorked = 0;
+        let leaves = 0;
+
+        // Fill first week
+        for (let i = startDay; i < 7; i++) {
+            const dayStr = String(dayCounter).padStart(2, "0");
+            const key = `${year}-${month}-${dayStr}`;
+            const hours = daily[key] || "0.00";
+
+            if (parseFloat(hours) > 0) daysWorked++;
+            else leaves++;
+
+            week[i] = `${dayCounter}\n${hours} hrs`;
+            dayCounter++;
+        }
+        weeks.push(week);
+
+        // Fill rest of the weeks
+        while (dayCounter <= daysInMonth) {
+            week = new Array(7).fill("");
+            for (let i = 0; i < 7 && dayCounter <= daysInMonth; i++) {
+                const dayStr = String(dayCounter).padStart(2, "0");
+                const key = `${year}-${month}-${dayStr}`;
+                const hours = daily[key] || "0.00";
+
+                if (parseFloat(hours) > 0) daysWorked++;
+                else leaves++;
+
+                week[i] = `${dayCounter}\n${hours} hrs`;
+                dayCounter++;
+            }
+            weeks.push(week);
+        }
+
+        // ✅ Use autoTable
+        autoTable(doc, {
+            startY: 40,
+            head: [["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]],
+            body: weeks,
+        });
+
+        // Monthly total + summary
+        const finalY = doc.lastAutoTable?.finalY || 40;
+        doc.setFontSize(12);
+        doc.text(`Monthly Total: ${monthlyTotal} hrs`, 14, finalY + 10);
+        doc.text(`Days Worked: ${daysWorked}`, 14, finalY + 20);
+        doc.text(`Leaves: ${leaves}`, 14, finalY + 30);
+
+        // Save PDF
+        const pdfBlobUrl = doc.output("bloburl");
+        window.open(pdfBlobUrl, "_blank");
+        // doc.save(`Attendance_${user.name}_${year}-${month}.pdf`);
+    }
+
+    
+
     return (
         <div className="patients-page-container">
-            <div className="page-header">
-                <h1>Employees</h1>
-                <div className="filters">
-                    <select
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                    >
-                        <option value="">All Roles</option>
-                        {statuses.map((team) => (
-                            <option key={team} value={team}>{team}</option>
-                        ))}
-                    </select>
-                    <div className="search-bar-container">
-                        <input
-                            type="text"
-                            placeholder="Search Name here..."
-                            value={searchTerm}
-                            className='search-input'
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="table-wrapper">
-                <table className="patients-table">
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Attendance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentUsers.map(user => (
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.role}</td>
-                                <td>
-                                    <button
-                                        className="view-button"
-                                        onClick={() => {
-                                            setSelectedUser(user);
-                                            setShowAttendanceModal(true);
-                                        }}
-                                    >
-                                        View
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {users.length == 0 && (
-                <div className='appointments-default-message'>
-                    <FaUsers className='appointments-default-logo' />
-                    <div className='appointments-default-text'>No Users Yet</div>
-                </div>
-            )}
-
-            <div className="table-footer">
-                <span className="pagination-info">
-                    Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
-                </span>
-                <Pagination
-                    playersPerPage={usersPerPage}
-                    totalPlayers={filteredUsers.length}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                />
-            </div>
+            <EmployeesReportPage viewfunction={viewfunction} />
 
             {showAttendanceModal && selectedUser && (
                 <div className="modal-overlay">
@@ -197,10 +153,10 @@ function AttendanceReportPage() {
                                 <option value="">Select Year</option>
                                 <option value="2025">2025</option>
                                 <option value="2024">2024</option>
-                                <option value="2024">2023</option>
-                                <option value="2024">2022</option>
-                                <option value="2024">2021</option>
-                                <option value="2024">2020</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
                             </select>
 
                             <select
@@ -258,6 +214,19 @@ function AttendanceReportPage() {
                         {/* Footer */}
                         <div className="modal-footer">
                             <button
+                                className="download-btn"
+                                onClick={() =>
+                                    downloadPDF(
+                                        selectedUser,
+                                        selectedYear,
+                                        selectedMonth,
+                                        calculateFilteredAttendance
+                                    )
+                                }
+                            >
+                                Download PDF
+                            </button>
+                            <button
                                 className="close-btn"
                                 onClick={() => setShowAttendanceModal(false)}
                             >
@@ -267,7 +236,6 @@ function AttendanceReportPage() {
                     </div>
                 </div>
             )}
-
 
         </div>
     );

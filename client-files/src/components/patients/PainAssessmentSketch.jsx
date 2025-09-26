@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useAuth } from "../../context/AuthContext";
+
 import { Stage, Layer, Image as KonvaImage, Ellipse, Line, Transformer } from 'react-konva';
 import useImage from 'use-image';
 import './PainAssessmentSketch.css';
@@ -13,6 +15,8 @@ const URLImage = ({ src }) => {
 };
 
 const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
+  const { branchId } = useAuth();
+
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawMode, setDrawMode] = useState('ellipse');
   const [selectedShapeName, setSelectedShapeName] = useState(null);
@@ -58,6 +62,7 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
       .post(`${API_URL}/api/images/get-images-title-list`, {
         classification: 'pain_sketch',
         patient_id: data?.patient_id,
+        branch_id:branchId
       })
       .then((response) => {
         setTitleList(response.data?.data || []);
@@ -137,6 +142,7 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
         .post(`${API_URL}/api/images/get-images-title-list`, {
           classification: 'pain_sketch',
           patient_id: data?.patient_id,
+          branch_id:branchId
         })
         .then((response) => {
           setTitleList(response.data?.data || []);
@@ -266,6 +272,7 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
     axios
       .post(`${API_URL}/api/images/add-image-record`, {
         ...saveSketch,
+        branch_id:branchId,
         patient_id: data?.patient_id,
         classification: 'pain_sketch',
         annotations: JSON.stringify(annotations),
@@ -320,6 +327,7 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
         classification: 'pain_sketch',
         patient_id: data?.patient_id,
         title: selectedTitle,
+        branch_id:branchId
       })
       .then((response) => {
         const rec = response?.data?.data?.[0];

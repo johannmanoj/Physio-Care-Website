@@ -1,26 +1,27 @@
 // Invoice.jsx
 import React from "react";
 import { Document, Page, Text, View, StyleSheet, Image, Font, pdf } from "@react-pdf/renderer";
-import clinicLogo from '../../assets/company-logo.png';
+// import clinicLogo from '../../assets/company-logo.png';
+import clinicLogo from '../../assets/invoice-logo.png';
 
 // --- Font registration ---
 Font.register({
   family: "Roboto",
   fonts: [
-    { src: "/fonts/Roboto-Regular.ttf", fontWeight: "normal" },
-    { src: "/fonts/Roboto-Bold.ttf", fontWeight: "bold" },
+    { src: "/physioclinic/fonts/Roboto-Regular.ttf", fontWeight: "normal" },
+    { src: "/physioclinic/fonts/Roboto-Bold.ttf", fontWeight: "bold" },
   ],
 });
 
 // --- Styles ---
 const styles = StyleSheet.create({
   page: { padding: 35, fontFamily: "Roboto", fontSize: 11, lineHeight: 1.4 },
-
+  
   // Header
   header: { flexDirection: "row", justifyContent: "space-between", marginBottom: 8 },
   clinicInfo: { fontSize: 9, textAlign: "right" },
   logo: { width: 200, height: 58 },
-  separator: { borderBottomWidth: 1, borderBottomColor: "#000", marginBottom: 15 },
+  separator: { borderBottomWidth: 4, borderBottomColor: "#3071B0", marginBottom: 15 },
 
   // Patient & Bill info
   infoBlock: { marginBottom: 10 },
@@ -70,7 +71,8 @@ const numberToWords = (num) => {
 };
 
 // --- Invoice document ---
-const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] , invoice_id}) => {
+const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] , invoice_id, branchDetails}) => {
+  
   const totalAmount = invoiceData.reduce((sum, item) => {
     const amt = parseFloat(item.amount) || 0;
     return sum + amt;
@@ -83,12 +85,27 @@ const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] , invoi
         <View style={styles.header}>
           <Image src={clinicLogo} style={styles.logo} />
           <View style={{ flexDirection: "column", alignItems: "flex-end" }}>
-            <Text style={styles.clinicInfo}>TC NO 24/136, CHITRA NAGAR</Text>
+
+            <Text style={styles.clinicInfo}>{branchDetails.address_line_1}</Text>
+            <Text style={styles.clinicInfo}>{branchDetails.address_line_2}</Text>
+            <Text style={styles.clinicInfo}>{branchDetails.address_line_3}</Text>
+            <Text style={styles.clinicInfo}>
+              <Text style={{ fontWeight: "bold" }}>Mob: {branchDetails.phone_1} / {branchDetails.phone_2}</Text>
+            </Text>
+            
+            {/* <Text style={styles.clinicInfo}>TC 9/1582, Hospital Road</Text>
+            <Text style={styles.clinicInfo}>Sasthamangalam</Text>
+            <Text style={styles.clinicInfo}>Trivandrum</Text>
+            <Text style={styles.clinicInfo}>
+              <Text style={{ fontWeight: "bold" }}>Mob: 0471 350 4858 / +91 9778284858 </Text>
+            </Text> */}
+
+            {/* <Text style={styles.clinicInfo}>TC NO 24/136, CHITRA NAGAR</Text>
             <Text style={styles.clinicInfo}>PIPELINE ROAD, KOWDIAR P.O</Text>
             <Text style={styles.clinicInfo}>THIRUVANANTHAPURAM - 695004</Text>
             <Text style={styles.clinicInfo}>
               <Text style={{ fontWeight: "bold" }}>Mob: +91 96053 11234 / +91 96054 11234 </Text>
-            </Text>
+            </Text> */}
           </View>
         </View>
         <View style={styles.separator} />
@@ -179,13 +196,15 @@ const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] , invoi
 //   window.open(url, "_blank");
 // };
 
-export const openInvoicePDF = async (patientData, selectedApptId, invoiceData, invoice_id, { openInNewTab = true } = {}) => {
+export const openInvoicePDF = async (patientData, selectedApptId, invoiceData, invoice_id, branchDetails, { openInNewTab = true } = {}) => {
     const blob = await pdf(
         <InvoiceDocument
             patientData={patientData}
             selectedApptId={selectedApptId}
             invoiceData={invoiceData}
             invoice_id={invoice_id}
+            branchDetails={branchDetails}
+            
         />
     ).toBlob();
 

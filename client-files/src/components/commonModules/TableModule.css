@@ -1,28 +1,28 @@
-.table-wrapper {
+.common-table-wrapper {
   overflow-x: auto;
 }
 
-.player-table {
+.common-table {
   width: 100%;
   border-collapse: collapse;
   background-color: #2d3748;
 }
 
-.player-table th,
-.player-table td {
+.common-table th,
+.common-table td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #4a5568;
   color: #edf2f7;
 }
 
-.player-table th {
+.common-table th {
   background-color: rgb(67, 77, 94);
   font-weight: bold;
   color: #edf2f7;
 }
 
-.player-table tbody tr:hover {
+.common-table tbody tr:hover {
   background-color: #4a5568;
 }
 

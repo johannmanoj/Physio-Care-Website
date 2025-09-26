@@ -1,17 +1,34 @@
-import axios from 'axios';
 import { React, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useAuth } from "../../../context/AuthContext";
 import { Toaster, toast } from "react-hot-toast";
+import axios from 'axios';
+
+import { openInvoicePDF } from '../../invoice/Invoice';
 import './InvoiceModal.css';
-import { openInvoicePDF } from '../patients/Invoice';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId }) {
+    const { branchId } = useAuth();
+
     const [invoiceData, setInvoiceData] = useState([]);
     const [treatmentsList, setTreatmentsList] = useState([]);
     const [selectedTreatment, setSelectedTreatment] = useState("");
     const [days, setDays] = useState("");
+
+    const [branchDetails, setBranchDetails] = useState(null);
+
+    useEffect(() => {
+        const fetchBranch = async () => {
+            try {
+                const res = await axios.post(`${API_URL}/api/invoice/get-address-details`, { branch_id: branchId });
+                setBranchDetails(res.data.data[0]);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchBranch();
+    }, [branchId]);
 
     // Fetch treatments list on mount
     useEffect(() => {
@@ -66,14 +83,13 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
         setInvoiceData(updatedData);
     };
 
-
-
     const handleNewInvoice = async () => {
         try {
             // Step 1: Create invoice in DB
             const total = invoiceData.reduce((acc, item) => acc + item.amount, 0);
 
             const createResponse = await axios.post(`${API_URL}/api/invoice/add-new-invoice`, {
+                branch_id: branchId,
                 practitioner_id: userId,
                 patient_id: patientData.id,
                 appointment_id: selectedApptId,
@@ -88,7 +104,7 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
             const invoice_id = createResponse.data.invoice_id;
 
             // Step 2: Generate PDF Blob
-            const pdfBlob = await openInvoicePDF(patientData, selectedApptId, invoiceData, invoice_id, { openInNewTab: false });
+            const pdfBlob = await openInvoicePDF(patientData, selectedApptId, invoiceData, invoice_id, branchDetails, { openInNewTab: false });
 
             // Step 3: Upload the PDF
             const formData = new FormData();
@@ -123,7 +139,6 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
             toast.error("Error generating invoice");
         }
     };
-
 
     return (
         <div>
@@ -162,8 +177,8 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
                         </button>
                     </div>
                 </div>
-
-                <table className="player-table">
+                            
+                <table className="common-table">
                     <thead>
                         <tr>
                             <th>Treatment</th>

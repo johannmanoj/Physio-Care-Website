@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import PatientsTable from './PatientsTable';
-import Pagination from './common/Pagination';
+import Pagination from '../common/Pagination';
 import './PatientsPage.css';
 import axios from 'axios';
+import { useAuth } from "../../context/AuthContext";
+
 
 import { FaUserInjured } from 'react-icons/fa';
 
@@ -10,6 +11,8 @@ import { FaUserInjured } from 'react-icons/fa';
 const API_URL = import.meta.env.VITE_API_URL
 
 function PatientsPage() {
+  const { branchId } = useAuth();
+
   const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -17,22 +20,13 @@ function PatientsPage() {
   const [patientsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
 
-
   const statuses = ['active', 'inactive', 'onhold'];
-
-  // useEffect(() => {
-  //   axios.post(`${API_URL}/api/patients/get-patient-list`)
-  //     .then((response) => {
-  //       setPatients(response.data.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching players data:', error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     axios
-      .post(`${API_URL}/api/patients/get-patient-list`)
+      .post(`${API_URL}/api/patients/get-patient-list`, {
+        branch_id: branchId
+      })
       .then((response) => {
         setPatients(response.data.data || []); // make sure it's always an array
       })
@@ -43,7 +37,6 @@ function PatientsPage() {
         setLoading(false); // ✅ stop loading after request finishes
       });
   }, []);
-
 
 
   // Filtering and Searching Logic
@@ -65,8 +58,6 @@ function PatientsPage() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) { return <p></p>; }
-
-
   return (
     <div className="patients-page-container">
       <div className="page-header">
@@ -94,7 +85,34 @@ function PatientsPage() {
         </div>
       </div>
 
-      <PatientsTable patients={currentPatients} />
+      <div className="common-table-wrapper">
+        <table className="common-table">
+          <thead>
+            <tr>
+              <th>Patient ID</th>
+              <th>Name</th>
+              <th>Sex</th>
+              <th>Age</th>
+              <th>Contact Number</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPatients.map(patient => (
+              <tr key={patient.id}>
+                <td>{patient.id}</td>
+                <td>{patient.patient_name}</td>
+                <td>{patient.sex}</td>
+                <td>{patient.age}</td>
+                <td>{patient.contact_num}</td>
+                <td>
+                  <button className="view-button" onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}>View</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {patients.length == 0 && (
         <div className='appointments-default-message'>

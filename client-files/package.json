@@ -20,6 +20,8 @@
     "dicom-parser": "^1.8.21",
     "hammerjs": "^2.0.8",
     "heroicons": "^2.2.0",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
     "konva": "^9.3.22",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

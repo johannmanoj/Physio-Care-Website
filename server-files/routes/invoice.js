@@ -4,30 +4,41 @@ const pool = require('../models/index');
 
 
 router.post('/get-treatments-list', async (req, res) => {
-    try {
-        const [treatment_details] = await pool.query('SELECT * FROM treatments', []);
+  try {
+    const [treatment_details] = await pool.query('SELECT * FROM treatments', []);
 
-        res.status(201).json({ message: 'Patient details retrieved successfully', data: treatment_details });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
-    }
+    res.status(201).json({ message: 'Patient details retrieved successfully', data: treatment_details });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 })
 
 router.post('/get-invoice-list', async (req, res) => {
   try {
-    const { filter, practitioner_id } = req.body;
+    const { filter, practitioner_id, branch_id } = req.body;
 
-    console.log("req.body---",req.body);
-    
+    if (!branch_id) {
+      return res.status(400).json({ message: 'branch_id is required' });
+    }
 
     let query = 'SELECT * FROM invoices';
     let params = [];
+    let conditions = [];
 
+    // Always filter by branch
+    conditions.push('branch_id = ?');
+    params.push(branch_id);
+
+    // Optional practitioner filter
     if (filter !== 'all' && practitioner_id) {
-      query += ' WHERE practitioner_id = ?';
+      conditions.push('practitioner_id = ?');
       params.push(practitioner_id);
     }
+
+    // Build WHERE clause
+    query += ' WHERE ' + conditions.join(' AND ');
+    query += ' ORDER BY id DESC';
 
     const [invoice_details] = await pool.query(query, params);
 
@@ -36,44 +47,55 @@ router.post('/get-invoice-list', async (req, res) => {
       data: invoice_details
     });
   } catch (err) {
+    console.error("Error fetching invoices:", err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.post('/add-new-invoice', async (req, res) => {
+  try {
+    const { practitioner_id, patient_id, appointment_id, total, branch_id } = req.body;
+
+    const [result] = await pool.query(
+      'INSERT INTO invoices (practitioner_id, patient_id, appointment_id, total,branch_id) VALUES (?, ?, ?, ?, ?)',
+      [practitioner_id, patient_id, appointment_id, total, branch_id]
+    );
+
+    // result.insertId gives you the auto-generated ID
+    res.status(201).json({
+      message: 'Invoice created successfully',
+      invoice_id: result.insertId
+    });
+  } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-
-router.post('/add-new-invoice', async (req, res) => {
-    try {
-        const { practitioner_id, patient_id, appointment_id, total} = req.body;
-
-        const [result] = await pool.query(
-            'INSERT INTO invoices (practitioner_id, patient_id, appointment_id, total) VALUES (?, ?, ?, ?)',
-            [practitioner_id, patient_id, appointment_id, total]
-        );
-
-        // result.insertId gives you the auto-generated ID
-        res.status(201).json({ 
-            message: 'Invoice created successfully',
-            invoice_id: result.insertId 
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
 router.post('/update-invoice-url', async (req, res) => {
-    try {
-        const { id, invoice_url } = req.body;
+  try {
+    const { id, invoice_url } = req.body;
 
-        await pool.query('UPDATE invoices SET invoice_url = ? WHERE id = ?',
-            [invoice_url, id]);
+    await pool.query('UPDATE invoices SET invoice_url = ? WHERE id = ?',
+      [invoice_url, id]);
 
-        res.status(201).json({ message: 'Patient details updated successfully' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
-    }
+    res.status(201).json({ message: 'Patient details updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+router.post('/get-address-details', async (req, res) => {
+  try {
+    const { branch_id } = req.body
+    const [treatment_details] = await pool.query('SELECT * FROM branches WHERE id = ?', [branch_id]);
+
+    res.status(201).json({ message: 'Patient details retrieved successfully', data: treatment_details });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 })
 
 

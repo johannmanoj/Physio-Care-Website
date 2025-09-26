@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import AppointmentsTable from './AppointmentsTable';
-import Pagination from './common/Pagination';
-import './AppointmentsPage.css';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-
 import { FaRegCalendarCheck } from 'react-icons/fa';
+import axios from 'axios';
 
+import TableModule from '../commonModules/TableModule'
+
+import { useAuth } from "../../context/AuthContext";
+import Pagination from '../common/Pagination';
+import './AppointmentsPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -22,8 +22,9 @@ function AppointmentsPage() {
   const [loading, setLoading] = useState(true);
 
   const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
-
-  const { role, userId } = useAuth();
+  
+  const { role, userId, branchId } = useAuth();
+  
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -31,10 +32,13 @@ function AppointmentsPage() {
         let response;
 
         if (role === "Admin" || role === "Receptionist") {
-          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`);
+          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`,{
+            branch_id:branchId
+          });
         } else {
-          response = await axios.post(`${API_URL}/api/appointments/get-practitioner-appointments-list`, {
+          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
             practitioner_id: userId,
+            branch_id:branchId
           });
         }
 
@@ -67,14 +71,14 @@ function AppointmentsPage() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) { return <p></p>; }
-
+  
   return (
     <div className="players-page-container">
       <div className="page-header">
         <h1>Appointments</h1>
 
         <div className="filters">
-          {role == "Admin" || role == "Receptionist" && <button className='view-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
+          {(role == "Admin" || role == "Receptionist") && <button className='view-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -96,7 +100,46 @@ function AppointmentsPage() {
         </div>
       </div>
 
-      <AppointmentsTable appointments={currentAppointments} />
+      {/* <TableModule appointments={currentAppointments} /> */}
+
+      <div className="common-table-wrapper">
+        <table className="common-table">
+          <thead>
+            <tr>
+              <th>Appt ID</th>
+              <th>Patient Names</th>
+              <th>Patient ID</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Session Type</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentAppointments.map(appointment => (
+              <tr key={appointment.id}>
+                <td>{appointment.id}</td>
+                <td>{appointment.name}</td>
+                <td>{appointment.patient_id}</td>
+                <td>{appointment.date}</td>
+                <td>{appointment.time}</td>
+                <td>{appointment.session_type}</td>
+                <td>
+                  <span className={`status-badge ${appointment.status.toLowerCase()}`}>
+                    {appointment.status}
+                  </span>
+                </td>
+                <td>
+                  <button className="view-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+
 
       {appointments.length == 0 && (
         <div className='appointments-default-message'>

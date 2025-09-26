@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarCheck, FaStethoscope } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb'
 import { BiTimeFive } from 'react-icons/bi'
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -15,7 +15,7 @@ function DashboardPage() {
 
   const [appointmentData, setAppointmnetData] = useState([]);
   const [patientData, setPatientData] = useState([]);
-  const { role, loginEmail, userId } = useAuth();
+  const { role, userId, branchId } = useAuth();
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -23,12 +23,13 @@ function DashboardPage() {
         let response;
 
         if (role === "Admin" || role === "Receptionist") {
-          // Admin → fetch all appointments
-          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`);
+          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
+            branch_id: branchId
+          });
         } else {
-          // Non-admin → fetch only practitioner's appointments
-          response = await axios.post(`${API_URL}/api/appointments/get-practitioner-appointments-list`, {
+          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
             practitioner_id: userId,
+            branch_id: branchId
           });
         }
 
@@ -42,7 +43,9 @@ function DashboardPage() {
   }, [role, userId]);
 
   useEffect(() => {
-    axios.post(`${API_URL}/api/patients/get-patient-list`)
+    axios.post(`${API_URL}/api/patients/get-patient-list`, {
+      branch_id: branchId
+    })
       .then((response) => {
         setPatientData(response.data.data);
       })

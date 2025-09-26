@@ -6,10 +6,10 @@ const pool = require('../models/index');
 
 router.post('/add-image-record', async(req,res) =>{
     try {
-        const { classification,patient_id,original_file,annotations,title } = req.body;
+        const { classification,patient_id,original_file,annotations,title, branch_id } = req.body;
 
-        await pool.query('INSERT INTO image_files (classification,patient_id,original_file,annotations,title) VALUES (?, ?, ?, ?, ?)', 
-            [classification,patient_id,original_file,annotations,title]);
+        await pool.query('INSERT INTO image_files (classification,patient_id,original_file,annotations,title, branch_id) VALUES (?, ?, ?, ?, ?, ?)', 
+            [classification,patient_id,original_file,annotations,title, branch_id]);
             
         res.status(201).json({ message: 'Patient details updated successfully' });
     } catch (err) {
@@ -20,8 +20,8 @@ router.post('/add-image-record', async(req,res) =>{
 
 router.post('/get-images-title-list', async(req,res) =>{
     try {
-        const {patient_id, classification} = req.body
-        const [image_details] = await pool.query('SELECT title FROM image_files WHERE patient_id=? AND classification = ?', [patient_id, classification]);
+        const {patient_id, classification, branch_id} = req.body
+        const [image_details] = await pool.query('SELECT title FROM image_files WHERE patient_id=? AND classification = ? AND branch_id = ?', [patient_id, classification, branch_id]);
 
         var titles_list = []
 
@@ -38,8 +38,8 @@ router.post('/get-images-title-list', async(req,res) =>{
 
 router.post('/get-images-details', async(req,res) =>{
     try {
-        const {patient_id, classification, title} = req.body
-        const [image_details] = await pool.query('SELECT * FROM image_files WHERE patient_id=? AND classification = ? AND title = ?', [patient_id, classification, title]);
+        const {patient_id, classification, title, branch_id} = req.body
+        const [image_details] = await pool.query('SELECT * FROM image_files WHERE patient_id=? AND classification = ? AND title = ? AND branch_id = ?', [patient_id, classification, title, branch_id]);
 
         res.status(201).json({ message: 'Patient details retrieved successfully' , data:image_details});
     } catch (err) {

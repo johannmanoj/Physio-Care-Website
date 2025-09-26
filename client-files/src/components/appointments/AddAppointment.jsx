@@ -4,16 +4,17 @@ import axios from 'axios';
 import './AddAppointment.css';
 import { useNavigate } from "react-router-dom";
 
+import { useAuth } from "../../context/AuthContext";
+
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 function AddAppointment() {
     const navigate = useNavigate();
+    const { branchId } = useAuth();
 
-    const [patients, setPatients] = useState([]);
-    const [employees, setEmployees] = useState()
-    const [filteredPatients, setFilteredPatients] = useState([]); // 🔥 filtered list
-    const [searchPhone, setSearchPhone] = useState(""); // 🔥 phone search input
-    const [newAppointment, setNewAppointment] = useState({
+
+    const appointment_data = {
         practitioner: '',
         patient_id: '',
         name: '',
@@ -23,11 +24,26 @@ function AddAppointment() {
         date: '',
         time: '',
         session_typ: '',
-        onexamination_desc: ''
-    });
+        onexamination_desc: '',
+        branch_id: branchId
+    }
+
+    const patient_data = {
+        name: '',
+        sex: '',
+        age: '',
+        contact_num: '',
+        branch_id: branchId
+    }
+
+    const [patients, setPatients] = useState([]);
+    const [employees, setEmployees] = useState()
+    const [filteredPatients, setFilteredPatients] = useState([]); // 🔥 filtered list
+    const [searchPhone, setSearchPhone] = useState(""); // 🔥 phone search input
+    const [newAppointment, setNewAppointment] = useState(appointment_data);
 
     const [showAddModal, setShowAddModal] = useState(false);
-    const [newPatient, setNewPatient] = useState({ name: '', sex: '', age: '', contact_num: '' });
+    const [newPatient, setNewPatient] = useState(patient_data);
 
     const timeOptions = [];
     for (let hour = 9; hour <= 18; hour++) {
@@ -41,7 +57,9 @@ function AddAppointment() {
     }
 
     const fetchPatients = () => {
-        axios.post(`${API_URL}/api/patients/get-patient-list`)
+        axios.post(`${API_URL}/api/patients/get-patient-list`, {
+            branch_id: branchId
+        })
             .then((response) => {
                 setPatients(response.data.data);
                 setFilteredPatients(response.data.data); // initially full list
@@ -72,7 +90,10 @@ function AddAppointment() {
     }, []);
 
     const fetchUsers = (role) => {
-        axios.post(`${API_URL}/api/users/get-custom-users-list`, { role })
+        axios.post(`${API_URL}/api/users/get-users-list`, { 
+            role:role,
+            branch_id:branchId 
+        })
             .then((response) => {
                 setEmployees(response.data.data);
             })
@@ -85,17 +106,18 @@ function AddAppointment() {
         const selectedSession = e.target.value;
 
         setNewAppointment({
-            ...newAppointment, session_typ: selectedSession });
-//         setNewAppointment({
-//             ...newAppointment, session_typ: selectedSession, onexamination_desc: `• Muscle Strength(MMT)
+            ...newAppointment, session_typ: selectedSession
+        });
+        //         setNewAppointment({
+        //             ...newAppointment, session_typ: selectedSession, onexamination_desc: `• Muscle Strength(MMT)
 
-// • Muscle Power
+        // • Muscle Power
 
-// • Limb Length Discrepancies (UL)
+        // • Limb Length Discrepancies (UL)
 
-// • Any Other Findings
+        // • Any Other Findings
 
-// ` });
+        // ` });
 
         // pass it directly here
         fetchUsers(selectedSession);
@@ -110,7 +132,7 @@ function AddAppointment() {
         axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
             .then(() => {
                 setShowAddModal(false);
-                setNewPatient({ name: '', sex: '', age: '', contact_num: '' });
+                setNewPatient(patient_data);
                 fetchPatients(); // refresh list
             })
             .catch((error) => {
@@ -121,7 +143,7 @@ function AddAppointment() {
     const handleAddAppointment = () => {
         axios.post(`${API_URL}/api/appointments/add-new-appointment`, newAppointment)
             .then(() => {
-                setNewAppointment({ practitioner: '', patient_id: '', name: '', sex: '', age: '', contact_num: '', date: '', time: '', session_typ: '' });
+                setNewAppointment(appointment_data);
                 navigate("/appointments");
             })
             .catch((error) => {
@@ -217,9 +239,6 @@ function AddAppointment() {
                 </div>
             </div>
 
-
-
-
             <div className="data-field-row">
                 <div className="data-field data-field-2">
                     <label>Session Type</label>
@@ -280,6 +299,7 @@ function AddAppointment() {
 
 
             </div>
+
             <div className="data-field-row">
                 <div className="data-field data-field-2">
                     <label>Date</label>
@@ -327,12 +347,6 @@ function AddAppointment() {
                         />
                         <label>Sex</label>
 
-                        {/* <input
-                            type="text"
-                            placeholder="Sex"
-                            onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
-                        /> */}
-
                         <select
                             id="sex"
                             // value={patientData.sex ?? ''}
@@ -342,9 +356,6 @@ function AddAppointment() {
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
-
-
-
 
                         <label>Age</label>
                         <input

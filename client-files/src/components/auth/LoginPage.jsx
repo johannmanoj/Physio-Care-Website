@@ -15,57 +15,30 @@ function LoginPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   setError('');
-
-  //   try {
-  //     const response = await axios.post(`${API_URL}/api/auth/login`, {
-  //       email,
-  //       password
-  //     });
-
-  //     // Save token in AuthContext
-  //     login(response.data.token);
-  //     navigate("/");
-
-  //   } catch (err) {
-  //     const message = err.response?.data?.message || "Login failed";
-  //     setError(message);
-  //     alert(message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  setLoading(true);
-  setError('');
+    event.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await axios.post(`${API_URL}/api/auth/login`, {
-      email,
-      password
-    });
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password
+      });
 
-    // console.log("reqqqqqq", response.data);
-    
+      // Pass token + role into context
+      login(response.data.token, response.data.role, response.data.email, response.data.user_id, response.data.branch_id);
 
-    // Pass token + role into context
-    login(response.data.token, response.data.role, response.data.email, response.data.user_id);
+      navigate("/");
 
-    navigate("/");
-
-  } catch (err) {
-    const message = err.response?.data?.message || "Login failed";
-    setError(message);
-    alert(message);
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (err) {
+      const message = err.response?.data?.message || "Login failed";
+      setError(message);
+      alert(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login-page">

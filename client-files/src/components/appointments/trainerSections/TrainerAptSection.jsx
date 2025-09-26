@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from "../../../context/AuthContext";
+
 import axios from 'axios';
 import { Toaster, toast } from "react-hot-toast";
 import { FaUpload, FaTrash, FaEye } from "react-icons/fa";
@@ -17,6 +19,7 @@ const INITIAL_DATA = {
 }
 
 const TrainerAptSection = ({ patient_id, appointment_id }) => {
+    const { branchId } = useAuth();
 
     //-- TO CREATE A NEW EXERCISE
     const [createExercise, setCreateExercise] = useState(INITIAL_DATA);
@@ -106,7 +109,8 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
         const payload = {
             ...newExercise,
             patient_id,
-            appointment_id
+            appointment_id,
+            branch_id: branchId
         };
 
         axios.post(`${API_URL}/api/exercises/add-new-exercise`, payload)
@@ -222,17 +226,16 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
     return (
         <div>
             <div className='trainerAptSection-header'>
-
                 <h1>Exercises</h1>
                 <div>
                     <button className='view-button' onClick={() => setShowCreateModal(true)}>New</button>
                     <button className='view-button' onClick={() => setShowAddModal(true)}>Add</button>
                 </div>
             </div>
-            <div className="table-wrapper">
+
+            <div className="common-table-wrapper">
                 <Toaster position="top-right" reverseOrder={false} />
 
-                
                 {showCreateModal && (
                     <div>
                         <div className="trainer-modal-overlay">
@@ -372,7 +375,7 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
                     </div>
                 )}
 
-                <table className="player-table">
+                <table className="common-table">
                     <thead>
                         <tr>
                             <th>Sl No</th>
@@ -399,13 +402,13 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
                                             setShowViewModal(true);
                                         }}
                                     >
-                                        <FaEye className='table-action-buttons-icons'/>
+                                        <FaEye className='table-action-buttons-icons' />
                                     </button>
                                     <button
                                         className="table-action-buttons"
                                         onClick={() => handleDeleteExercise(appointmentExercise.id)}
                                     >
-                                        <FaTrash className='table-action-buttons-icons'/>
+                                        <FaTrash className='table-action-buttons-icons' />
                                     </button>
                                 </td>
 

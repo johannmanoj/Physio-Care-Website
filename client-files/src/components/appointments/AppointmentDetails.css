@@ -224,8 +224,10 @@
 }
 
 .appointment-field textarea::placeholder {
-  color: #a5a5a5; /* darker color for better visibility */
-  opacity: 1;  /* makes it fully opaque */
+  color: #a5a5a5;
+  /* darker color for better visibility */
+  opacity: 1;
+  /* makes it fully opaque */
 }
 
 .appointment-pain-assessment-button {
@@ -269,7 +271,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -294,8 +296,8 @@
   justify-content: center;
   gap: 5px;
   margin-top: 5px;
-  background-color: #1a65ce; 
-  background-color: #334155; 
+  background-color: #1a65ce;
+  background-color: #334155;
   border-radius: 10px;
   width: 85px;
   height: 35px;
@@ -311,7 +313,7 @@
 
   border: none;
   cursor: pointer;
-  background-color: #334155; 
+  background-color: #334155;
   color: #f8fafc;
   font-size: 16px;
 }
@@ -336,6 +338,25 @@
   /* width: 200px; */
 }
 
+.appointment-subheading-grid {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 30px;
+}
 
+.status-dropdown-section {
+  border-radius: 5px;
+  height: 38px;
+  width: 150px;
+  background-color: #3e4a64;
+  box-sizing: border-box;
+  border: none;
+  color: #ffffff;
+  /* font-size: 1em; */
+  font-size: 17px;
 
-
+  padding-left: 10px;
+  margin: 30px 20px 0px 0px;
+}

@@ -7,25 +7,51 @@ function Pagination({ playersPerPage, totalPlayers, paginate, currentPage, total
     pageNumbers.push(i);
   }
 
+  const handlePaginate = (page) => {
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      paginate(page);
+    }
+  };
+
   return (
     <nav className="pagination-nav">
       <ul className="pagination-list">
+        {/* Prev button */}
         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <a onClick={() => paginate(currentPage - 1)} href="#!" className="page-link">
+          <button
+            onClick={() => handlePaginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="page-link"
+          >
             &lt;
-          </a>
+          </button>
         </li>
-        {pageNumbers.map(number => (
-          <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
-            <a onClick={() => paginate(number)} href="#!" className="page-link">
+
+        {/* Page numbers */}
+        {pageNumbers.map((number) => (
+          <li
+            key={number}
+            className={`page-item ${currentPage === number ? 'active' : ''}`}
+          >
+            <button
+              onClick={() => handlePaginate(number)}
+              disabled={currentPage === number}
+              className="page-link"
+            >
               {number}
-            </a>
+            </button>
           </li>
         ))}
+
+        {/* Next button */}
         <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-          <a onClick={() => paginate(currentPage + 1)} href="#!" className="page-link">
+          <button
+            onClick={() => handlePaginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="page-link"
+          >
             &gt;
-          </a>
+          </button>
         </li>
       </ul>
     </nav>

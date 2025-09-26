@@ -1,18 +1,20 @@
-import axios from 'axios';
 import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Toaster, toast } from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
+import axios from 'axios';
 
 import './AppointmentDetails.css';
 import PainAssessmentSketch from '../patients/PainAssessmentSketch'
-import PhysioSection from './PhysioSection'
-import DifferentialDiagnosisSection from './DifferentialDiagnosisSection'
-import TreatmentGoalsSection from './TreatmentGoalsSection'
-import PatientDetailsSection from './PatientDetailsSection'
-import TrainerAptSection from '../trainer/TrainerAptSection'
 
-import InvoiceModal from './InvoiceModal'
+import PhysioSection from './therapistSections/PhysioSection'
+import TreatmentGoalsSection from './therapistSections/TreatmentGoalsSection'
+import DifferentialDiagnosisSection from './therapistSections/DifferentialDiagnosisSection'
+
+import PatientDetailsSection from './apptSubSections/PatientDetailsSection'
+
+import TrainerAptSection from './trainerSections/TrainerAptSection'
+import InvoiceModal from './apptSubSections/InvoiceModal'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -20,6 +22,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const INITIAL_DATA = {
   patient_id: '',
   name: '',
+  status:'',
   age: '',
   sex: '',
   occupation: '',
@@ -61,7 +64,7 @@ const INITIAL_DATA = {
 
 function PatientDetails() {
   const { patientId, apptId } = useParams();
-  const { role, userId } = useAuth();
+  const { role, userId, branchId } = useAuth();
   const isReadOnly = role === "Receptionist";
 
   const [showSketchModal, setShowSketchModal] = useState(false);
@@ -75,7 +78,7 @@ function PatientDetails() {
   // --- fetch appointment list for the patient ---
   useEffect(() => {
     axios
-      .post(`${API_URL}/api/appointments/get-practitioner-patient-appointments-list`, { practitioner_id: userId, patient_id: patientId })
+      .post(`${API_URL}/api/appointments/get-appointments-list`, { practitioner_id: userId, patient_id: patientId, branch_id: branchId })
       .then((response) => {
         const list = response?.data?.data || [];
         setAppointments(list);
@@ -164,7 +167,20 @@ function PatientDetails() {
         </div>
 
         <div className="appointment-details-sub-page-card">
-          <h1>Appointment Details</h1>
+          <div className='appointment-subheading-grid'>
+            <h1>Appointment Details</h1>
+            <select
+            className='status-dropdown-section'
+              id="role"
+              value={patientData.status}
+              onChange={(e) => updatePatientData({ status: e.target.value })}
+            >
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+              <option value="Rescheduled">Rescheduled</option>
+              <option value="Upcoming">Upcoming</option>
+            </select>
+          </div>
 
           {patientData.session_type != "Trainer" && (
             <div>
@@ -188,13 +204,13 @@ function PatientDetails() {
               />
             </div>
           )}
-          
+
           {patientData.session_type == "Trainer" && (
             <div>
-              <TrainerAptSection patient_id = {patientId} appointment_id = {apptId} />
+              <TrainerAptSection patient_id={patientId} appointment_id={apptId} />
             </div>
           )}
-          
+
 
 
           <div className="patient-details-save">

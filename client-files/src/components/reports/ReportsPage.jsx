@@ -1,11 +1,9 @@
 import React from 'react'
-import { FaRegCalendarCheck, FaUserInjured, FaUserCircle, FaUsers, FaFileInvoice, FaClipboardCheck, FaUserCheck } from 'react-icons/fa';
-
+import { useNavigate } from "react-router-dom";
+import { FaRegCalendarCheck, FaFileInvoice } from 'react-icons/fa';
 import { MdPeople } from 'react-icons/md';
 
 import './ReportsPage.css'
-import { useNavigate } from "react-router-dom";
-
 
 
 const ReportsPage = () => {
@@ -22,11 +20,11 @@ const ReportsPage = () => {
                         <button onClick={() => navigate(`/attendanceReports`)}>View</button>
                         
                     </div>
-                    {/* <div className='report-selection-card'>
+                    <div className='report-selection-card'>
                         <FaRegCalendarCheck />
                         <label>Appointments</label>
-                        <button>View</button>
-                    </div> */}
+                        <button onClick={() => navigate(`/appointmentReportPage`)}>View</button>
+                    </div>
                     <div className='report-selection-card'>
                         <FaFileInvoice />
                         <label>Invoices</label>
@@ -51,8 +49,6 @@ const ReportsPage = () => {
                         <button>View</button>
                     </div>
                 </div> */}
-
-
 
             </div>
         </div>

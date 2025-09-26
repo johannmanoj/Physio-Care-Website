@@ -116,3 +116,19 @@ Overlay
   color: #ffffff;
   font-size: 14px;
 }
+
+
+.download-btn {
+  background: #1d4ed8;
+  color: white;
+  padding: 8px 14px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.download-btn:hover {
+  background: #2563eb;
+}
