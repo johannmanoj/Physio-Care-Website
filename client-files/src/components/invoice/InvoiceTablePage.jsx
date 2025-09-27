@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '../common/Pagination';
-import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+
 import { useAuth } from "../../context/AuthContext";
-
 import { FaFileInvoice } from 'react-icons/fa';
-
-
-
+import Pagination from '../common/Pagination';
 
 const API_URL = import.meta.env.VITE_API_URL
+
 
 function InvoiceTablePage() {
     const navigate = useNavigate();
@@ -51,9 +49,9 @@ function InvoiceTablePage() {
 
 
     // Filtering and Searching Logic
-    const filteredAppointments = invoices.filter(appointment => {
-        const matchesSearch = appointment.practitioner_id.toLowerCase().includes(searchTerm.toLowerCase())
-        const matchesStatus = filterStatus ? appointment.status.toLowerCase() == filterStatus : true;
+    const filteredAppointments = invoices.filter(invoice => {
+        const matchesSearch = invoice.id.toString().includes(searchTerm.toLowerCase())
+        const matchesStatus = filterStatus ? invoice.status.toLowerCase() == filterStatus : true;
 
         return matchesSearch && matchesStatus;
     });
@@ -74,9 +72,9 @@ function InvoiceTablePage() {
             <div className="page-header">
                 {/* <h1>Patient: {patientId} ({patientName})</h1> */}
                 <h1>Invoices</h1>
-                {/* <div className="filters">
+                <div className="filters">
 
-                    <select
+                    {/* <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
                     >
@@ -84,17 +82,17 @@ function InvoiceTablePage() {
                         {statuses.map((team) => (
                             <option key={team} value={team}>{team}</option>
                         ))}
-                    </select>
+                    </select> */}
                     <div className="search-bar-container">
                         <input
                             type="text"
-                            placeholder="Search here..."
+                            placeholder="Search Invoice ID here..."
                             value={searchTerm}
                             className='search-input'
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                </div> */}
+                </div>
             </div>
 
             <div className="common-table-wrapper">

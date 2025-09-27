@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { FaUserInjured } from 'react-icons/fa';
+import { Toaster, toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+
+
+import { useAuth } from "../../context/AuthContext";
 import Pagination from '../common/Pagination';
 import './PatientsPage.css';
-import axios from 'axios';
-import { useAuth } from "../../context/AuthContext";
-
-
-import { FaUserInjured } from 'react-icons/fa';
 
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function PatientsPage() {
+  const navigate = useNavigate();
   const { branchId } = useAuth();
+
+  const patient_data = {
+    name: '',
+    sex: '',
+    age: '',
+    contact_num: '',
+    branch_id: branchId
+  }
 
   const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,6 +30,11 @@ function PatientsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [patientsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newPatient, setNewPatient] = useState(patient_data);
+
+
 
   const statuses = ['active', 'inactive', 'onhold'];
 
@@ -37,6 +53,36 @@ function PatientsPage() {
         setLoading(false); // ✅ stop loading after request finishes
       });
   }, []);
+
+  // const handleAddPatient = () => {
+  //   axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
+  //     .then(() => {
+  //       setShowAddModal(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error adding patient:', error);
+  //     });
+  // };
+
+  const handleAddPatient = () => {
+    const { name, sex, age, contact_num } = newPatient;
+
+    if (!name || !sex || !age || !contact_num) {
+      toast.error("Please fill all fields before adding patient.");
+      return;
+    }
+
+    axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
+      .then(() => {
+        toast.success("Patient added successfully!");
+        setShowAddModal(false);
+        setNewPatient(patient_data);
+      })
+      .catch((error) => {
+        toast.error("Failed to add patient. Try again.");
+        console.error('Error adding patient:', error);
+      });
+  };
 
 
   // Filtering and Searching Logic
@@ -62,7 +108,9 @@ function PatientsPage() {
     <div className="patients-page-container">
       <div className="page-header">
         <h1>Patients</h1>
+
         <div className="filters">
+          <button className="add-patient-button" onClick={() => setShowAddModal(true)}>Add Patient</button>
 
           {/* <select
             value={filterStatus}
@@ -135,6 +183,72 @@ function PatientsPage() {
           />
         </div>
       )}
+
+      {showAddModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Add Patient</h2>
+            <label>Name</label>
+            <input
+              type="text"
+              placeholder="Name"
+              onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
+            />
+            <label>Sex</label>
+
+            <select
+              id="sex"
+              // value={patientData.sex ?? ''}
+              onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
+            >
+              <option value="">Select Sex</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+
+            <label>Age</label>
+            <input
+              type="number"
+              placeholder="Age"
+              onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
+            />
+            <label>Contact Number</label>
+            <input
+              type="number"
+              placeholder="Contact Number"
+              onChange={(e) => setNewPatient({ ...newPatient, contact_num: e.target.value })}
+            />
+
+            <div className="modal-buttons">
+              <button className="view-button" onClick={handleAddPatient}>Add</button>
+              <button className="cancel-button" onClick={() => setShowAddModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#1e293b",
+            color: "#f8fafc",
+            border: "1px solid #334155",
+          },
+          success: {
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#1e293b",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#1e293b",
+            },
+          },
+        }}
+      />
     </div>
   );
 }

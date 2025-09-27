@@ -1,11 +1,11 @@
-import Select from "react-select";
 import { useState, useEffect } from "react";
-import axios from 'axios';
-import './AddAppointment.css';
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
+import Select from "react-select";
+import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
-
+import './AddAppointment.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -90,9 +90,9 @@ function AddAppointment() {
     }, []);
 
     const fetchUsers = (role) => {
-        axios.post(`${API_URL}/api/users/get-users-list`, { 
-            role:role,
-            branch_id:branchId 
+        axios.post(`${API_URL}/api/users/get-users-list`, {
+            role: role,
+            branch_id: branchId
         })
             .then((response) => {
                 setEmployees(response.data.data);
@@ -123,30 +123,66 @@ function AddAppointment() {
         fetchUsers(selectedSession);
     };
 
+    // const handleAddPatient = () => {
+    //     axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
+    //         .then(() => {
+    //             setShowAddModal(false);
+    //             setNewPatient(patient_data);
+    //             fetchPatients(); // refresh list
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error adding patient:', error);
+    //         });
+    // };
 
-
-
-
+    // const handleAddAppointment = () => {
+    //     axios.post(`${API_URL}/api/appointments/add-new-appointment`, newAppointment)
+    //         .then(() => {
+    //             setNewAppointment(appointment_data);
+    //             navigate("/appointments");
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error adding appointment:', error);
+    //         });
+    // };
 
     const handleAddPatient = () => {
+        const { name, sex, age, contact_num } = newPatient;
+
+        if (!name || !sex || !age || !contact_num) {
+            toast.error("Please fill all fields before adding patient.");
+            return;
+        }
+
         axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
             .then(() => {
+                toast.success("Patient added successfully!");
                 setShowAddModal(false);
                 setNewPatient(patient_data);
-                fetchPatients(); // refresh list
+                fetchPatients();
             })
             .catch((error) => {
+                toast.error("Failed to add patient. Try again.");
                 console.error('Error adding patient:', error);
             });
     };
 
     const handleAddAppointment = () => {
+        const { practitioner, patient_id, date, time, session_typ, contact_num } = newAppointment;
+
+        if (!practitioner || !patient_id || !date || !time || !session_typ || !contact_num) {
+            toast.error("Please fill all required fields before creating appointment.");
+            return;
+        }
+
         axios.post(`${API_URL}/api/appointments/add-new-appointment`, newAppointment)
             .then(() => {
+                toast.success("Appointment created successfully!");
                 setNewAppointment(appointment_data);
                 navigate("/appointments");
             })
             .catch((error) => {
+                toast.error("Failed to create appointment. Try again.");
                 console.error('Error adding appointment:', error);
             });
     };
@@ -377,6 +413,28 @@ function AddAppointment() {
                     </div>
                 </div>
             )}
+            <Toaster
+                position="top-right"
+                toastOptions={{
+                    style: {
+                        background: "#1e293b",
+                        color: "#f8fafc",
+                        border: "1px solid #334155",
+                    },
+                    success: {
+                        iconTheme: {
+                            primary: "#22c55e",
+                            secondary: "#1e293b",
+                        },
+                    },
+                    error: {
+                        iconTheme: {
+                            primary: "#ef4444",
+                            secondary: "#1e293b",
+                        },
+                    },
+                }}
+            />
         </div>
     );
 }

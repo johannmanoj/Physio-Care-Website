@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { FaUsers } from 'react-icons/fa';
+import { Toaster, toast } from "react-hot-toast";
+
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
@@ -26,7 +28,7 @@ function UsersProfile() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUser, setEditUser] = useState({ id: '', email: '', role: '', name: '' });
 
-  const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient', 'Receptionist'];
+  const statuses = ['Admin', 'Trainer', 'Therapist', 'Receptionist'];
 
   useEffect(() => {
     fetchUsers();
@@ -47,17 +49,40 @@ function UsersProfile() {
       });
   };
 
+  // const handleAddUser = () => {
+  //   axios.post(`${API_URL}/api/users/add-user`, newUser)
+  //     .then(() => {
+  //       setShowAddModal(false);
+  //       setNewUser({ email: '', password: '', role: '', name: '' });
+  //       fetchUsers();
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error adding user:', error);
+  //     });
+  // };
+
   const handleAddUser = () => {
+    const { name, email, password, role } = newUser;
+
+    // ✅ Validation check
+    if (!name || !email || !password || !role) {
+      toast.error("Please fill all fields before saving user.");
+      return;
+    }
+
     axios.post(`${API_URL}/api/users/add-user`, newUser)
       .then(() => {
+        toast.success("User added successfully!");
         setShowAddModal(false);
-        setNewUser({ email: '', password: '', role: '', name: '' });
+        setNewUser({ email: '', password: '', role: '', name: '', branch_id: branchId });
         fetchUsers();
       })
       .catch((error) => {
+        toast.error("Failed to add user. Try again.");
         console.error('Error adding user:', error);
       });
   };
+
 
   const handleEditUser = () => {
     axios.post(`${API_URL}/api/users/update-user`, editUser)
@@ -103,7 +128,7 @@ function UsersProfile() {
           <div className="search-bar-container">
             <input
               type="text"
-              placeholder="Search here..."
+              placeholder="Search Name here..."
               value={searchTerm}
               className='search-input'
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -254,6 +279,29 @@ function UsersProfile() {
           </div>
         </div>
       )}
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#1e293b",
+            color: "#f8fafc",
+            border: "1px solid #334155",
+          },
+          success: {
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#1e293b",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#1e293b",
+            },
+          },
+        }}
+      />
     </div>
   );
 }
