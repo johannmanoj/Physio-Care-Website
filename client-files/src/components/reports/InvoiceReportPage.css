@@ -1,3 +1,13 @@
+.modal-table-container {
+  max-height: 350px; /* adjust as needed */
+  overflow-y: auto;  /* vertical scroll if content exceeds height */
+  overflow-x: auto;  /* horizontal scroll if table is too wide */
+  margin-top: 16px;
+  border: 1px solid #3d4d5e; /* optional, for better separation */
+  border-radius: 6px;          /* optional */
+  padding: 4px;                /* optional */
+}
+
 .invoice-table {
   width: 100%;
   border-collapse: collapse;

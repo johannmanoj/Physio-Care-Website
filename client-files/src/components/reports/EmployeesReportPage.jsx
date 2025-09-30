@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '../common/Pagination';
-import axios from 'axios';
 import { FaUsers } from 'react-icons/fa';
+import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
-
+import Pagination from '../common/Pagination';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -18,7 +17,7 @@ function EmployeesReportPage({ viewfunction, setSelectedUserId }) {
     const [usersPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
 
-    const statuses = ['Admin', 'Trainer', 'Therapist', 'Patient', 'Receptionist'];
+    const statuses = ['Admin', 'Trainer', 'Therapist', 'Receptionist'];
 
     useEffect(() => {
         fetchUsers();
@@ -26,7 +25,7 @@ function EmployeesReportPage({ viewfunction, setSelectedUserId }) {
 
     const fetchUsers = () => {
         axios.post(`${API_URL}/api/users/get-users-list`, {
-            branch_id:branchId
+            branch_id: branchId
         })
             .then((response) => {
                 setUsers(response.data.data);

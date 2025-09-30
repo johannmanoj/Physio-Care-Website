@@ -113,7 +113,7 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
             branch_id: branchId
         };
 
-        axios.post(`${API_URL}/api/exercises/add-new-exercise`, payload)
+        axios.post(`${API_URL}/api/exercises/add-appointment-exercise`, payload)
             .then(() => {
                 setNewExercise(INITIAL_DATA);
                 fetchAppointmentExercises();

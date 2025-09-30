@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import image from '../../assets/clinic-logo.png'
 import { useAuth } from "../../context/AuthContext";
 
-import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice, FaChartBar } from 'react-icons/fa';
-import { MdDashboard } from 'react-icons/md';
+import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice, FaChartBar, FaBookOpen, FaSitemap   } from 'react-icons/fa';
+import { MdDashboard, MdLibraryBooks  } from 'react-icons/md';
 
 
 function Sidebar() {
@@ -44,6 +44,18 @@ function Sidebar() {
       icon: <FaChartBar style={{ color: "grey", fontSize: "24px" }} />,
       roles: ["Admin"], // 👈 Only for Admin
     },
+    {
+      label: "Library",
+      path: "/librariesPage",
+      icon: <FaBookOpen  style={{ color: "grey", fontSize: "24px" }} />,
+      roles: ["Admin"], // 👈 Only for Admin
+    },
+    // {
+    //   label: "Branches",
+    //   path: "/librariesPage",
+    //   icon: <FaSitemap   style={{ color: "grey", fontSize: "24px" }} />,
+    //   roles: ["Admin"], // 👈 Only for Admin
+    // },
     {
       label: "Profile",
       path: "/profile",

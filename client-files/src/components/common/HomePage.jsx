@@ -19,6 +19,9 @@ import ReportsPage from '../reports/ReportsPage'
 import AttendanceReportPage from '../reports/AttendanceReportPage'
 import InvoiceReportPage from '../reports/InvoiceReportPage'
 import AppointmentReportPage from '../reports/AppointmentReportPage'
+import LibrariesPage from '../library/LibrariesPage'
+import ExerciseLibPage from '../library/ExerciseLibPage'
+import TreatmentLibPage from '../library/TreatmentLibPage'
 
 function App() {
   return (
@@ -39,6 +42,9 @@ function App() {
           <Route path="/invoiceReportPage" element={<InvoiceReportPage />} />
           <Route path="/attendanceReports" element={<AttendanceReportPage />} />
           <Route path="/appointmentReportPage" element={<AppointmentReportPage />} />
+          <Route path="/librariesPage" element={<LibrariesPage />} />
+          <Route path="/exerciseLibPage" element={<ExerciseLibPage />} />
+          <Route path="/treatmentLibPage" element={<TreatmentLibPage />} />
 
           <Route path="/patientAppointments/:patientId/:patientName" element={<PatientAppointments />} />
           <Route path="/appointmentDetails/:patientId/:apptId" element={<AppointmentDetails />} />

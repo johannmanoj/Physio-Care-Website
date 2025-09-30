@@ -385,7 +385,6 @@ function AddAppointment() {
 
                         <select
                             id="sex"
-                            // value={patientData.sex ?? ''}
                             onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
                         >
                             <option value="">Select Sex</option>

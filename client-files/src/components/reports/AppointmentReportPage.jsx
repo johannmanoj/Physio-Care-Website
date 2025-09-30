@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import './AppointmentReportPage.css';
-import EmployeesReportPage from './EmployeesReportPage'
 
+import EmployeesReportPage from './EmployeesReportPage'
 import AppointmentReportSection from './AppointmentReportSection'
+// import './AppointmentReportPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL
 

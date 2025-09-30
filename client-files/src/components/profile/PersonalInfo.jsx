@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PersonalInfo = ({profileData,updateProfileData, handleSave}) => {
+const PersonalInfo = ({ profileData, updateProfileData, handleSave }) => {
     return (
         <div>
             <div className='data-field-row'>
@@ -37,6 +37,7 @@ const PersonalInfo = ({profileData,updateProfileData, handleSave}) => {
                 <div className='data-field data-field-2'>
                     <label>Phone</label>
                     <input
+                        type="number"
                         name="phone"
                         value={profileData.phone ?? ''}
                         onChange={(e) => updateProfileData({ phone: e.target.value })}
@@ -69,6 +70,7 @@ const PersonalInfo = ({profileData,updateProfileData, handleSave}) => {
                 <div className='data-field data-field-4'>
                     <label>Account Number</label>
                     <input
+                        type="number"
                         name="acc_number"
                         value={profileData.acc_number ?? ''}
                         onChange={(e) => updateProfileData({ acc_number: e.target.value })}

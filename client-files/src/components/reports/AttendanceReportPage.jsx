@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import './AttendanceReportPage.css';
-import EmployeesReportPage from './EmployeesReportPage'
-
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const API_URL = import.meta.env.VITE_API_URL
+import EmployeesReportPage from './EmployeesReportPage'
+import './AttendanceReportPage.css';
+import company_logo from '../../assets/invoice-logo.png'
+
 
 function AttendanceReportPage() {
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
@@ -55,7 +54,6 @@ function AttendanceReportPage() {
             return;
         }
 
-        // Get daily data and monthly total
         const { daily, monthlyTotal } = calculateFilteredAttendance(
             user.attendance,
             year,
@@ -63,75 +61,141 @@ function AttendanceReportPage() {
         );
 
         const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth();
 
-        // Header
+        // --- Add company logo (right-aligned) ---
+        const imgWidth = 55;
+        const imgHeight = 15;
+        doc.addImage(company_logo, "PNG", pageWidth - imgWidth - 14, 10, imgWidth, imgHeight);
+
+        // --- Attendance Report heading (left-aligned) ---
         doc.setFontSize(16);
-        doc.text(`Attendance Report - ${user.name}`, 14, 20);
-        doc.setFontSize(12);
-        doc.text(`${year}-${month}`, 14, 28);
+        doc.setFont("helvetica", "bold");
+        doc.text("Attendance Report", 14, 20);
 
-        // ✅ Calendar-like table
-        const daysInMonth = new Date(year, parseInt(month), 0).getDate();
-        const startDay = new Date(`${year}-${month}-01`).getDay(); // Sunday = 0
-        const weeks = [];
-        let week = new Array(7).fill(""); // 7 days per week
+        // --- Line separator after header/logo ---
+        doc.setDrawColor(150);
+        doc.setLineWidth(0.5);
+        const separatorY = 28;
+        doc.line(14, separatorY, pageWidth - 14, separatorY);
 
-        let dayCounter = 1;
+        // --- Employee Details Section (space after separator) ---
+        const detailsY = separatorY + 10;
+        doc.setFontSize(11);
+
+        // Employee ID
+        doc.setFont("helvetica", "bold");
+        doc.text("Employee ID : ", 14, detailsY, { align: "left" });
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${user.id}`, 14 + doc.getTextWidth("Employee ID : "), detailsY);
+
+        // Employee Name
+        doc.setFont("helvetica", "bold");
+        doc.text("Employee Name : ", 14, detailsY + 7, { align: "left" });
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${user.name}`, 14 + doc.getTextWidth("Employee Name : "), detailsY + 7);
+
+        // Month
+        doc.setFont("helvetica", "bold");
+        doc.text("Month : ", 14, detailsY + 14, { align: "left" });
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${year}-${month}`, 14 + doc.getTextWidth("Month : "), detailsY + 14);
+
+        // --- Build table rows ---
+        const tableRows = [];
         let daysWorked = 0;
-        let leaves = 0;
 
-        // Fill first week
-        for (let i = startDay; i < 7; i++) {
-            const dayStr = String(dayCounter).padStart(2, "0");
-            const key = `${year}-${month}-${dayStr}`;
-            const hours = daily[key] || "0.00";
+        Object.entries(user.attendance || {}).forEach(([date, { in: inTime, out: outTime }]) => {
+            if (!inTime || !outTime) return;
 
-            if (parseFloat(hours) > 0) daysWorked++;
-            else leaves++;
+            const d = new Date(inTime);
+            const dYear = d.getUTCFullYear().toString();
+            const dMonth = String(d.getUTCMonth() + 1).padStart(2, "0");
 
-            week[i] = `${dayCounter}\n${hours} hrs`;
-            dayCounter++;
-        }
-        weeks.push(week);
+            if (dYear === year && dMonth === month) {
+                const start = new Date(inTime);
+                const end = new Date(outTime);
+                const hours = ((end - start) / (1000 * 60 * 60)).toFixed(2);
 
-        // Fill rest of the weeks
-        while (dayCounter <= daysInMonth) {
-            week = new Array(7).fill("");
-            for (let i = 0; i < 7 && dayCounter <= daysInMonth; i++) {
-                const dayStr = String(dayCounter).padStart(2, "0");
-                const key = `${year}-${month}-${dayStr}`;
-                const hours = daily[key] || "0.00";
+                // Format date as dd-mm-yyyy
+                const day = String(d.getUTCDate()).padStart(2, "0");
+                const monthStr = String(d.getUTCMonth() + 1).padStart(2, "0");
+                const formattedDate = `${day}-${monthStr}-${dYear}`;
+
+                tableRows.push([
+                    formattedDate,
+                    start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    `${hours} hrs`,
+                ]);
 
                 if (parseFloat(hours) > 0) daysWorked++;
-                else leaves++;
-
-                week[i] = `${dayCounter}\n${hours} hrs`;
-                dayCounter++;
             }
-            weeks.push(week);
-        }
-
-        // ✅ Use autoTable
-        autoTable(doc, {
-            startY: 40,
-            head: [["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]],
-            body: weeks,
         });
 
-        // Monthly total + summary
-        const finalY = doc.lastAutoTable?.finalY || 40;
-        doc.setFontSize(12);
-        doc.text(`Monthly Total: ${monthlyTotal} hrs`, 14, finalY + 10);
-        doc.text(`Days Worked: ${daysWorked}`, 14, finalY + 20);
-        doc.text(`Leaves: ${leaves}`, 14, finalY + 30);
+        // --- Attendance Table ---
+        autoTable(doc, {
+            startY: detailsY + 20,
+            head: [["Date", "Time In", "Time Out", "Total Hours"]],
+            body: tableRows,
+            tableWidth: "auto",
+            styles: { fontSize: 11, valign: "middle" },
+            headStyles: { fillColor: [41, 128, 185], textColor: 255, halign: "center" },
+            columnStyles: {
+                0: { halign: "center" },
+                1: { halign: "center" },
+                2: { halign: "center" },
+                3: { halign: "center" },
+            },
+        });
 
-        // Save PDF
+        // --- Separator after table ---
+        const finalY = doc.lastAutoTable?.finalY || detailsY + 24;
+        doc.setDrawColor(180);
+        doc.setLineWidth(0.5);
+        doc.line(14, finalY + 5, pageWidth - 14, finalY + 5);
+
+        // --- Summary Section ---
+        const daysInMonth = new Date(year, parseInt(month), 0).getDate();
+        const leaves = daysInMonth - daysWorked;
+
+        const summaryY = finalY + 15;
+        doc.setFontSize(11);
+
+        // Monthly Total
+        doc.setFont("helvetica", "bold");
+        doc.text("Monthly Total : ", 14, summaryY);
+        doc.setFont("helvetica", "normal");
+        doc.text(`    ${monthlyTotal} hrs`, 14 + doc.getTextWidth("Monthly Total: "), summaryY);
+
+        // Days Worked
+        doc.setFont("helvetica", "bold");
+        doc.text("Days Worked : ", 14, summaryY + 6);
+        doc.setFont("helvetica", "normal");
+        doc.text(`  ${daysWorked}`, 14 + doc.getTextWidth("Days Worked: "), summaryY + 6);
+
+        // Leaves
+        doc.setFont("helvetica", "bold");
+        doc.text("Leaves : ", 14, summaryY + 12);
+        doc.setFont("helvetica", "normal");
+        doc.text(`  ${leaves}`, 14 + doc.getTextWidth("Leaves: "), summaryY + 12);
+
+        // --- Open PDF in new tab ---
         const pdfBlobUrl = doc.output("bloburl");
         window.open(pdfBlobUrl, "_blank");
-        // doc.save(`Attendance_${user.name}_${year}-${month}.pdf`);
     }
 
-    
+
+
+
+
+
+
+
+
+
+
+
 
     return (
         <div className="patients-page-container">

@@ -30,14 +30,14 @@ const INITIAL_DATA = {
 
 const UserPage = () => {
     const { employeeId } = useParams();
-    const user_roles = ['Admin', 'Trainer', 'Therapist', 'Patient', 'Receptionist'];
+    const user_roles = ['Admin', 'Trainer', 'Therapist', 'Receptionist'];
     const [employeeData, setEmployeeData] = useState(INITIAL_DATA);
 
     const [salaryYear, setSalaryYear] = useState("");
     const [salaryMonth, setSalaryMonth] = useState("");
     const [workingDays, setWorkingDays] = useState(null);
     const [showCalculateModal, setShowCalculateModal] = useState(false);
-
+    
 
     useEffect(() => {
         axios.post(`${API_URL}/api/users/get-user-details`, { "user_id": employeeId })
@@ -236,6 +236,7 @@ const UserPage = () => {
                 <div className='data-field data-field-2'>
                     <label>Phone</label>
                     <input
+                        type="number"
                         name="phone"
                         value={employeeData.phone ?? ''}
                         onChange={(e) => updateEmployeeData({ phone: e.target.value })}
@@ -278,6 +279,7 @@ const UserPage = () => {
                 <div className='data-field data-field-3'>
                     <label>Monthly Salary</label>
                     <input
+                        type="number"
                         name="monthly_salary"
                         value={employeeData.monthly_salary ?? ''}
                         onChange={(e) => updateEmployeeData({ monthly_salary: e.target.value })}
@@ -287,6 +289,7 @@ const UserPage = () => {
                 <div className='data-field data-field-3'>
                     <label>PF</label>
                     <input
+                        type="number"
                         name="pf"
                         value={employeeData.pf ?? ''}
                         onChange={(e) => updateEmployeeData({ pf: e.target.value })}
@@ -296,6 +299,7 @@ const UserPage = () => {
                 <div className='data-field data-field-3'>
                     <label>Tax</label>
                     <input
+                        type="number"
                         name="tax"
                         value={employeeData.tax ?? ''}
                         onChange={(e) => updateEmployeeData({ tax: e.target.value })}
@@ -339,6 +343,7 @@ const UserPage = () => {
                 </div>
 
             </div>
+
             {workingDays !== null && (
                 <div className='data-field-row'>
                     <div className='data-field data-field-3'>
@@ -364,9 +369,6 @@ const UserPage = () => {
 
             )}
 
-
-
-
             <div className='user-page-sub-heading'>Bank Details</div>
             <div className='data-field-row'>
                 <div className='data-field data-field-4'>
@@ -390,6 +392,7 @@ const UserPage = () => {
                 <div className='data-field data-field-4'>
                     <label>Account Number</label>
                     <input
+                        type="number"
                         name="acc_number"
                         value={employeeData.acc_number ?? ''}
                         onChange={(e) => updateEmployeeData({ acc_number: e.target.value })}
@@ -438,8 +441,6 @@ const UserPage = () => {
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <h2>Monthly Working Days</h2>
-                        
-
                     </div>
                 </div>
             )} */}

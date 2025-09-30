@@ -1,0 +1,27 @@
+.lib-tool-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lib-tool-buttons button {
+  background-color: #34495e;  /* dark slate */
+  color: #ffffff;
+  padding: 8px 14px;
+  border: 1px solid #3d566e;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lib-tool-buttons button:hover {
+  background-color: #3d566e;
+}
+
+.lib-tool-buttons button.active {
+  background-color: #28a745;  /* Green for active */
+  border-color: #28a745;
+  box-shadow: 0 0 4px rgba(40, 167, 69, 0.5);
+}
