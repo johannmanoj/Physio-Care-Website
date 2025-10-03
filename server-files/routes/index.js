@@ -9,6 +9,7 @@ const images = require('./images')
 const appointments = require('./appointments')
 const invoice = require('./invoice')
 const exercises = require('./excercises')
+const branches = require('./branches')
 
 router.use('/auth', auth)
 router.use('/patients', patients)
@@ -18,6 +19,7 @@ router.use('/images',images)
 router.use('/appointments',appointments)
 router.use('/invoice',invoice)
 router.use('/exercises',exercises)
+router.use('/branches', branches)
 
 
 module.exports = router;

@@ -22,15 +22,22 @@ import AppointmentReportPage from '../reports/AppointmentReportPage'
 import LibrariesPage from '../library/LibrariesPage'
 import ExerciseLibPage from '../library/ExerciseLibPage'
 import TreatmentLibPage from '../library/TreatmentLibPage'
+import Branches from '../admin/Branches'
+
+import { useAuth } from "../../context/AuthContext";
+
 
 function App() {
+  const { role } = useAuth();
+
   return (
     <div className="app-container">
       <Sidebar />
       <div className="main-content">
         <Header />
         <Routes className="homepage-grid">
-          <Route path="/" element={<DashboardPage />} />
+          
+          <Route path="/" element={role == "PrimaryAdmin" ? <Branches/> : <DashboardPage />} />
           <Route path="/billing" element={<BillingPage />} />
           <Route path="/reports" element={<ReportsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
@@ -45,6 +52,7 @@ function App() {
           <Route path="/librariesPage" element={<LibrariesPage />} />
           <Route path="/exerciseLibPage" element={<ExerciseLibPage />} />
           <Route path="/treatmentLibPage" element={<TreatmentLibPage />} />
+          <Route path="/branches" element={<Branches />} />
 
           <Route path="/patientAppointments/:patientId/:patientName" element={<PatientAppointments />} />
           <Route path="/appointmentDetails/:patientId/:apptId" element={<AppointmentDetails />} />

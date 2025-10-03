@@ -200,7 +200,7 @@ function TreatmentLibPage() {
       {showAddModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Add New Exercise</h2>
+            <h2>Add New Treatment</h2>
             <label htmlFor="Name">Name</label>
             <input
               type="text"

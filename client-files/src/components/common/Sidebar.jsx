@@ -1,16 +1,16 @@
 import React from 'react';
-import './Sidebar.css'; // For sidebar specific styles
+import './Sidebar.css';
 import { Link } from 'react-router-dom';
-import image from '../../assets/clinic-logo.png'
+import image from '../../assets/clinic-logo.png';
 import { useAuth } from "../../context/AuthContext";
 
-import { FaRegCalendarCheck, FaUserInjured, FaUserCircle ,FaUsers , FaFileInvoice, FaChartBar, FaBookOpen, FaSitemap   } from 'react-icons/fa';
-import { MdDashboard, MdLibraryBooks  } from 'react-icons/md';
-
+import { FaRegCalendarCheck, FaUserInjured, FaUserCircle, FaUsers, FaFileInvoice, FaChartBar, FaBookOpen, FaSitemap } from 'react-icons/fa';
+import { MdDashboard } from 'react-icons/md';
 
 function Sidebar() {
   const { role } = useAuth();
 
+  // Define menu items
   const menuItems = [
     {
       label: "Dashboard",
@@ -36,49 +36,50 @@ function Sidebar() {
       label: "Users",
       path: "/usersListPage",
       icon: <FaUsers style={{ color: "grey", fontSize: "24px" }} />,
-      roles: ["Admin"], // 👈 Only for Admin
+      roles: ["Admin"], // Only Admin
     },
     {
       label: "Reports",
       path: "/reports",
       icon: <FaChartBar style={{ color: "grey", fontSize: "24px" }} />,
-      roles: ["Admin"], // 👈 Only for Admin
+      roles: ["Admin"], // Only Admin
     },
     {
       label: "Library",
       path: "/librariesPage",
-      icon: <FaBookOpen  style={{ color: "grey", fontSize: "24px" }} />,
-      roles: ["Admin"], // 👈 Only for Admin
+      icon: <FaBookOpen style={{ color: "grey", fontSize: "24px" }} />,
+      roles: ["Admin"], // Only Admin
     },
-    // {
-    //   label: "Branches",
-    //   path: "/librariesPage",
-    //   icon: <FaSitemap   style={{ color: "grey", fontSize: "24px" }} />,
-    //   roles: ["Admin"], // 👈 Only for Admin
-    // },
+    {
+      label: "Branches",
+      path: "/branches",
+      icon: <FaSitemap style={{ color: "grey", fontSize: "24px" }} />,
+      roles: ["PrimaryAdmin"], // 👈 Only PrimaryAdmin
+    },
     {
       label: "Profile",
       path: "/profile",
       icon: <FaUserCircle style={{ color: "grey", fontSize: "24px" }} />,
     },
   ];
-  
+
+  // Special rule: If role is PrimaryAdmin → show only Branches & Profile
+  const filteredMenu = role === "PrimaryAdmin"
+    ? menuItems.filter(item => item.label === "Branches" || item.label === "Profile")
+    : menuItems.filter(item => !item.roles || item.roles.includes(role));
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
         <img src={image} alt="logo" />
       </div>
       <ul className="sidebar-menu">
-        {menuItems.map((item, idx) => {
-          if (item.roles && !item.roles.includes(role)) return null;
-
-          return (
-            <li className="menu-item" key={idx}>
-              {item.icon}
-              <Link to={item.path}>{item.label}</Link>
-            </li>
-          );
-        })}
+        {filteredMenu.map((item, idx) => (
+          <li className="menu-item" key={idx}>
+            {item.icon}
+            <Link to={item.path}>{item.label}</Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

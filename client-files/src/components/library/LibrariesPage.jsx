@@ -9,7 +9,7 @@ import { MdPeople } from 'react-icons/md';
 
 const LibrariesPage = () => {
     const navigate = useNavigate();
-
+    
     return (
         <div className='report-page'>
             <h1>Libraries</h1>
