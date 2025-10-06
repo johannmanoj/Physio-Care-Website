@@ -224,12 +224,12 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
     };
 
     return (
-        <div>
+        <div className='trainerAptSection-layout'>
             <div className='trainerAptSection-header'>
                 <h1>Exercises</h1>
                 <div>
-                    <button className='view-button' onClick={() => setShowCreateModal(true)}>New</button>
-                    <button className='view-button' onClick={() => setShowAddModal(true)}>Add</button>
+                    <button className='primary-button' onClick={() => setShowCreateModal(true)}>New</button>
+                    <button className='primary-button' onClick={() => setShowAddModal(true)}>Add</button>
                 </div>
             </div>
 
@@ -415,8 +415,15 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
 
                             </tr>
                         ))}
+
+
                     </tbody>
                 </table>
+                {appointmentExercises.length == 0 && (
+                    <div className='appt-exercise-table-default'>
+                        No Exercises Yet
+                    </div>
+                )}
             </div>
         </div>
     )

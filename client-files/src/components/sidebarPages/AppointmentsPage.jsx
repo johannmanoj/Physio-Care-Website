@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { FaRegCalendarCheck } from 'react-icons/fa';
+import { FaRegCalendarCheck, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 
 import TableModule from '../commonModules/TableModule'
 
 import { useAuth } from "../../context/AuthContext";
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
 import './AppointmentsPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -22,9 +23,9 @@ function AppointmentsPage() {
   const [loading, setLoading] = useState(true);
 
   const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
-  
+
   const { role, userId, branchId } = useAuth();
-  
+
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -32,13 +33,13 @@ function AppointmentsPage() {
         let response;
 
         if (role === "Admin" || role === "Receptionist") {
-          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`,{
-            branch_id:branchId
+          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
+            branch_id: branchId
           });
         } else {
           response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
             practitioner_id: userId,
-            branch_id:branchId
+            branch_id: branchId
           });
         }
 
@@ -70,15 +71,18 @@ function AppointmentsPage() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
+
   if (loading) { return <p></p>; }
-  
+
   return (
     <div className="players-page-container">
-      <div className="page-header">
+      <div className="common-page-header">
         <h1>Appointments</h1>
 
         <div className="filters">
-          {(role == "Admin" || role == "Receptionist") && <button className='view-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
+          {(role == "Admin" || role == "Receptionist") && <button className='primary-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
+          
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -88,7 +92,9 @@ function AppointmentsPage() {
               <option key={team} value={team}>{team}</option>
             ))}
           </select>
+
           <div className="search-bar-container">
+            {/* <FaSearch className="search-icon" /> */}
             <input
               type="text"
               placeholder="Search Name here..."
@@ -97,6 +103,15 @@ function AppointmentsPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          {/* <div className="search-bar-container">
+            <input
+              type="text"
+              placeholder="Search Name here..."
+              value={searchTerm}
+              className='search-input'
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div> */}
         </div>
       </div>
 
@@ -113,6 +128,8 @@ function AppointmentsPage() {
               <th>Time</th>
               <th>Session Type</th>
               <th>Status</th>
+              <th>Pymt Status</th>
+              <th>Pymt Method</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -130,8 +147,10 @@ function AppointmentsPage() {
                     {appointment.status}
                   </span>
                 </td>
+                <td>{appointment.pymt_status}</td>
+                <td>{appointment.pymt_method}</td>
                 <td>
-                  <button className="view-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+                  <button className="primary-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
                 </td>
               </tr>
             ))}
@@ -150,10 +169,18 @@ function AppointmentsPage() {
 
       {appointments.length > 0 && (
         <div className="table-footer">
-          <span className="pagination-info">
+          {/* <span className="pagination-info">
             Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
           </span>
           <Pagination
+            playersPerPage={appointmentsPerPage}
+            totalPlayers={filteredAppointments.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          /> */}
+          <PaginationFooter
+            page_count={page_count}
             playersPerPage={appointmentsPerPage}
             totalPlayers={filteredAppointments.length}
             paginate={paginate}

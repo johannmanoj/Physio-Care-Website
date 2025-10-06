@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
+
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -77,14 +79,16 @@ function AppointmentReportSection({ user_id }) {
     const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
     const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
     const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
-
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
+
 
     if (loading) { return <p></p>; }
 
     return (
         <div>
-            <div className="page-header">
+            <div className="common-page-header">
                 <h1>Appointments</h1>
 
                 <div className="filters">
@@ -164,7 +168,7 @@ function AppointmentReportSection({ user_id }) {
                                 </td>
                                 <td>
                                     <button
-                                        className="view-button"
+                                        className="primary-button"
                                         onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}
                                     >
                                         View
@@ -185,10 +189,18 @@ function AppointmentReportSection({ user_id }) {
 
             {appointments.length > 0 && (
                 <div className="table-footer">
-                    <span className="pagination-info">
+                    {/* <span className="pagination-info">
                         Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
                     </span>
                     <Pagination
+                        playersPerPage={appointmentsPerPage}
+                        totalPlayers={filteredAppointments.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    /> */}
+                    <PaginationFooter
+                        page_count={page_count}
                         playersPerPage={appointmentsPerPage}
                         totalPlayers={filteredAppointments.length}
                         paginate={paginate}

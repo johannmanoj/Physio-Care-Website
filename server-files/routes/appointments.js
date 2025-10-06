@@ -125,10 +125,12 @@ router.post('/update-appointment', async (req, res) => {
             blood_report_file_2,
             blood_report_file_3,
             blood_report_file_4,
+            pymt_status,
+            pymt_method
         } = req.body;
 
-        await pool.query('UPDATE appointments SET name=?, status=?, age=?, sex=?, occupation=?, contact_num=?, medical_allergies=?, address=?, other_ailments=?, subjective_desc=?, onexamination_desc=?, sketch_overlays=?, special_test_desc=?, goal_desc=? , program_desc=? ,xray_desc=?,mri_desc=?,ultrasound_desc=?,blood_report_desc=?,xray_file_1=?, xray_file_2=?, xray_file_3=?, xray_file_4=?,  mri_file_1=?, mri_file_2=?, mri_file_3=?, mri_file_4=?, ultrasound_file_1=?, ultrasound_file_2=?, ultrasound_file_3=?,  ultrasound_file_4=?, blood_report_file_1=?, blood_report_file_2=?, blood_report_file_3=?,  blood_report_file_4=? WHERE id = ?',
-            [name, status, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc, sketch_overlays, special_test_desc, goal_desc, program_desc, xray_desc, mri_desc, ultrasound_desc, blood_report_desc, xray_file_1, xray_file_2, xray_file_3, xray_file_4, mri_file_1, mri_file_2, mri_file_3, mri_file_4, ultrasound_file_1, ultrasound_file_2, ultrasound_file_3, ultrasound_file_4, blood_report_file_1, blood_report_file_2, blood_report_file_3, blood_report_file_4, appt_id]);
+        await pool.query('UPDATE appointments SET name=?, status=?, age=?, sex=?, occupation=?, contact_num=?, medical_allergies=?, address=?, other_ailments=?, subjective_desc=?, onexamination_desc=?, sketch_overlays=?, special_test_desc=?, goal_desc=? , program_desc=? ,xray_desc=?,mri_desc=?,ultrasound_desc=?,blood_report_desc=?,xray_file_1=?, xray_file_2=?, xray_file_3=?, xray_file_4=?,  mri_file_1=?, mri_file_2=?, mri_file_3=?, mri_file_4=?, ultrasound_file_1=?, ultrasound_file_2=?, ultrasound_file_3=?,  ultrasound_file_4=?, blood_report_file_1=?, blood_report_file_2=?, blood_report_file_3=?,  blood_report_file_4=?, pymt_status=?, pymt_method=? WHERE id = ?',
+            [name, status, age, sex, occupation, contact_num, medical_allergies, address, other_ailments, subjective_desc, onexamination_desc, sketch_overlays, special_test_desc, goal_desc, program_desc, xray_desc, mri_desc, ultrasound_desc, blood_report_desc, xray_file_1, xray_file_2, xray_file_3, xray_file_4, mri_file_1, mri_file_2, mri_file_3, mri_file_4, ultrasound_file_1, ultrasound_file_2, ultrasound_file_3, ultrasound_file_4, blood_report_file_1, blood_report_file_2, blood_report_file_3, blood_report_file_4, pymt_status, pymt_method, appt_id]);
 
         res.status(201).json({ message: 'Patient details updated successfully' });
     } catch (err) {

@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
+
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -75,11 +77,13 @@ function EmployeesReportPage({ viewfunction, setSelectedUserId }) {
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
+
 
     if (loading) { return <p></p>; }
     return (
         <div>
-            <div className="page-header">
+            <div className="common-page-header">
                 <h1>Employees</h1>
                 <div className="filters">
                     <select
@@ -123,7 +127,7 @@ function EmployeesReportPage({ viewfunction, setSelectedUserId }) {
                                 <td>{user.role}</td>
                                 <td>
                                     <button
-                                        className="view-button"
+                                        className="primary-button"
                                         onClick={() => { viewfunction(user) }}
                                     >
                                         View
@@ -143,10 +147,18 @@ function EmployeesReportPage({ viewfunction, setSelectedUserId }) {
             )}
 
             <div className="table-footer">
-                <span className="pagination-info">
+                {/* <span className="pagination-info">
                     Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
                 </span>
                 <Pagination
+                    playersPerPage={usersPerPage}
+                    totalPlayers={filteredUsers.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                /> */}
+                <PaginationFooter
+                    page_count={page_count}
                     playersPerPage={usersPerPage}
                     totalPlayers={filteredUsers.length}
                     paginate={paginate}

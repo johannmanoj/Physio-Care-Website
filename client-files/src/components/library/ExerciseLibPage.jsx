@@ -8,6 +8,7 @@ import './LibrariesPage.css'
 
 import { useAuth } from "../../context/AuthContext";
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -230,14 +231,16 @@ function ExerciseLibPage() {
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
+
   if (loading) return <p></p>;
 
   return (
     <div className="patients-page-container">
-      <div className="page-header">
+      <div className="common-page-header">
         <h1>Exercises</h1>
         <div className="filters">
-          <button className='view-button' onClick={() => setShowCreateModal(true)}>Add Exercise</button>
+          <button className='primary-button' onClick={() => setShowCreateModal(true)}>Add Exercise</button>
           <div className="search-bar-container">
             <input
               type="text"
@@ -296,10 +299,18 @@ function ExerciseLibPage() {
 
       {/* Pagination */}
       <div className="table-footer">
-        <span className="pagination-info">
+        {/* <span className="pagination-info">
           Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
         </span>
         <Pagination
+          playersPerPage={usersPerPage}
+          totalPlayers={filteredUsers.length}
+          paginate={paginate}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        /> */}
+        <PaginationFooter
+          page_count={page_count}
           playersPerPage={usersPerPage}
           totalPlayers={filteredUsers.length}
           paginate={paginate}

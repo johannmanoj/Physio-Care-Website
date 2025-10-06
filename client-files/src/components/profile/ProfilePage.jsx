@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import './ProfilePage.css';
-import { useAuth } from "../../context/AuthContext";
-import axios from 'axios';
 import { Toaster, toast } from "react-hot-toast";
-import PersonalInfo from './PersonalInfo';
+import { FaChevronDown, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+import axios from 'axios';
+
+import { useAuth } from "../../context/AuthContext";
+import './ProfilePage.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function ProfilePage() {
   const { userId } = useAuth();
-  const TABS = ['Personal Info', 'Change Password'];
-  const [activeTab, setActiveTab] = useState(TABS[0]);
 
   const [profileData, setProfileData] = useState({
     id: '',
@@ -128,9 +127,9 @@ function ProfilePage() {
 
   return (
     <div className='profile-page'>
-      <header className="patient-header">
+      <header className="common-page-header">
         <div className='profile-header-section-1'>
-          <h1>Profile Page</h1>
+          <h1>Profile</h1>
           <button
             onClick={handlePunch}
             className={`punch-btn ${isPunchedIn ? "out" : "in"}`}
@@ -138,61 +137,140 @@ function ProfilePage() {
             {isPunchedIn ? "Punch Out" : "Punch In"}
           </button>
         </div>
-
-        <nav className="profile-main-heading-tabs">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`main-heading-tab ${activeTab === tab ? 'main-heading-tab--active' : ''}`}
-            >
-              {tab}
-            </button>
-          ))}
-        </nav>
       </header>
 
-      {activeTab === 'Personal Info' && (
-        <PersonalInfo profileData={profileData} updateProfileData={updateProfileData} handleSave={handleSave} />
-      )}
+      <div className='user-page-sub-heading'>Personal Information</div>
 
-      {activeTab === 'Change Password' && (
-        <div>
-          <div className='data-field-row'>
-            <div className='data-field data-field-3'>
-              <label>Current Password</label>
-              <input
-                type="password"
-                value={passwordData.currentpass}
-                onChange={(e) => setPasswordData({ ...passwordData, currentpass: e.target.value })}
-              />
-            </div>
+      <div className='profile-field-grid'>
+        <div className='data-field-row'>
+          <div className='data-field data-field-2'>
+            <label>Employee ID</label>
+            <input
+              name="id"
+              value={profileData.id ?? ''}
+              onChange={(e) => updateProfileData({ id: e.target.value })}
+              readOnly
+            />
           </div>
-          <div className='data-field-row'>
-            <div className='data-field data-field-3'>
-              <label>New Password</label>
-              <input
-                type="password"
-                value={passwordData.newpassword}
-                onChange={(e) => setPasswordData({ ...passwordData, newpassword: e.target.value })}
-              />
-            </div>
-          </div>
-          <div className='data-field-row'>
-            <div className='data-field data-field-3'>
-              <label>Confirm New Password</label>
-              <input
-                type="password"
-                value={passwordData.confirmpassword}
-                onChange={(e) => setPasswordData({ ...passwordData, confirmpassword: e.target.value })}
-              />
-            </div>
-          </div>
-          <div className='profile-save'>
-            <button onClick={handlePasswordChange}>Update</button>
+          <div className='data-field data-field-2'>
+            <label>Name</label>
+            <input
+              name="name"
+              value={profileData.name ?? ''}
+              onChange={(e) => updateProfileData({ name: e.target.value })}
+              placeholder="Name"
+            />
           </div>
         </div>
-      )}
+      </div>
+
+      <div className='profile-field-grid'>
+        <div className='data-field-row'>
+          <div className='data-field data-field-2'>
+            <label>Email</label>
+            <input
+              name="email"
+              value={profileData.email ?? ''}
+              onChange={(e) => updateProfileData({ email: e.target.value })}
+              placeholder="Email"
+            />
+          </div>
+          <div className='data-field data-field-2'>
+            <label>Phone</label>
+            <input
+              type="number"
+              name="phone"
+              value={profileData.phone ?? ''}
+              onChange={(e) => updateProfileData({ phone: e.target.value })}
+              placeholder="Phone"
+            />
+          </div>
+        </div>
+      </div>
+
+
+
+      <div className='user-page-sub-heading'>Change Password</div>
+
+      <div className='profile-field-grid'>
+        <div className='data-field-row'>
+          <div className='data-field data-field-4'>
+            <label>Current Password</label>
+            <input
+              type="password"
+              value={passwordData.currentpass}
+              onChange={(e) => setPasswordData({ ...passwordData, currentpass: e.target.value })}
+            />
+          </div>
+          <div className='data-field data-field-4'>
+            <label>New Password</label>
+            <input
+              type="password"
+              value={passwordData.newpassword}
+              onChange={(e) => setPasswordData({ ...passwordData, newpassword: e.target.value })}
+            />
+          </div>
+          <div className='data-field data-field-4'>
+            <label>Confirm New Password</label>
+            <input
+              type="password"
+              value={passwordData.confirmpassword}
+              onChange={(e) => setPasswordData({ ...passwordData, confirmpassword: e.target.value })}
+            />
+          </div>
+          <div className='data-field data-field-4'>
+            <button onClick={handlePasswordChange} className='primary-button password-update-button'>Update</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div className='user-page-sub-heading'>Bank Details</div>
+      <div className='profile-field-grid'>
+        <div className='data-field-row'>
+          <div className='data-field data-field-4'>
+            <label>Bank Name</label>
+            <input
+              name="bank_name"
+              value={profileData.bank_name ?? ''}
+              onChange={(e) => updateProfileData({ bank_name: e.target.value })}
+              placeholder="Bank Name"
+            />
+          </div>
+          <div className='data-field data-field-4'>
+            <label>Account Holder Name</label>
+            <input
+              name="acc_holder_name"
+              value={profileData.acc_holder_name ?? ''}
+              onChange={(e) => updateProfileData({ acc_holder_name: e.target.value })}
+              placeholder="Account Holder Name"
+            />
+          </div>
+          <div className='data-field data-field-4'>
+            <label>Account Number</label>
+            <input
+              type="number"
+              name="acc_number"
+              value={profileData.acc_number ?? ''}
+              onChange={(e) => updateProfileData({ acc_number: e.target.value })}
+              placeholder="Account Number"
+            />
+          </div>
+          <div className='data-field data-field-4'>
+            <label>IFSC Code</label>
+            <input
+              name="ifsc_code"
+              value={profileData.ifsc_code ?? ''}
+              onChange={(e) => updateProfileData({ ifsc_code: e.target.value })}
+              placeholder="IFSC Code"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className='common-page-footer-layout'>
+        <button className='common-footer-bsave' onClick={handleSave}>Save</button>
+      </div>
 
       <Toaster
         position="top-right"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -10,7 +11,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 function PatientAppointments() {
     const navigate = useNavigate();
-      const { branchId } = useAuth();
+    const { branchId } = useAuth();
 
     const { patientId, patientName } = useParams();
 
@@ -24,9 +25,9 @@ function PatientAppointments() {
 
 
     useEffect(() => {
-        axios.post(`${API_URL}/api/appointments/get-patient-appointment-list`, { 
+        axios.post(`${API_URL}/api/appointments/get-patient-appointment-list`, {
             "patient_id": patientId,
-            "branch_id":branchId
+            "branch_id": branchId
         })
             .then((response) => {
                 setAppointments(response.data.data);
@@ -50,12 +51,14 @@ function PatientAppointments() {
     const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
     const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
     const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
-
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
+
 
     return (
         <div className="players-page-container">
-            <div className="page-header">
+            <div className="common-page-header">
                 <h1>Patient: {patientId} ({patientName})</h1>
                 {/* <div className="filters">
 
@@ -109,9 +112,7 @@ function PatientAppointments() {
                                     </span>
                                 </td>
                                 <td>
-                                    {/* <button className="view-button" onClick={() => navigate("/patientInfo")}>View</button> */}
-                                    {/* <button className="view-button" onClick={() => navigate(`/patientInfo/${appointment.id}`)}>View</button> */}
-                                    <button className="view-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+                                    <button className="primary-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
 
                                 </td>
                             </tr>
@@ -121,10 +122,18 @@ function PatientAppointments() {
             </div>
 
             <div className="table-footer">
-                <span className="pagination-info">
+                {/* <span className="pagination-info">
                     Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
                 </span>
                 <Pagination
+                    playersPerPage={appointmentsPerPage}
+                    totalPlayers={filteredAppointments.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                /> */}
+                <PaginationFooter
+                    page_count={page_count}
                     playersPerPage={appointmentsPerPage}
                     totalPlayers={filteredAppointments.length}
                     paginate={paginate}

@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useAuth } from "../../context/AuthContext";
 import { FaFileInvoice } from 'react-icons/fa';
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
+
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -32,8 +34,8 @@ function InvoiceTablePage() {
             try {
                 const payload =
                     role === "Admin"
-                        ? { filter: "all" , branch_id:branchId}
-                        : { filter: "practitioner", practitioner_id: userId, branch_id:branchId };
+                        ? { filter: "all", branch_id: branchId }
+                        : { filter: "practitioner", practitioner_id: userId, branch_id: branchId };
 
                 const response = await axios.post(`${API_URL}/api/invoice/get-invoice-list`, payload);
                 setInvoices(response.data.data);
@@ -63,13 +65,14 @@ function InvoiceTablePage() {
     const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
 
-      if (loading) { return <p></p>; }
+    if (loading) { return <p></p>; }
 
 
     return (
         <div className="players-page-container">
-            <div className="page-header">
+            <div className="common-page-header">
                 {/* <h1>Patient: {patientId} ({patientName})</h1> */}
                 <h1>Invoices</h1>
                 <div className="filters">
@@ -125,7 +128,7 @@ function InvoiceTablePage() {
 
                                 <td>
                                     <button
-                                        className="view-button"
+                                        className="primary-button"
                                         onClick={() => window.open(invoice.invoice_url, "_blank")}
                                     >
                                         View
@@ -146,10 +149,18 @@ function InvoiceTablePage() {
 
             {invoices.length > 0 && (
                 <div className="table-footer">
-                    <span className="pagination-info">
+                    {/* <span className="pagination-info">
                         Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
                     </span>
                     <Pagination
+                        playersPerPage={appointmentsPerPage}
+                        totalPlayers={filteredAppointments.length}
+                        paginate={paginate}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    /> */}
+                    <PaginationFooter
+                        page_count={page_count}
                         playersPerPage={appointmentsPerPage}
                         totalPlayers={filteredAppointments.length}
                         paginate={paginate}

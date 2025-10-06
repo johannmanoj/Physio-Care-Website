@@ -12,6 +12,7 @@ import TreatmentGoalsSection from './therapistSections/TreatmentGoalsSection'
 import DifferentialDiagnosisSection from './therapistSections/DifferentialDiagnosisSection'
 
 import PatientDetailsSection from './apptSubSections/PatientDetailsSection'
+import ApptPaymentSection from './apptSubSections/ApptPaymentSection'
 
 import TrainerAptSection from './trainerSections/TrainerAptSection'
 import InvoiceModal from './apptSubSections/InvoiceModal'
@@ -22,7 +23,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const INITIAL_DATA = {
   patient_id: '',
   name: '',
-  status:'',
+  status: '',
   age: '',
   sex: '',
   occupation: '',
@@ -59,7 +60,9 @@ const INITIAL_DATA = {
   xray_file: '',
   mri_file: '',
   ultrasound_file: '',
-  blood_report_file: ''
+  blood_report_file: '',
+  pymt_status: '',
+  pymt_method: ''
 };
 
 function PatientDetails() {
@@ -167,10 +170,10 @@ function PatientDetails() {
         </div>
 
         <div className="appointment-details-sub-page-card">
-          <div className='appointment-subheading-grid'>
-            <h1>Appointment Details</h1>
+          <div className='common-page-header'>
+            <h1>Appointment Details : {patientData.id}</h1>
             <select
-            className='status-dropdown-section'
+              className='status-dropdown-section'
               id="role"
               value={patientData.status}
               onChange={(e) => updatePatientData({ status: e.target.value })}
@@ -202,50 +205,65 @@ function PatientDetails() {
                 updatePatientData={updatePatientData}
                 isReadOnly={isReadOnly}
               />
+              <ApptPaymentSection
+                patientData={patientData}
+                updatePatientData={updatePatientData}
+                isReadOnly={isReadOnly}
+              />
             </div>
           )}
 
           {patientData.session_type == "Trainer" && (
             <div>
-              <TrainerAptSection patient_id={patientId} appointment_id={apptId} />
+              <div>
+                <TrainerAptSection patient_id={patientId} appointment_id={apptId} />
+              </div>
+              <div>
+                <ApptPaymentSection
+                  patientData={patientData}
+                  updatePatientData={updatePatientData}
+                  isReadOnly={isReadOnly}
+                />
+              </div>
             </div>
           )}
 
 
 
-          <div className="patient-details-save">
+          <div className="common-page-footer-layout">
             <button
-              className="appointment-invoice-button"
+              className="common-footer-binvoice"
               onClick={() => setShowInvoiceModal(true)}
               disabled={isReadOnly}
             >
               Invoice
             </button>
 
-            <button className='b-save' onClick={handleSave} disabled={isReadOnly}>Save</button>
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                style: {
-                  background: "#1e293b",
-                  color: "#f8fafc",
-                  border: "1px solid #334155",
-                },
-                success: {
-                  iconTheme: {
-                    primary: "#22c55e",
-                    secondary: "#1e293b",
-                  },
-                },
-                error: {
-                  iconTheme: {
-                    primary: "#ef4444",
-                    secondary: "#1e293b",
-                  },
-                },
-              }}
-            />
+            <button className='common-footer-bsave' onClick={handleSave} disabled={isReadOnly}>Save</button>
           </div>
+
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "#1e293b",
+                color: "#f8fafc",
+                border: "1px solid #334155",
+              },
+              success: {
+                iconTheme: {
+                  primary: "#22c55e",
+                  secondary: "#1e293b",
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: "#ef4444",
+                  secondary: "#1e293b",
+                },
+              },
+            }}
+          />
         </div>
       </div>
 

@@ -1,61 +1,74 @@
 .report-page {
-  background-color: #2d3748;
-  border-radius: 10px;
+  background-color: #2d3748; /* match main body */
+  border-radius: 12px;
   min-height: 610px;
+  padding: 20px;
+  /* box-shadow: inset 0 0 8px rgba(0,0,0,0.3); */
 }
 
 .report-page h1 {
-  color: white;
-  padding: 20px;
-  font-size: x-large;
-  font-weight: bold;
-  margin: 0px;
+  color: #f1f5f9;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .report-selection-card-grid {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .report-selection-card-row {
-    display: flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .report-selection-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: #2b3141;
-    width: 300px;
-    height: 220px;
-    margin: 20px;
-    border-radius: 10px;
-    font-size: 60px;
-    color: rgb(180, 180, 180);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background-color: #2d3748;
+  width: 260px;
+  height: 200px;
+  border-radius: 12px;
+  font-size: 48px;
+  color: #94a3b8;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.2s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
 }
 
-.report-selection-card button {
-    height: 25px;
-    width: 70px;
-    background-color: #00bf8a;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-.report-selection-card button:hover {
-    background-color: #00a377;
+.report-selection-card:hover {
+  background-color: #334155;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  color: #38bdf8; /* sky-blue icon hover */
 }
 
 .report-selection-card label {
-    font-size: 16px;
-    font-weight: 500;
+  font-size: 16px;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+.report-selection-card button {
+  padding: 6px 14px;
+  background-color: #38bdf8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.report-selection-card button:hover {
+  background-color: #0ea5e9;
+  transform: scale(1.05);
 }

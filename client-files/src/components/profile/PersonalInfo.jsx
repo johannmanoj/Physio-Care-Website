@@ -3,6 +3,8 @@ import React from 'react'
 const PersonalInfo = ({ profileData, updateProfileData, handleSave }) => {
     return (
         <div>
+            <div className='user-page-sub-heading'>Personal Information</div>
+
             <div className='data-field-row'>
                 <div className='data-field data-field-2'>
                     <label>Employee ID</label>

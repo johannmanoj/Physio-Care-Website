@@ -7,6 +7,8 @@ import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
 import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
+
 import './PatientsPage.css';
 
 
@@ -54,16 +56,6 @@ function PatientsPage() {
       });
   }, []);
 
-  // const handleAddPatient = () => {
-  //   axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
-  //     .then(() => {
-  //       setShowAddModal(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error adding patient:', error);
-  //     });
-  // };
-
   const handleAddPatient = () => {
     const { name, sex, age, contact_num } = newPatient;
 
@@ -103,14 +95,16 @@ function PatientsPage() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  var page_count = `Showing ${indexOfFirstPlayer + 1} to ${Math.min(indexOfLastPlayer, filteredPatients.length)} of ${filteredPatients.length}`
+
   if (loading) { return <p></p>; }
   return (
     <div className="patients-page-container">
-      <div className="page-header">
+      <div className="common-page-header">
         <h1>Patients</h1>
 
         <div className="filters">
-          <button className="add-patient-button" onClick={() => setShowAddModal(true)}>Add Patient</button>
+          <button className="primary-button" onClick={() => setShowAddModal(true)}>Add Patient</button>
 
           {/* <select
             value={filterStatus}
@@ -154,7 +148,7 @@ function PatientsPage() {
                 <td>{patient.age}</td>
                 <td>{patient.contact_num}</td>
                 <td>
-                  <button className="view-button" onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}>View</button>
+                  <button className="primary-button" onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}>View</button>
                 </td>
               </tr>
             ))}
@@ -171,10 +165,18 @@ function PatientsPage() {
 
       {patients.length > 0 && (
         <div className="table-footer">
-          <span className="pagination-info">
+          {/* <span className="pagination-info">
             Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPatients.length)} of {filteredPatients.length}
           </span>
           <Pagination
+            playersPerPage={patientsPerPage}
+            totalPlayers={filteredPatients.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          /> */}
+          <PaginationFooter
+            page_count={page_count}
             playersPerPage={patientsPerPage}
             totalPlayers={filteredPatients.length}
             paginate={paginate}

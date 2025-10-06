@@ -1,3 +1,7 @@
+.trainerAptSection-layout{
+    margin: 0px 20px 0px 20px;
+}
+
 .trainerAptSection-header {
     display: flex;
     align-items: center;
@@ -16,7 +20,7 @@
 
 .trainerAptSection-header h1 {
     font-size: 20px;
-    margin: 0px 10px 10px 0px;
+    margin: 0px 10px 10px -20px;
 }
 
 .exercise-image {
@@ -178,4 +182,13 @@
     height: 40px;
     width: 40px;
     /* color: white; */
+}
+
+.appt-exercise-table-default {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+    /* background-color: #cccccc; */
 }

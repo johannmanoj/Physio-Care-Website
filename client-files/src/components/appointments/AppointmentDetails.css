@@ -48,7 +48,7 @@
   margin-left: 10px;
 
   /* Show only 17 date cards (17 * 76px approx) */
-  max-height: 1450px;
+  max-height: 1600px;
   /* each card ~68px + margin */
   overflow-y: auto;
   /* scroll inside only */
@@ -130,7 +130,7 @@
   font-weight: 500;
   border-radius: 6px;
   cursor: pointer;
-  background: #2e7d32;
+  background-color: rgb(1, 140, 196);
   color: #fff;
   border: none;
   transition: all 0.2s ease-in-out;
@@ -141,8 +141,7 @@
 }
 
 .upload-image-button:hover {
-  background: #1b5e20;
-  /* darker green */
+  background-color: rgb(1, 130, 180);
 }
 
 .uploaded-file-name {
@@ -243,7 +242,7 @@
   font-weight: 500;
   border-radius: 6px;
   cursor: pointer;
-  background: #2e7d32;
+  background-color: rgb(1, 140, 196);
   /* dark green */
   color: #fff;
   border: none;
@@ -253,7 +252,7 @@
 }
 
 .appointment-pain-assessment-button:hover {
-  background: #1b5e20;
+  background-color: rgb(1, 130, 180);
   /* darker green */
 }
 
@@ -358,5 +357,5 @@
   font-size: 17px;
 
   padding-left: 10px;
-  margin: 30px 20px 0px 0px;
+  margin: 20px 20px 10px 0px;
 }

@@ -18,7 +18,7 @@ const LibrariesPage = () => {
                     <div className='report-selection-card'>
                         <FaDumbbell />
                         <label>Exercises</label>
-                        <button onClick={() => navigate(`/exerciseLibPage`)}>View</button>
+                        <button onClick={() => navigate(`/exerciseLibPage`)} className='prima'>View</button>
                         
                     </div>
                     <div className='report-selection-card'>
@@ -32,7 +32,7 @@ const LibrariesPage = () => {
                         <button onClick={() => navigate(`/invoiceReportPage`)}>View</button>
                     </div> */}
                 </div>
-
+                            
                 {/* <div className='report-selection-card-row'>
                     <div className='report-selection-card'>
                         <FaRegCalendarCheck />

@@ -15,6 +15,7 @@ function DashboardPage() {
 
   const [appointmentData, setAppointmnetData] = useState([]);
   const [patientData, setPatientData] = useState([]);
+  const [treatmentData, setTreatmentData] = useState([])
   const { role, userId, branchId } = useAuth();
 
   useEffect(() => {
@@ -54,9 +55,19 @@ function DashboardPage() {
       });
   }, []);
 
+  useEffect(() => {
+    axios.post(`${API_URL}/api/exercises/get-treatments-list`)
+      .then((response) => {
+        setTreatmentData(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching patient data:', error);
+      });
+  }, []);
+
 
   return (
-    <div>
+    <div className='dashboard-layout'>
       {/* <div className='dashboard-card-row'>
         <div className='dashboard-card-single'>
           <div className='dashboard-stats'>
@@ -163,16 +174,39 @@ function DashboardPage() {
 
       <div className='dashboard-card-row'>
         <div className='dashboard-card'>
-          <div className='dashboard-card-header'>Assessments</div>
-
-          <div className='dashboard-card-default-text'>
-            <div>No assessments Yet</div>
+          <div className='dashboard-card-header'>
+            <div className='dashboard-card-header-name'>Treatments</div>
+            <button className='dashboard-card-button' onClick={() => navigate("/patientsPage")}>View All</button>
           </div>
-
+          {patientData.length > 0 && (
+            <table className='db-appointment-table'>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Treatment</th>
+                  <th>Cost / hr</th>
+                </tr>
+              </thead>
+              <tbody>
+                {treatmentData.slice(0, 5).map((treatment) => (
+                  <tr key={treatment.id}>
+                    <td>{treatment.id}</td>
+                    <td>{treatment.treatment}</td>
+                    <td>{treatment.rate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {treatmentData.length == 0 && (
+            <div className='dashboard-card-default-text'>
+              <div>No Treatments Yet</div>
+            </div>
+          )}
         </div>
         <div className='dashboard-card'>
-          <div className='dashboard-card-header'>Treatments</div>
-          <div className='dashboard-card-default-text'>No treatments Yet</div>
+          <div className='dashboard-card-header'>Assessments</div>
+          <div className='dashboard-card-default-text'>No assessments Yet</div>
         </div>
       </div>
     </div>

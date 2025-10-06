@@ -5,8 +5,7 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
-import Pagination from '../common/Pagination';
-// import './UsersListPage.css';
+import PaginationFooter from '../common/PaginationFooter';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -14,10 +13,8 @@ function TreatmentLibPage() {
   const navigate = useNavigate();
   const { branchId } = useAuth();
 
-
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
@@ -27,7 +24,6 @@ function TreatmentLibPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUser, setEditUser] = useState({ id: '', treatment: '', rate: '' });
 
-  const statuses = ['Admin', 'Trainer', 'Therapist', 'Receptionist'];
 
   useEffect(() => {
     fetchUsers();
@@ -116,14 +112,16 @@ function TreatmentLibPage() {
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
+
 
   if (loading) { return <p></p>; }
   return (
     <div className="patients-page-container">
-      <div className="page-header">
+      <div className="common-page-header">
         <h1>Treatments</h1>
         <div className="filters">
-          <button className='view-button' onClick={() => setShowAddModal(true)}>Add Treatment</button>
+          <button className='primary-button' onClick={() => setShowAddModal(true)}>Add Treatment</button>
 
           <div className="search-bar-container">
             <input
@@ -184,10 +182,8 @@ function TreatmentLibPage() {
       )}
 
       <div className="table-footer">
-        <span className="pagination-info">
-          Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
-        </span>
-        <Pagination
+        <PaginationFooter
+          page_count={page_count}
           playersPerPage={usersPerPage}
           totalPlayers={filteredUsers.length}
           paginate={paginate}

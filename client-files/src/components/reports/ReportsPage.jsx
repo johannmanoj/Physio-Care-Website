@@ -31,25 +31,6 @@ const ReportsPage = () => {
                         <button onClick={() => navigate(`/invoiceReportPage`)}>View</button>
                     </div>
                 </div>
-
-                {/* <div className='report-selection-card-row'>
-                    <div className='report-selection-card'>
-                        <FaRegCalendarCheck />
-                        <label>Attendance</label>
-                        <button>View</button>
-                    </div>
-                    <div className='report-selection-card'>
-                        <FaRegCalendarCheck />
-                        <label>Attendance</label>
-                        <button>View</button>
-                    </div>
-                    <div className='report-selection-card'>
-                        <FaRegCalendarCheck />
-                        <label>Attendance</label>
-                        <button>View</button>
-                    </div>
-                </div> */}
-
             </div>
         </div>
     )

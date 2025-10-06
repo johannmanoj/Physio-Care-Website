@@ -12,7 +12,9 @@ function PatientDetailsSection({ patientData, updatePatientData, isReadOnly }) {
 
     return (
         <div>
-            <h1>Patient Details: {patientId}</h1>
+            <div className='common-section-header'>
+                <h1>Patient Details: {patientId}</h1>
+            </div>
 
             <div className="data-field-row">
                 <div className="data-field data-field-2">

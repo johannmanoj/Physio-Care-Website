@@ -10,9 +10,15 @@
   font-weight: bold;
 }
 
-.profile-header-section-1{
+.profile-page-logo {
+  font-size: 80px;
+}
+
+.profile-header-section-1 {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .profile-main-heading-tabs {
@@ -105,3 +111,12 @@
   background-color: #c82333;
   /* box-shadow: 0px 6px 10px rgba(230, 57, 70, 0.4); */
 }
+
+.password-update-button {
+  margin-top: 30px;
+  width: 100px;
+}
+
+/* .profile-field-grid {
+  margin: 0px 30px;
+} */
