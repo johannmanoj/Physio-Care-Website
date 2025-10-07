@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 
 import { useAuth } from "../../context/AuthContext";
 import EmployeesReportPage from './EmployeesReportPage';
@@ -12,6 +14,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 
 function InvoiceReportPage() {
+    const navigate = useNavigate();
     const { branchId } = useAuth();
 
     const [showRevenueModal, setShowRevenueModal] = useState(false);
@@ -151,12 +154,13 @@ function InvoiceReportPage() {
 
     const viewfunction = (user) => {
         setSelectedUser(user);
-        setShowRevenueModal(true);
+        // setShowRevenueModal(true);
+        navigate(`/invoiceStats/${user.id}`)
     };
 
     return (
         <div className="patients-page-container">
-            <EmployeesReportPage viewfunction={viewfunction} />
+            <EmployeesReportPage pageName={"InvoiceReportPage"} viewfunction={viewfunction} setSelectedUserId ={setSelectedUser}/>
 
             {showRevenueModal && selectedUser && (
                 <div className="modal-overlay">
@@ -200,7 +204,7 @@ function InvoiceReportPage() {
                                 <option value="12">December</option>
                             </select>
                         </div>
-                        
+
                         {/* Invoice List */}
                         <div className="invoice-list">
                             {selectedYear && selectedMonth ? (

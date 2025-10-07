@@ -199,7 +199,7 @@ function AttendanceReportPage() {
 
     return (
         <div className="patients-page-container">
-            <EmployeesReportPage viewfunction={viewfunction} />
+            <EmployeesReportPage pageName={"AttendanceReportPage"} viewfunction={viewfunction} />
 
             {showAttendanceModal && selectedUser && (
                 <div className="modal-overlay">

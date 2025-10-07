@@ -85,6 +85,11 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
 
     const handleNewInvoice = async () => {
         try {
+            if (invoiceData.length == 0) {
+                toast.error("Please add a treatment");
+                return;
+            }
+            invoiceData.length
             // Step 1: Create invoice in DB
             const total = invoiceData.reduce((acc, item) => acc + item.amount, 0);
 
@@ -129,11 +134,18 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
                 invoice_url,
             });
 
-            // Optionally open PDF in new tab after upload
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            window.open(pdfUrl, "_blank");
+            // Step 5: Update appointment record with URL
+            await axios.post(`${API_URL}/api/invoice/update-appointment-invoice-url`, {
+                id: selectedApptId,
+                invoice_url,
+            });
 
-            toast.success("Invoice generated, uploaded, and saved successfully");
+            // // Optionally open PDF in new tab after upload
+            // const pdfUrl = URL.createObjectURL(pdfBlob);
+            // window.open(pdfUrl, "_blank");
+            location.reload()
+            // toast.success("Invoice generated, uploaded, and saved successfully");
+
         } catch (error) {
             console.error("Error generating invoice:", error);
             toast.error("Error generating invoice");
@@ -177,7 +189,7 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
                         </button>
                     </div>
                 </div>
-                            
+
                 <table className="common-table">
                     <thead>
                         <tr>

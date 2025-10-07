@@ -52,20 +52,17 @@ router.post('/get-invoice-list', async (req, res) => {
   }
 });
 
-router.post('/add-new-invoice', async (req, res) => {
+router.post('/get-custom-invoice-list', async (req, res) => {
   try {
-    const { practitioner_id, patient_id, appointment_id, total, branch_id } = req.body;
+    const { practitioner_id, branch_id } = req.body;
 
     const [result] = await pool.query(
-      'INSERT INTO invoices (practitioner_id, patient_id, appointment_id, total,branch_id) VALUES (?, ?, ?, ?, ?)',
-      [practitioner_id, patient_id, appointment_id, total, branch_id]
+      `SELECT invoices.*, appointments.pymt_status, appointments.pymt_method FROM invoices INNER JOIN appointments ON invoices.appointment_id = appointments.id where invoices.practitioner_id = ? AND invoices.branch_id = ?`,
+      [practitioner_id, branch_id]
     );
 
     // result.insertId gives you the auto-generated ID
-    res.status(201).json({
-      message: 'Invoice created successfully',
-      invoice_id: result.insertId
-    });
+    res.status(201).json({ message: 'Invoice details retrieved successfully', data: result });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -77,6 +74,20 @@ router.post('/update-invoice-url', async (req, res) => {
     const { id, invoice_url } = req.body;
 
     await pool.query('UPDATE invoices SET invoice_url = ? WHERE id = ?',
+      [invoice_url, id]);
+
+    res.status(201).json({ message: 'Patient details updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+router.post('/update-appointment-invoice-url', async (req, res) => {
+  try {
+    const { id, invoice_url } = req.body;
+
+    await pool.query('UPDATE appointments SET invoice_url = ? WHERE id = ?',
       [invoice_url, id]);
 
     res.status(201).json({ message: 'Patient details updated successfully' });

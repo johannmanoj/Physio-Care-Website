@@ -29,7 +29,7 @@ function LoginPage() {
       // Pass token + role into context
       login(response.data.token, response.data.role, response.data.email, response.data.user_id, response.data.branch_id);
 
-      navigate("/");
+      navigate("/dashboard");
 
     } catch (err) {
       const message = err.response?.data?.message || "Login failed";

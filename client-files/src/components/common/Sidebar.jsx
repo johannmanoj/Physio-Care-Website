@@ -12,7 +12,7 @@ function Sidebar() {
   const { role } = useAuth();
 
   const menuItems = [
-    { label: "Dashboard", path: "/", icon: <MdDashboard style={{ color: "grey", fontSize: "24px" }} /> },
+    { label: "Dashboard", path: "/dashboard", icon: <MdDashboard style={{ color: "grey", fontSize: "24px" }} /> },
     { label: "Appointments", path: "/appointments", icon: <FaRegCalendarCheck style={{ color: "grey", fontSize: "24px" }} /> },
     { label: "Patients", path: "/patientsPage", icon: <FaUserInjured style={{ color: "grey", fontSize: "24px" }} /> },
     { label: "Invoices", path: "/invoiceTablePage", icon: <FaFileInvoice style={{ color: "grey", fontSize: "24px" }} /> },

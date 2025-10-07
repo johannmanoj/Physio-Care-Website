@@ -25,7 +25,7 @@ function AppointmentReportPage() {
         <div className="patients-page-container">
 
             {!showAttendanceModal && (
-                <EmployeesReportPage viewfunction={viewfunction} setSelectedUserId={setSelectedUserId}/>
+                <EmployeesReportPage pageName={"AppointmentReportPage"} viewfunction={viewfunction} setSelectedUserId={setSelectedUserId}/>
             )}
 
             {showAttendanceModal && selectedUser && (

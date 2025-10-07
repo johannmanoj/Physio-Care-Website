@@ -24,6 +24,8 @@ import ExerciseLibPage from '../library/ExerciseLibPage'
 import TreatmentLibPage from '../library/TreatmentLibPage'
 import Branches from '../admin/Branches'
 
+import InvoiceStats from '../reports/invoices/InvoiceStats'
+
 import { useAuth } from "../../context/AuthContext";
 
 
@@ -38,6 +40,7 @@ function App() {
         <div className='main-body-content'>
           <Routes className="homepage-grid">
             <Route path="/" element={role == "PrimaryAdmin" ? <Branches /> : <DashboardPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/billing" element={<BillingPage />} />
             <Route path="/reports" element={<ReportsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
@@ -58,6 +61,7 @@ function App() {
             <Route path="/appointmentDetails/:patientId/:apptId" element={<AppointmentDetails />} />
             <Route path="/patientInfo/:apptId" element={<PatientDetails />} />
             <Route path="/userPage/:employeeId" element={<UserPage />} />
+            <Route path="/invoiceStats/:employeeId" element={<InvoiceStats />} />
           </Routes>
         </div>
       </div>

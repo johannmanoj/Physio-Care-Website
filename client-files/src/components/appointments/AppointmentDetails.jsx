@@ -21,6 +21,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 
 const INITIAL_DATA = {
+  id:'',
   patient_id: '',
   name: '',
   status: '',
@@ -231,13 +232,25 @@ function PatientDetails() {
 
 
           <div className="common-page-footer-layout">
-            <button
-              className="common-footer-binvoice"
-              onClick={() => setShowInvoiceModal(true)}
-              disabled={isReadOnly}
-            >
-              Invoice
-            </button>
+            {patientData.invoice_url ? (
+              // Condition: invoice_url is truthy (exists)
+              <button
+                className="common-footer-binvoice"
+                onClick={() => window.open(patientData.invoice_url, "_blank")}
+                disabled={isReadOnly}
+              >
+                View Invoice
+              </button>
+            ) : (
+              // Else (invoice_url is falsy/null/undefined)
+              <button
+                className="common-footer-binvoice"
+                onClick={() => setShowInvoiceModal(true)}
+                disabled={isReadOnly}
+              >
+                Generate Invoice
+              </button>
+            )}
 
             <button className='common-footer-bsave' onClick={handleSave} disabled={isReadOnly}>Save</button>
           </div>

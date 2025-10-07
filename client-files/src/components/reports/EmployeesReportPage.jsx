@@ -9,7 +9,7 @@ import PaginationFooter from '../common/PaginationFooter';
 
 const API_URL = import.meta.env.VITE_API_URL
 
-function EmployeesReportPage({ viewfunction, setSelectedUserId }) {
+function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
     const { branchId } = useAuth();
 
     const [users, setUsers] = useState([]);
