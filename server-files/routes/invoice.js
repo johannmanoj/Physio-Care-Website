@@ -109,6 +109,26 @@ router.post('/get-address-details', async (req, res) => {
   }
 })
 
+router.post('/add-new-invoice', async (req, res) => {
+    try {
+        const { practitioner_id, patient_id, appointment_id, total, branch_id } = req.body;
+
+        const [result] = await pool.query(
+            'INSERT INTO invoices (practitioner_id, patient_id, appointment_id, total,branch_id) VALUES (?, ?, ?, ?, ?)',
+            [practitioner_id, patient_id, appointment_id, total,branch_id]
+        );
+
+        // result.insertId gives you the auto-generated ID
+        res.status(201).json({ 
+            message: 'Invoice created successfully',
+            invoice_id: result.insertId 
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 
 module.exports = router

@@ -4,13 +4,9 @@ import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-
 import { useAuth } from "../../context/AuthContext";
-import Pagination from '../common/Pagination';
 import PaginationFooter from '../common/PaginationFooter';
-
 import './PatientsPage.css';
-
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -36,10 +32,7 @@ function PatientsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newPatient, setNewPatient] = useState(patient_data);
 
-
-
-  const statuses = ['active', 'inactive', 'onhold'];
-
+  
   useEffect(() => {
     axios
       .post(`${API_URL}/api/patients/get-patient-list`, {
@@ -76,11 +69,8 @@ function PatientsPage() {
       });
   };
 
-
   // Filtering and Searching Logic
   const filteredPatients = patients.filter(patient => {
-    // console.log("patientpatientpatient", patient);
-
     const matchesSearch = patient.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = filterStatus ? patient.status.toLowerCase() == filterStatus : true;
 
@@ -92,29 +82,19 @@ function PatientsPage() {
   const indexOfFirstPlayer = indexOfLastPlayer - patientsPerPage;
   const currentPatients = filteredPatients.slice(indexOfFirstPlayer, indexOfLastPlayer);
   const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   var page_count = `Showing ${indexOfFirstPlayer + 1} to ${Math.min(indexOfLastPlayer, filteredPatients.length)} of ${filteredPatients.length}`
+
 
   if (loading) { return <p></p>; }
   return (
-    <div className="patients-page-container">
+    <div className="common-page-layout">
       <div className="common-page-header">
         <h1>Patients</h1>
 
         <div className="filters">
           <button className="primary-button" onClick={() => setShowAddModal(true)}>Add Patient</button>
 
-          {/* <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option value="">Filter by Status</option>
-            {statuses.map((team) => (
-              <option key={team} value={team}>{team}</option>
-            ))}
-          </select> */}
           <div className="search-bar-container">
             <input
               type="text"
@@ -165,16 +145,6 @@ function PatientsPage() {
 
       {patients.length > 0 && (
         <div className="table-footer">
-          {/* <span className="pagination-info">
-            Showing {indexOfFirstPlayer + 1} to {Math.min(indexOfLastPlayer, filteredPatients.length)} of {filteredPatients.length}
-          </span>
-          <Pagination
-            playersPerPage={patientsPerPage}
-            totalPlayers={filteredPatients.length}
-            paginate={paginate}
-            currentPage={currentPage}
-            totalPages={totalPages}
-          /> */}
           <PaginationFooter
             page_count={page_count}
             playersPerPage={patientsPerPage}

@@ -3,8 +3,8 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 import EmployeesReportPage from './EmployeesReportPage'
-import './AttendanceReportPage.css';
 import company_logo from '../../assets/invoice-logo.png'
+import './AttendanceReportPage.css';
 
 
 function AttendanceReportPage() {
@@ -185,20 +185,9 @@ function AttendanceReportPage() {
         window.open(pdfBlobUrl, "_blank");
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    
     return (
-        <div className="patients-page-container">
+        <div className="common-page-layout">
             <EmployeesReportPage pageName={"AttendanceReportPage"} viewfunction={viewfunction} />
 
             {showAttendanceModal && selectedUser && (

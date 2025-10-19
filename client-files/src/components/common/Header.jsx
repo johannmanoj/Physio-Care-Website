@@ -57,7 +57,16 @@ function Header() {
         >
 
           <span className="user-info">{user.name}</span>
-          <FaUserCircle style={{ color: 'grey', fontSize: '34px', cursor: 'pointer' }} />
+          {user.profile_pic ? (
+            <img
+              src={user.profile_pic}
+              alt="Profile"
+              className="profile-picture"
+            />
+          ) : (
+            <FaUserCircle className="profile-picture" />
+          )}
+          {/* <FaUserCircle style={{ color: 'grey', fontSize: '34px', cursor: 'pointer' }} /> */}
           <FaChevronDown className={`arrow-icon ${menuOpen ? "rotate" : ""}`} />
 
           {menuOpen && (
@@ -71,8 +80,8 @@ function Header() {
                 </div>
               </div>
               <div className="profile-menu-item-list">
-                <div className="profile-menu-item" onClick={handleProfile}><FaUserCircle  className="profile-menu-item-logo"/> Edit Profile</div>
-                <div className="profile-menu-item" onClick={handleLogout}><FaSignOutAlt className="profile-menu-item-logo"/> Log Out</div>
+                <div className="profile-menu-item" onClick={handleProfile}><FaUserCircle className="profile-menu-item-logo" /> Edit Profile</div>
+                <div className="profile-menu-item" onClick={handleLogout}><FaSignOutAlt className="profile-menu-item-logo" /> Log Out</div>
               </div>
             </div>
           )}

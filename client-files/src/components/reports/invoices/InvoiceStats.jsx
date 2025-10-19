@@ -108,7 +108,7 @@ function InvoiceStats() {
                 </div>
             </div>
 
-            <div className="players-page-container">
+            <div className="common-page-layout">
                 <div className="common-page-header">
                     <h1>Invoices</h1>
                     <div className="filters">

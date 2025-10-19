@@ -88,9 +88,9 @@ router.post('/update-user', async (req, res) => {
 
 router.post('/update-user-profile', async (req, res) => {
     try {
-        const { id, name, email, phone, bank_name, acc_holder_name, acc_number, ifsc_code } = req.body
+        const { id, name, email, phone, bank_name, acc_holder_name, acc_number, ifsc_code, profile_pic, dob } = req.body
 
-        await pool.query('UPDATE users SET email=?, name=?, phone=?, bank_name=?, acc_holder_name=?, acc_number=?, ifsc_code=? WHERE id = ?', [email, name, phone, bank_name, acc_holder_name, acc_number, ifsc_code, id]);
+        await pool.query('UPDATE users SET email=?, name=?, phone=?, bank_name=?, acc_holder_name=?, acc_number=?, ifsc_code=?, profile_pic=?, dob=? WHERE id = ?', [email, name, phone, bank_name, acc_holder_name, acc_number, ifsc_code, profile_pic, dob, id]);
 
         res.status(201).json({ message: 'User details updated successfully' });
     } catch (err) {

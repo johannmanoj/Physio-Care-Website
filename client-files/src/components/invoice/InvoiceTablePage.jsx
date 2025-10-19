@@ -71,7 +71,7 @@ function InvoiceTablePage() {
 
 
     return (
-        <div className="players-page-container">
+        <div className="common-page-layout">
             <div className="common-page-header">
                 {/* <h1>Patient: {patientId} ({patientName})</h1> */}
                 <h1>Invoices</h1>

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '../common/Pagination';
-import PaginationFooter from '../common/PaginationFooter';
-import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+
 import { useAuth } from "../../context/AuthContext";
-
-
+import PaginationFooter from '../common/PaginationFooter';
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function PatientAppointments() {
     const navigate = useNavigate();
     const { branchId } = useAuth();
-
     const { patientId, patientName } = useParams();
 
     const [appointments, setAppointments] = useState([]);
@@ -57,7 +54,7 @@ function PatientAppointments() {
 
 
     return (
-        <div className="players-page-container">
+        <div className="common-page-layout">
             <div className="common-page-header">
                 <h1>Patient: {patientId} ({patientName})</h1>
                 {/* <div className="filters">
@@ -88,8 +85,6 @@ function PatientAppointments() {
                     <thead>
                         <tr>
                             <th>Appt ID</th>
-                            {/* <th>Patient Names</th>
-                            <th>Patient ID</th> */}
                             <th>Date</th>
                             <th>Time</th>
                             <th>Session Type</th>
@@ -101,8 +96,6 @@ function PatientAppointments() {
                         {appointments.map(appointment => (
                             <tr key={appointment.id}>
                                 <td>{appointment.id}</td>
-                                {/* <td>{appointment.name}</td>
-                                <td>{appointment.patient_id}</td> */}
                                 <td>{appointment.date}</td>
                                 <td>{appointment.time}</td>
                                 <td>{appointment.session_type}</td>
@@ -113,7 +106,6 @@ function PatientAppointments() {
                                 </td>
                                 <td>
                                     <button className="primary-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
-
                                 </td>
                             </tr>
                         ))}
@@ -122,16 +114,6 @@ function PatientAppointments() {
             </div>
 
             <div className="table-footer">
-                {/* <span className="pagination-info">
-                    Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
-                </span>
-                <Pagination
-                    playersPerPage={appointmentsPerPage}
-                    totalPlayers={filteredAppointments.length}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                /> */}
                 <PaginationFooter
                     page_count={page_count}
                     playersPerPage={appointmentsPerPage}

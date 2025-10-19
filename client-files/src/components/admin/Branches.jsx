@@ -5,7 +5,7 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
-import Pagination from '../common/Pagination';
+import PaginationFooter from '../common/PaginationFooter';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -101,14 +101,17 @@ function UsersProfile() {
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
+
+
 
     if (loading) { return <p></p>; }
     return (
-        <div className="patients-page-container">
-            <div className="page-header">
+        <div className="common-page-layout">
+            <div className="common-page-header">
                 <h1>Branches</h1>
                 <div className="filters">
-                    <button className='view-button' onClick={() => setShowAddModal(true)}>Add Branch</button>
+                    <button className='primary-button' onClick={() => setShowAddModal(true)}>Add Branch</button>
                     <div className="search-bar-container">
                         <input
                             type="text"
@@ -147,7 +150,7 @@ function UsersProfile() {
                                 <td>{appointment.phone_1}</td>
                                 <td>
                                     <button
-                                        className="view-button"
+                                        className="primary-button"
                                         onClick={() => {
                                             setEditUser(
                                                 {
@@ -181,10 +184,8 @@ function UsersProfile() {
             )}
 
             <div className="table-footer">
-                <span className="pagination-info">
-                    Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
-                </span>
-                <Pagination
+                <PaginationFooter
+                    page_count={page_count}
                     playersPerPage={usersPerPage}
                     totalPlayers={filteredUsers.length}
                     paginate={paginate}

@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '../common/Pagination';
-import PaginationFooter from '../common/PaginationFooter';
-
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { FaRegCalendarCheck } from 'react-icons/fa';
+import axios from 'axios';
+
+import { useAuth } from "../../context/AuthContext";
+import PaginationFooter from '../common/PaginationFooter';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function AppointmentReportSection({ user_id }) {
     const navigate = useNavigate();
     const { branchId } = useAuth();
-
 
     const [appointments, setAppointments] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -80,7 +78,6 @@ function AppointmentReportSection({ user_id }) {
     const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
     const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
     var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
 
 
@@ -189,16 +186,6 @@ function AppointmentReportSection({ user_id }) {
 
             {appointments.length > 0 && (
                 <div className="table-footer">
-                    {/* <span className="pagination-info">
-                        Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
-                    </span>
-                    <Pagination
-                        playersPerPage={appointmentsPerPage}
-                        totalPlayers={filteredAppointments.length}
-                        paginate={paginate}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                    /> */}
                     <PaginationFooter
                         page_count={page_count}
                         playersPerPage={appointmentsPerPage}

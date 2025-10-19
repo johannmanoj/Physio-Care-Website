@@ -1,12 +1,17 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+import { useAuth } from "../../context/AuthContext";
 import Sidebar from './Sidebar';
 import Header from './Header';
 import './HomePage.css';
-import { Routes, Route } from 'react-router-dom';
+import '../cssCommon/PageCss.css';
+import '../cssCommon/TableCss.css';
+import '../cssCommon/ElementsCss.css';
+
 import DashboardPage from '../sidebarPages/DashboardPage';
 import AppointmentsPage from '../sidebarPages/AppointmentsPage';
 import ProfilePage from '../profile/ProfilePage';
-import BillingPage from '../sidebarPages/BillingPage'
 import PatientsPage from '../sidebarPages/PatientsPage';
 import PatientDetails from '../patients/PatientDetails'
 import UsersListPage from '../admin/UsersListPage'
@@ -26,7 +31,6 @@ import Branches from '../admin/Branches'
 
 import InvoiceStats from '../reports/invoices/InvoiceStats'
 
-import { useAuth } from "../../context/AuthContext";
 
 
 function App() {
@@ -41,7 +45,6 @@ function App() {
           <Routes className="homepage-grid">
             <Route path="/" element={role == "PrimaryAdmin" ? <Branches /> : <DashboardPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/billing" element={<BillingPage />} />
             <Route path="/reports" element={<ReportsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />

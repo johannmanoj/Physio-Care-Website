@@ -3,9 +3,7 @@ import { FaUsers } from 'react-icons/fa';
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
-import Pagination from '../common/Pagination';
 import PaginationFooter from '../common/PaginationFooter';
-
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -147,16 +145,6 @@ function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
             )}
 
             <div className="table-footer">
-                {/* <span className="pagination-info">
-                    Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
-                </span>
-                <Pagination
-                    playersPerPage={usersPerPage}
-                    totalPlayers={filteredUsers.length}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                /> */}
                 <PaginationFooter
                     page_count={page_count}
                     playersPerPage={usersPerPage}

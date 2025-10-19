@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import EmployeesReportPage from './EmployeesReportPage'
 import AppointmentReportSection from './AppointmentReportSection'
 // import './AppointmentReportPage.css';
-
-const API_URL = import.meta.env.VITE_API_URL
 
 function AppointmentReportPage() {
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
@@ -22,7 +19,7 @@ function AppointmentReportPage() {
     }
 
     return (
-        <div className="patients-page-container">
+        <div className="common-page-layout">
 
             {!showAttendanceModal && (
                 <EmployeesReportPage pageName={"AppointmentReportPage"} viewfunction={viewfunction} setSelectedUserId={setSelectedUserId}/>

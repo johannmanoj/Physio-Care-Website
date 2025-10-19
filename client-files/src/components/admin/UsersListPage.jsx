@@ -6,7 +6,6 @@ import { Toaster, toast } from "react-hot-toast";
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
-import Pagination from '../common/Pagination';
 import PaginationFooter from '../common/PaginationFooter';
 
 import './UsersListPage.css';
@@ -115,7 +114,7 @@ function UsersProfile() {
 
   if (loading) { return <p></p>; }
   return (
-    <div className="patients-page-container">
+    <div className="common-page-layout">
       <div className="common-page-header">
         <h1>Users</h1>
         <div className="filters">
@@ -185,16 +184,6 @@ function UsersProfile() {
       )}
 
       <div className="table-footer">
-        {/* <span className="pagination-info">
-          Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, filteredUsers.length)} of {filteredUsers.length}
-        </span>
-        <Pagination
-          playersPerPage={usersPerPage}
-          totalPlayers={filteredUsers.length}
-          paginate={paginate}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        /> */}
         <PaginationFooter
           page_count={page_count}
           playersPerPage={usersPerPage}

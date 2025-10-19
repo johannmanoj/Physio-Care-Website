@@ -15,7 +15,7 @@ function Sidebar() {
     { label: "Dashboard", path: "/dashboard", icon: <MdDashboard style={{ color: "grey", fontSize: "24px" }} /> },
     { label: "Appointments", path: "/appointments", icon: <FaRegCalendarCheck style={{ color: "grey", fontSize: "24px" }} /> },
     { label: "Patients", path: "/patientsPage", icon: <FaUserInjured style={{ color: "grey", fontSize: "24px" }} /> },
-    { label: "Invoices", path: "/invoiceTablePage", icon: <FaFileInvoice style={{ color: "grey", fontSize: "24px" }} /> },
+    // { label: "Invoices", path: "/invoiceTablePage", icon: <FaFileInvoice style={{ color: "grey", fontSize: "24px" }} /> },
     { label: "Users", path: "/usersListPage", icon: <FaUsers style={{ color: "grey", fontSize: "24px" }} />, roles: ["Admin"] },
     { label: "Reports", path: "/reports", icon: <FaChartBar style={{ color: "grey", fontSize: "24px" }} />, roles: ["Admin"] },
     { label: "Library", path: "/librariesPage", icon: <FaBookOpen style={{ color: "grey", fontSize: "24px" }} />, roles: ["Admin"] },

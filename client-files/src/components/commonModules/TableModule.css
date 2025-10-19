@@ -1,4 +1,4 @@
-.common-table-wrapper {
+/* .common-table-wrapper {
   overflow-x: auto;
 }
 
@@ -20,32 +20,32 @@
   background-color: rgb(67, 77, 94);
   font-weight: bold;
   color: #edf2f7;
-}
+} */
 
 /* .common-table tbody tr:hover {
   background-color: #4a5568;
 } */
 
-.profile-thumbnail {
+/* .profile-thumbnail {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
   vertical-align: middle; 
-}
+} */
 
-.view-button {
+/* .view-button {
   background-color: #00bf8a;
   color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
-}
+} */
 
-.view-button:hover {
+/* .view-button:hover {
   background-color: #00a377;
-}
+} */
 
 .status-badge {
   display: inline-block;

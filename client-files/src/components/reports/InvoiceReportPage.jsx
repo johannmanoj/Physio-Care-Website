@@ -159,7 +159,7 @@ function InvoiceReportPage() {
     };
 
     return (
-        <div className="patients-page-container">
+        <div className="common-page-layout">
             <EmployeesReportPage pageName={"InvoiceReportPage"} viewfunction={viewfunction} setSelectedUserId ={setSelectedUser}/>
 
             {showRevenueModal && selectedUser && (

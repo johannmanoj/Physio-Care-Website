@@ -1,6 +1,24 @@
+.profile-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 20px; */
+  /* border-bottom: 1px solid #4a5568;
+  padding-bottom: 10px; */
+  padding-top: 10px;
+}
+
+.profile-page-header h1 {
+  font-size: 24px;
+  color: #edf2f7;
+  margin: 0;
+}
+
+
 .profile-page {
   background-color: #2d3748;
   border-radius: 10px;
+  padding: 10px 10px 20px 10px;
 }
 
 .profile-page h1 {
@@ -76,6 +94,13 @@
   background-color: #00a377;
 }
 
+.punch-button-layout {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
 .punch-btn {
   padding: 10px 15px;
   font-size: 1rem;
@@ -120,3 +145,110 @@
 /* .profile-field-grid {
   margin: 0px 30px;
 } */
+
+
+.profile-page-sections {
+  border: 2px solid #334155;
+  border-radius: 15px;
+  margin: 20px 20px;
+  /* background-color: #1e293b; */
+}
+
+.profile-page-sections h1 {
+  font-weight: bold;
+  font-size: 18px;
+  padding: 0px;
+  margin: 0px;
+  /* background-color: #1e293b; */
+  width: 100%;
+}
+
+.profile-page-sections h2 {
+  font-weight: bold;
+  font-size: 16px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.profile-page-sections-label {
+  margin-top: 10px;
+  color: white;
+  font-size: 16px;
+
+}
+
+.profile-info-header {
+
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.profile-info-header-pic {
+  font-size: 80px;
+}
+
+
+.profile-info-header-sub-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* margin-left: 10px; */
+
+}
+
+.profile-info-header-sub-text h1 {
+  font-weight: bold;
+  font-size: 18px;
+  padding: 0px;
+}
+
+.profile-edit-button {
+  width: 85px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 20px;
+  border: none;
+  background-color: #36455b;
+  color: rgb(210, 210, 210);
+}
+
+.profile-edit-button:hover {
+  color: white;
+  background-color: #344258;
+
+}
+
+
+.profile-pic-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-info-header-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.upload-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #1e293b;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  color: white;
+  border: 1px solid #334155;
+}
+
+.upload-icon:hover {
+  background: #334155;
+}
+

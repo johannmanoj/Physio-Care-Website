@@ -3,17 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarCheck, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 
-import TableModule from '../commonModules/TableModule'
-
 import { useAuth } from "../../context/AuthContext";
-import Pagination from '../common/Pagination';
 import PaginationFooter from '../common/PaginationFooter';
 import './AppointmentsPage.css';
+// import TableModule from '../commonModules/TableModule'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 function AppointmentsPage() {
   const navigate = useNavigate();
+  const { role, userId, branchId } = useAuth();
 
   const [appointments, setAppointments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,8 +22,6 @@ function AppointmentsPage() {
   const [loading, setLoading] = useState(true);
 
   const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
-
-  const { role, userId, branchId } = useAuth();
 
 
   useEffect(() => {
@@ -54,7 +51,6 @@ function AppointmentsPage() {
     fetchAppointments();
   }, [role, userId]);
 
-
   // Filtering and Searching Logic
   const filteredAppointments = appointments.filter(appointment => {
     const matchesSearch = appointment.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,15 +64,12 @@ function AppointmentsPage() {
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
   const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
   const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
 
   if (loading) { return <p></p>; }
-
   return (
-    <div className="players-page-container">
+    <div className="common-page-layout">
       <div className="common-page-header">
         <h1>Appointments</h1>
 
@@ -103,19 +96,8 @@ function AppointmentsPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {/* <div className="search-bar-container">
-            <input
-              type="text"
-              placeholder="Search Name here..."
-              value={searchTerm}
-              className='search-input'
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div> */}
         </div>
       </div>
-
-      {/* <TableModule appointments={currentAppointments} /> */}
 
       <div className="common-table-wrapper">
         <table className="common-table">
@@ -159,7 +141,6 @@ function AppointmentsPage() {
       </div>
 
 
-
       {appointments.length == 0 && (
         <div className='appointments-default-message'>
           <FaRegCalendarCheck className='appointments-default-logo' />
@@ -169,16 +150,6 @@ function AppointmentsPage() {
 
       {appointments.length > 0 && (
         <div className="table-footer">
-          {/* <span className="pagination-info">
-            Showing {indexOfFirstAppointment + 1} to {Math.min(indexOfLastAppointment, filteredAppointments.length)} of {filteredAppointments.length}
-          </span>
-          <Pagination
-            playersPerPage={appointmentsPerPage}
-            totalPlayers={filteredAppointments.length}
-            paginate={paginate}
-            currentPage={currentPage}
-            totalPages={totalPages}
-          /> */}
           <PaginationFooter
             page_count={page_count}
             playersPerPage={appointmentsPerPage}

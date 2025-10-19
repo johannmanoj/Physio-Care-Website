@@ -111,13 +111,12 @@ function TreatmentLibPage() {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
 
 
   if (loading) { return <p></p>; }
   return (
-    <div className="patients-page-container">
+    <div className="common-page-layout">
       <div className="common-page-header">
         <h1>Treatments</h1>
         <div className="filters">
