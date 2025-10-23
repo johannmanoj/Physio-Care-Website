@@ -17,7 +17,8 @@ Overlay
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   width: 450px;
   max-height: 80vh;
-  padding: 24px;
+  min-height: 300px;
+  padding: 10px 24px 10px 24px;
   animation: fadeIn 0.3s ease-out;
   display: flex;
   flex-direction: column;

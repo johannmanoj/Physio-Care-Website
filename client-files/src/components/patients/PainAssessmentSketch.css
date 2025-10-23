@@ -21,10 +21,10 @@
 .pain-sketch-controls {
   width: 250px;
   height: 94%;
-  background: #111827;
+  background: #121929;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.3); */
   color: #f1f5f9;
   display: flex;
   flex-direction: column;
@@ -34,7 +34,8 @@
 
 .control-group {
   /* background: #1f2937; */
-  background-color: #0e294e;
+  /* background-color: #0e294e; */
+  background-color: #1e293b;
   padding: 0px 10px 10px 10px;
   border-radius: 8px;
 }

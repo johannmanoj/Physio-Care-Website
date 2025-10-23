@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaUsers } from 'react-icons/fa';
+import { FaUsers, FaEye } from 'react-icons/fa';
 import axios from 'axios';
-
 import { useAuth } from "../../context/AuthContext";
 import PaginationFooter from '../common/PaginationFooter';
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL;
 
 function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
     const { branchId } = useAuth();
@@ -14,6 +13,7 @@ function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
     const [usersPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
 
@@ -21,64 +21,36 @@ function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [branchId, searchTerm, filterStatus, currentPage]);
 
-    const fetchUsers = () => {
-        axios.post(`${API_URL}/api/users/get-users-list`, {
-            branch_id: branchId
-        })
-            .then((response) => {
-                setUsers(response.data.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching users:', error);
-            })
-            .finally(() => {
-                setLoading(false); // ✅ stop loading after request finishes
+    const fetchUsers = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.post(`${API_URL}/api/users/get-all-users-list`, {
+                branch_id: branchId,
+                search: searchTerm,
+                role: filterStatus,
+                page: currentPage,
+                limit: usersPerPage,
             });
+            setUsers(response.data.data);
+            setTotalUsers(response.data.total);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    function calculateFilteredAttendance(attendance, year, month) {
-        if (!attendance) return { daily: {}, monthlyTotal: 0 };
-
-        const daily = {};
-        let monthlyTotal = 0;
-
-        Object.entries(attendance).forEach(([date, { in: inTime, out: outTime }]) => {
-            if (inTime && outTime) {
-                const dateObj = new Date(inTime);
-                const dYear = dateObj.getUTCFullYear().toString();
-                const dMonth = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
-
-                if (dYear === year && dMonth === month) {
-                    const start = new Date(inTime);
-                    const end = new Date(outTime);
-                    const hours = (end - start) / (1000 * 60 * 60);
-                    daily[date] = hours.toFixed(2);
-                    monthlyTotal += hours;
-                }
-            }
-        });
-
-        return { daily, monthlyTotal: monthlyTotal.toFixed(2) };
-    }
-
-    const filteredUsers = users.filter(user => {
-        const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStatus = filterStatus ? user.role === filterStatus : true;
-        return matchesSearch && matchesStatus;
-    });
-
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    const totalPages = Math.ceil(totalUsers / usersPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
+    const indexOfFirstUser = (currentPage - 1) * usersPerPage;
+    const indexOfLastUser = indexOfFirstUser + users.length;
+    const page_count = `Showing ${indexOfFirstUser + 1} to ${indexOfLastUser} of ${totalUsers}`;
 
+    // if (loading) return <p>Loading...</p>;
 
-    if (loading) { return <p></p>; }
     return (
         <div>
             <div className="common-page-header">
@@ -86,20 +58,26 @@ function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
                 <div className="filters">
                     <select
                         value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
+                        onChange={(e) => {
+                            setCurrentPage(1);
+                            setFilterStatus(e.target.value);
+                        }}
                     >
                         <option value="">All Roles</option>
-                        {statuses.map((team) => (
-                            <option key={team} value={team}>{team}</option>
+                        {statuses.map((role) => (
+                            <option key={role} value={role}>{role}</option>
                         ))}
                     </select>
                     <div className="search-bar-container">
                         <input
                             type="text"
-                            placeholder="Search Name here..."
+                            placeholder="Search Name or Email..."
                             value={searchTerm}
-                            className='search-input'
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="search-input"
+                            onChange={(e) => {
+                                setCurrentPage(1);
+                                setSearchTerm(e.target.value);
+                            }}
                         />
                     </div>
                 </div>
@@ -117,27 +95,35 @@ function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentUsers.map(user => (
+                        {users.map(user => (
                             <tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
-                                <td>
+                                <td className='commn-table-action-td'>
+                                    <div className='common-table-action-btn-layout'>
+                                        <FaEye
+                                            className='common-table-action-btn'
+                                            onClick={() => viewfunction(user)}
+                                        />
+                                    </div>
+                                </td>
+                                {/* <td>
                                     <button
                                         className="primary-button"
-                                        onClick={() => { viewfunction(user) }}
+                                        onClick={() => viewfunction(user)}
                                     >
                                         View
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
 
-            {users.length == 0 && (
+            {users.length === 0 && (
                 <div className='appointments-default-message'>
                     <FaUsers className='appointments-default-logo' />
                     <div className='appointments-default-text'>No Users Yet</div>
@@ -148,7 +134,7 @@ function EmployeesReportPage({ pageName, viewfunction, setSelectedUserId }) {
                 <PaginationFooter
                     page_count={page_count}
                     playersPerPage={usersPerPage}
-                    totalPlayers={filteredUsers.length}
+                    totalPlayers={totalUsers}
                     paginate={paginate}
                     currentPage={currentPage}
                     totalPages={totalPages}

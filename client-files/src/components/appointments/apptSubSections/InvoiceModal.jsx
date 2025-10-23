@@ -141,8 +141,9 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
             });
 
             // // Optionally open PDF in new tab after upload
-            // const pdfUrl = URL.createObjectURL(pdfBlob);
-            // window.open(pdfUrl, "_blank");
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            window.open(pdfUrl, "_blank");
+            setShowInvoiceModal(false)
             location.reload()
             // toast.success("Invoice generated, uploaded, and saved successfully");
 
@@ -153,80 +154,95 @@ function InvoiceModal({ patientData, selectedApptId, setShowInvoiceModal, userId
     };
 
     return (
-        <div>
-            <Toaster />
-            <div className='invoice-header'>Invoice</div>
-            <div className='invoice-body'>
-                <div className="invoice-field-row">
-                    <div className="invoice-field invoice-field-3">
-                        <label>Treatment</label>
-                        <select
-                            value={selectedTreatment}
-                            onChange={(e) => setSelectedTreatment(e.target.value)}
-                        >
-                            <option value="">-- Select Treatment --</option>
-                            {treatmentsList.map((t) => (
-                                <option key={t.id} value={t.id}>
-                                    {t.treatment} (₹{t.rate})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+        <div className="common-modal-overlay">
+            <div className="common-medium-modal-content">
+                <div className="common-modal-header">
+                    <h1>Invoice</h1>
+                </div>
 
-                    <div className="invoice-field invoice-field-3">
-                        <label>Days</label>
-                        <input
-                            type="number"
-                            value={days}
-                            onChange={(e) => setDays(e.target.value)}
-                            placeholder="Days"
-                        />
-                    </div>
+                <div className="common-modal-body">
+                    <div className='invoice-body'>
+                        <div className="invoice-field-row">
+                            <div className="invoice-field invoice-field-3">
+                                <label>Treatment</label>
+                                <select
+                                    value={selectedTreatment}
+                                    onChange={(e) => setSelectedTreatment(e.target.value)}
+                                >
+                                    <option value="">-- Select Treatment --</option>
+                                    {treatmentsList.map((t) => (
+                                        <option key={t.id} value={t.id}>
+                                            {t.treatment} (₹{t.rate})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                    <div className="invoice-field invoice-field-3">
-                        <button className="invoice-add-button" onClick={handleAdd}>
-                            Add
-                        </button>
+                            <div className="invoice-field invoice-field-3">
+                                <label>Days</label>
+                                <input
+                                    type="number"
+                                    value={days}
+                                    onChange={(e) => setDays(e.target.value)}
+                                    placeholder="Days"
+                                />
+                            </div>
+
+                            <div className="invoice-field invoice-field-3">
+                                <button className="primary-button invoice-treatment-add-button" onClick={handleAdd}>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <table className="common-table">
+                            <colgroup>
+                                <col style={{ width: "200px" }} />
+                                <col style={{ width: "40px" }} />
+                                <col style={{ width: "40px" }} />
+                                <col style={{ width: "80px" }} />
+                                <col style={{ width: "50px" }} />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Treatment</th>
+                                    <th>Days</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {invoiceData.map((data, index) => (
+                                    <tr key={index}>
+                                        <td>{data.treatment}</td>
+                                        <td>{data.days}</td>
+                                        <td>₹{data.rate}</td>
+                                        <td>₹{data.amount}</td>
+                                        <td>
+                                            <button
+                                                className="cancel-button"
+                                                onClick={() => handleDelete(index)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <table className="common-table">
-                    <thead>
-                        <tr>
-                            <th>Treatment</th>
-                            <th>Days</th>
-                            <th>Rate</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {invoiceData.map((data, index) => (
-                            <tr key={index}>
-                                <td>{data.treatment}</td>
-                                <td>{data.days}</td>
-                                <td>₹{data.rate}</td>
-                                <td>₹{data.amount}</td>
-                                <td>
-                                    <button
-                                        className="cancel-button"
-                                        onClick={() => handleDelete(index)}
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                <div className="common-modal-footer-layout">
+                    <button className="common-modal-buttons-close" onClick={() => setShowInvoiceModal(false)}>Close</button>
+                    <button className="common-modal-buttons-success" onClick={() => handleNewInvoice(patientData, selectedApptId, invoiceData)}> Generate </button>
+                </div>
 
-            <div className="modal-buttons">
-                {/* <button onClick={() => openInvoicePDF(patientData, selectedApptId, invoiceData)}>Generate</button> */}
-                <button onClick={() => handleNewInvoice(patientData, selectedApptId, invoiceData)}>Generate</button>
 
-                <button className="cancel-button" onClick={() => setShowInvoiceModal(false)} >Cancel</button>
             </div>
+            <Toaster />
+
         </div>
     );
 }

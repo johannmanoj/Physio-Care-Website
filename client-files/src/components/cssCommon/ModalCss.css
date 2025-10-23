@@ -1,0 +1,124 @@
+.common-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.common-modal-content {
+    background-color: #1e293b;
+    /* padding: 20px; */
+    border-radius: 10px;
+    width: 390px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: white;
+}
+
+.common-medium-modal-content {
+  background-color: #1e293b;
+  /* padding: 20px; */
+  border-radius: 10px;
+  width: 1000px;
+  /* height: 500px; */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: white;
+}
+
+.common-large-modal-content {
+  background-color: #1e293b;
+  /* padding: 20px; */
+  border-radius: 10px;
+  width: 1100px;
+  /* height: 500px; */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: white;
+}
+
+.common-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-bottom: 20px; */
+    border-bottom: 1px solid #4a5568;
+    /* padding-bottom: 10px; */
+}
+
+.common-modal-header h1 {
+    font-size: 22px;
+    padding: 10px 0px 5px 25px ;
+}
+.common-modal-content h1 {
+    font-size: 22px;
+    padding: 10px 0px 5px 25px ;
+}
+
+.common-modal-body {
+    padding: 10px 25px ;
+}
+
+.common-modal-body input,
+.common-modal-body select {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3e4a64;
+    color: #ffffff;
+    font-size: 1em;
+    box-sizing: border-box;
+    margin: 10px 0px;
+}
+
+
+.common-modal-footer-layout {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    /* margin-top: 20px; */
+    border-top: 1px solid #4a5568;
+    padding-top: 10px;
+    padding: 20px 25px;
+    gap: 15px;
+}
+
+.common-modal-footer-layout button {
+    min-width: 100px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.common-modal-buttons-success {
+    background-color: rgb(1, 140, 196);
+
+    color: white;
+}
+
+.common-modal-buttons-success:hover {
+    background-color: rgb(1, 130, 180);
+
+}
+
+.common-modal-buttons-close {
+    background-color: #ef4444;
+    color: white;
+}
+
+.common-modal-buttons-close:hover {
+    background-color: #dc2626;
+}

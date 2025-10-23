@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { FaRegCalendarCheck, FaSearch } from 'react-icons/fa';
+import { FaRegCalendarCheck, FaSearch, FaFileInvoice, FaEye } from 'react-icons/fa';
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
 import PaginationFooter from '../common/PaginationFooter';
 import './AppointmentsPage.css';
+import InvoiceModal from '../appointments/apptSubSections/InvoiceModal'
+
 // import TableModule from '../commonModules/TableModule'
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -21,53 +23,55 @@ function AppointmentsPage() {
   const [appointmentsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
 
-  const statuses = ['completed', 'upcoming', 'cancelled', 'rescheduled'];
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [selectedAppt, setSelectedAppt] = useState({})
+  const [selectedApptId, setSelectedApptId] = useState(null);
 
+  const [totalAppointments, setTotalAppointments] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        let response;
+  const statuses = ['Completed', 'Upcoming', 'Cancelled', 'Rescheduled'];
 
-        if (role === "Admin" || role === "Receptionist") {
-          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
-            branch_id: branchId
-          });
-        } else {
-          response = await axios.post(`${API_URL}/api/appointments/get-appointments-list`, {
-            practitioner_id: userId,
-            branch_id: branchId
-          });
-        }
+  const fetchAppointments = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        branch_id: branchId,
+        page: currentPage,
+        limit: appointmentsPerPage,
+        search: searchTerm,
+        status: filterStatus,
+      };
 
-        setAppointments(response.data.data);
-      } catch (error) {
-        console.error("Error fetching appointments data:", error);
-      } finally {
-        setLoading(false);
+      if (role !== "Admin" && role !== "Receptionist") {
+        payload.practitioner_id = userId;
       }
-    };
 
+      const response = await axios.post(`${API_URL}/api/appointments/get-all-appointments-list`, payload);
+      const { data, total, totalPages } = response.data;
+
+      setAppointments(data);
+      setTotalAppointments(total);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch appointments whenever filters or page change
+  useEffect(() => {
     fetchAppointments();
-  }, [role, userId]);
+  }, [currentPage, searchTerm, filterStatus]);
 
-  // Filtering and Searching Logic
-  const filteredAppointments = appointments.filter(appointment => {
-    const matchesSearch = appointment.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = filterStatus ? appointment.status.toLowerCase() == filterStatus : true;
+  // Reset page when search or status changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus]);
 
-    return matchesSearch && matchesStatus;
-  });
 
-  // Pagination Logic
-  const indexOfLastAppointment = currentPage * appointmentsPerPage;
-  const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
-  const currentAppointments = filteredAppointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
-  const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  var page_count = `Showing ${indexOfFirstAppointment + 1} to ${Math.min(indexOfLastAppointment, filteredAppointments.length)} of ${filteredAppointments.length}`
-
-  if (loading) { return <p></p>; }
+  // if (loading) { return <p></p>; }
   return (
     <div className="common-page-layout">
       <div className="common-page-header">
@@ -75,19 +79,18 @@ function AppointmentsPage() {
 
         <div className="filters">
           {(role == "Admin" || role == "Receptionist") && <button className='primary-button' onClick={() => navigate("/addAppointment")}>New Appointment</button>}
-          
+
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
-            <option value="">Filter by Status</option>
+            <option value="">All Status</option>
             {statuses.map((team) => (
               <option key={team} value={team}>{team}</option>
             ))}
           </select>
 
           <div className="search-bar-container">
-            {/* <FaSearch className="search-icon" /> */}
             <input
               type="text"
               placeholder="Search Name here..."
@@ -101,6 +104,17 @@ function AppointmentsPage() {
 
       <div className="common-table-wrapper">
         <table className="common-table">
+          <colgroup>
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "160px" }} />
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "80px" }} />
+            <col style={{ width: "80px" }} />
+            <col style={{ width: "30px" }} />
+            <col style={{ width: "30px" }} />
+            <col style={{ width: "30px" }} />
+            <col style={{ width: "30px" }} />
+          </colgroup>
           <thead>
             <tr>
               <th>Appt ID</th>
@@ -108,31 +122,51 @@ function AppointmentsPage() {
               <th>Patient ID</th>
               <th>Date</th>
               <th>Time</th>
-              <th>Session Type</th>
+              <th>Session</th>
+              <th>Payment</th>
               <th>Status</th>
-              <th>Pymt Status</th>
-              <th>Pymt Method</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {currentAppointments.map(appointment => (
+            {appointments.map(appointment => (
               <tr key={appointment.id}>
                 <td>{appointment.id}</td>
-                <td>{appointment.name}</td>
+                <td>{appointment.patient_name}</td>
                 <td>{appointment.patient_id}</td>
                 <td>{appointment.date}</td>
                 <td>{appointment.time}</td>
                 <td>{appointment.session_type}</td>
+                <td>{appointment.pymt_status}</td>
                 <td>
                   <span className={`status-badge ${appointment.status.toLowerCase()}`}>
                     {appointment.status}
                   </span>
                 </td>
-                <td>{appointment.pymt_status}</td>
-                <td>{appointment.pymt_method}</td>
-                <td>
-                  <button className="primary-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+                <td className='commn-table-action-td'>
+                  <div className='common-table-action-btn-layout'>
+                    <FaEye
+                      className='common-table-action-btn'
+                      onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}
+                    />
+                  </div>
+                  {(role == "Admin" || role == "Receptionist") && <div className='common-table-action-btn-layout'>
+                    {appointment.invoice_url ? (
+                      <FaFileInvoice
+                        className='common-table-action-btn'
+                        onClick={() => window.open(appointment.invoice_url, "_blank")}
+                      />
+                    ) : (
+                      <FaFileInvoice
+                        className='common-table-action-btn'
+                        onClick={() => {
+                          setSelectedAppt(appointment);
+                          setSelectedApptId(appointment.id);
+                          setShowInvoiceModal(true);
+                        }}
+                      />
+                    )}
+                  </div>}
                 </td>
               </tr>
             ))}
@@ -143,22 +177,27 @@ function AppointmentsPage() {
 
       {appointments.length == 0 && (
         <div className='appointments-default-message'>
-          <FaRegCalendarCheck className='appointments-default-logo' />
+          {/* <FaRegCalendarCheck className='appointments-default-logo' /> */}
           <div className='appointments-default-text'>No Appointments Yet</div>
         </div>
       )}
 
-      {appointments.length > 0 && (
+      {totalAppointments > 0 && (
         <div className="table-footer">
           <PaginationFooter
-            page_count={page_count}
+            page_count={`Showing ${(currentPage - 1) * appointmentsPerPage + 1} to ${Math.min(currentPage * appointmentsPerPage, totalAppointments)} of ${totalAppointments}`}
             playersPerPage={appointmentsPerPage}
-            totalPlayers={filteredAppointments.length}
-            paginate={paginate}
+            totalPlayers={totalAppointments}
+            paginate={setCurrentPage}
             currentPage={currentPage}
             totalPages={totalPages}
           />
         </div>
+      )}
+
+
+      {showInvoiceModal && (
+        <InvoiceModal patientData={selectedAppt} selectedApptId={selectedApptId} setShowInvoiceModal={setShowInvoiceModal} userId={userId} />
       )}
     </div>
   );

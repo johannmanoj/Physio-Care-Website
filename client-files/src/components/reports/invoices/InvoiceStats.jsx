@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "../../../context/AuthContext";
-import { FaFileInvoice } from 'react-icons/fa';
+import { FaFileInvoice, FaEye } from 'react-icons/fa';
 import PaginationFooter from '../../common/PaginationFooter';
 import './InvoiceStats.css';
 
@@ -164,14 +164,22 @@ function InvoiceStats() {
                                     </td>
                                     <td>{invoice.pymt_status}</td>
                                     <td>{invoice.pymt_method}</td>
-                                    <td>
+                                    <td className='commn-table-action-td'>
+                                        <div className='common-table-action-btn-layout'>
+                                            <FaEye
+                                                className='common-table-action-btn'
+                                                onClick={() => window.open(invoice.invoice_url, "_blank")}
+                                            />
+                                        </div>
+                                    </td>
+                                    {/* <td>
                                         <button
                                             className="primary-button"
                                             onClick={() => window.open(invoice.invoice_url, "_blank")}
                                         >
                                             View
                                         </button>
-                                    </td>
+                                    </td> */}
                                 </tr>
                             ))}
                         </tbody>

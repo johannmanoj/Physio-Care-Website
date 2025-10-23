@@ -56,42 +56,42 @@
 }
 
 .status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: capitalize;
-  line-height: 1;
-  border: 1px solid transparent;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: 1;
+    border: 1px solid transparent;
 }
 
 /* Completed – Green */
 .status-badge.completed {
-  background-color: rgba(34, 197, 94, 0.15);  
-  color: #22c55e;                             
-  border-color: #22c55e;
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border-color: #22c55e;
 }
 
 /* Cancelled – Red */
 .status-badge.cancelled {
-  background-color: rgba(239, 68, 68, 0.15);  
-  color: #ef4444;
-  border-color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: #ef4444;
 }
 
 /* Upcoming – Blue */
 .status-badge.upcoming {
-  background-color: rgba(59, 130, 246, 0.15); 
-  color: #3b82f6;
-  border-color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border-color: #3b82f6;
 }
 
 /* Rescheduled – Yellow */
 .status-badge.rescheduled {
-  background-color: rgba(234, 179, 8, 0.15);  
-  color: #eab308;
-  border-color: #eab308;
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+    border-color: #eab308;
 }
 
 
@@ -130,4 +130,40 @@
     padding: 6px 12px;
     font-size: 13px;
     border-radius: 6px;
+}
+
+.commn-table-action-td {
+    display: flex;
+    gap: 5px;
+}
+
+
+.common-table-action-btn-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #39455a;
+    border-radius: 10px;
+    padding: 5px 0px;
+    font-size: 20px;
+}
+
+.common-table-action-btn-layout:hover {
+    background-color: #414e66;
+}
+
+.common-table-action-btn {
+    color: rgb(223, 223, 223);
+    font-size: 20px;
+    padding: 0px 10px 0px 10px;
+    transition: background-color 0.2s ease;
+
+}
+
+.common-table-action-btn:hover {
+    color: rgb(255, 255, 255);
+    /* font-size: 18px; */
+
+    transition: background-color 0.2s ease;
+
 }

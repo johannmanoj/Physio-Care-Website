@@ -1,155 +1,88 @@
+/* --- Pagination Footer Container --- */
 .pagination-footer-layout {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background-color: #1e293b; /* Match table footer bg */
+  border-top: 1px solid #2d3748;
+  border-radius: 0 0 12px 12px; /* Rounded like table bottom */
+  font-size: 14px;
+  color: #cbd5e0;
 }
 
+/* --- Page Info Text --- */
 .pagination-footer-info {
-    font-weight: 600;
+  font-weight: 500;
+  color: #94a3b8; /* Softer gray text */
 }
 
+/* --- Pagination Nav --- */
 .pagination-footer-nav {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-
+/* --- Page Buttons List --- */
 .pagination-footer-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 6px;
 }
 
+/* --- Individual Page Item --- */
 .pagination-footer-list .page-item {
-    margin: 0 5px;  
+  display: flex;
 }
 
-.pagination-footer-list .page-link {
-    display: block;
-    padding: 8px 12px;
-    border: 1px solid #4a5568;
-    /* border: none; */
-    background-color: #2d3748;
-    color: #edf2f7;
-    text-decoration: none;
-    border-radius: 4px;
-    /* height: 34px; */
-}
-
-.pagination-footer-list .page-link:hover {
-    background-color: #4a5568;
-    color: skyblue;
-}
-
-.pagination-footer-list .page-item.active .page-link {
-    background-color: #4a5568;
-    color: rgb(0, 183, 255);
-}
-
-.pagination-footer-list .page-item.disabled .page-link {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #2d3748;
-}
-
-.pagination-footer-list .page-number {
-    display: block;
-    padding: 8px 12px;
-    /* border: 1px solid #4a5568; */
-    border: none;
-    background-color: #2d3748;
-    color: #edf2f7;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-.pagination-footer-list .page-number:hover {
-    background-color: #4a5568;
-    color: skyblue;
-}
-
-.pagination-footer-list .page-item.active .page-number {
-    background-color: #4a5568;
-    color: rgb(0, 183, 255);
-}
-
-.pagination-footer-list .page-item.disabled .page-number {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #2d3748;
-}
-
-.table-footer {
-    margin-top: 10px;.pagination-footer-layout {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 20px;
-    background-color: #1e293b; /* match table footer bg */
-    border-top: 1px solid #2d3748;
-    border-radius: 0 0 12px 12px; /* rounded like table bottom */
-    font-size: 14px;
-    color: #cbd5e0;
-}
-
-.pagination-footer-info {
-    font-weight: 500;
-    color: #94a3b8; /* softer gray text */
-}
-
-.pagination-footer-nav {
-    display: flex;
-    justify-content: center;
-}
-
-.pagination-footer-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 6px;
-}
-
-.pagination-footer-list .page-item {
-    display: flex;
-}
-
+/* --- Shared Button Styles --- */
 .pagination-footer-list .page-link,
 .pagination-footer-list .page-number {
-    padding: 8px 14px;
-    border: 1px solid #334155;
-    background-color: #1e293b;
-    color: #e2e8f0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  padding: 8px 14px;
+  border: 1px solid #334155;
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* --- Hover Effects --- */
 .pagination-footer-list .page-link:hover,
 .pagination-footer-list .page-number:hover {
-    background-color: #334155;
-    color: #38bdf8; /* skyblue accent */
-    transform: translateY(-1px);
+  background-color: #334155;
+  color: #38bdf8; /* Sky blue accent */
+  transform: translateY(-1px);
 }
 
+/* --- Active Page --- */
 .pagination-footer-list .page-item.active .page-link,
 .pagination-footer-list .page-item.active .page-number {
-    background-color: #38bdf8;
-    color: #0f172a; /* dark text on accent */
-    font-weight: 600;
-    border-color: #38bdf8;
-    box-shadow: 0 2px 6px rgba(56,189,248,0.4);
+  background-color: #38bdf8;
+  color: #0f172a; /* Dark text on accent */
+  font-weight: 600;
+  border-color: #38bdf8;
+  box-shadow: 0 2px 6px rgba(56, 189, 248, 0.4);
 }
 
+/* --- Disabled Buttons --- */
 .pagination-footer-list .page-item.disabled .page-link,
 .pagination-footer-list .page-item.disabled .page-number {
-    opacity: 0.4;
-    cursor: not-allowed;
-    background-color: #1e293b;
-    border-color: #2d3748;
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #1e293b;
+  border-color: #2d3748;
 }
 
+/* --- Ellipsis Style --- */
+.pagination-footer-list .page-number.ellipsis {
+  cursor: default;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  box-shadow: none;
+  transform: none;
 }

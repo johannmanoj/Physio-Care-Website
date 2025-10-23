@@ -43,6 +43,77 @@ router.post('/get-users-list', async (req, res) => {
     }
 });
 
+router.post('/get-all-users-list', async (req, res) => {
+  try {
+    let {
+      branch_id,
+      role,
+      search = '',
+      page = 1,
+      limit = 10
+    } = req.body;
+
+    if (!branch_id) {
+      return res.status(400).json({ message: 'branch_id is required' });
+    }
+
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+    const offset = (page - 1) * limit;
+
+    let query = 'SELECT * FROM users';
+    let countQuery = 'SELECT COUNT(*) AS total FROM users';
+    let conditions = [];
+    let params = [];
+    let countParams = [];
+
+    // --- mandatory ---
+    conditions.push('branch_id = ?');
+    params.push(branch_id);
+    countParams.push(branch_id);
+
+    // --- optional role filter ---
+    if (role) {
+      conditions.push('role = ?');
+      params.push(role);
+      countParams.push(role);
+    }
+
+    // --- optional search ---
+    if (search) {
+      conditions.push('(name LIKE ? OR email LIKE ?)');
+      params.push(`%${search}%`, `%${search}%`);
+      countParams.push(`%${search}%`, `%${search}%`);
+    }
+
+    // build where clause
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+      countQuery += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    query += ' ORDER BY id DESC LIMIT ? OFFSET ?';
+    params.push(limit, offset);
+
+    const [users] = await pool.query(query, params);
+    const [[{ total }]] = await pool.query(countQuery, countParams);
+    const totalPages = Math.ceil(total / limit);
+
+    res.status(200).json({
+      success: true,
+      message: 'Users retrieved successfully',
+      data: users,
+      total,
+      currentPage: page,
+      totalPages
+    });
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+
 
 router.post('/get-user-details', async (req, res) => {
     try {

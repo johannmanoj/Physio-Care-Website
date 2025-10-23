@@ -29,6 +29,47 @@ router.post('/get-exercise-list', async (req, res) => {
     }
 })
 
+// ✅ /api/exercises/get-exercise-list
+router.post('/get-all-exercises-list', async (req, res) => {
+    try {
+        const { search = '', page = 1, limit = 10 } = req.body;
+
+        const offset = (page - 1) * limit;
+
+        // ✅ Main query with pagination and search
+        let query = `
+            SELECT * FROM exercises
+            WHERE (name LIKE ?)
+            ORDER BY id DESC
+            LIMIT ? OFFSET ?
+        `;
+        const params = [`%${search}%`, Number(limit), Number(offset)];
+
+        const [exercises] = await pool.query(query, params);
+
+        // ✅ Get total count for pagination
+        const [countResult] = await pool.query(
+            `
+            SELECT COUNT(*) AS total FROM exercises
+            WHERE (name LIKE ?)
+            `,
+            [`%${search}%`]
+        );
+
+        const totalExercises = countResult[0].total;
+
+        res.status(200).json({
+            message: 'Exercises fetched successfully',
+            data: exercises,
+            total: totalExercises,
+        });
+    } catch (err) {
+        console.error('Error fetching exercises:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
 router.post('/update-exercise', async (req, res) => {
     try {
         const { id, name, instructions, img_1, img_2, img_3, img_4 } = req.body
@@ -152,6 +193,42 @@ router.post('/get-treatments-list', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 })
+
+router.post('/get-all-treatments-list', async (req, res) => {
+  try {
+    const { search = '', page = 1, limit = 10 } = req.body;
+    const offset = (page - 1) * limit;
+
+    // ✅ Fetch treatments with pagination + search + optional branch filter
+    const [data] = await pool.query(
+      `SELECT * FROM treatments 
+       WHERE (treatment LIKE ?)
+       ORDER BY id DESC 
+       LIMIT ? OFFSET ?`,
+      [`%${search}%`, Number(limit), Number(offset)]
+    );
+
+    // ✅ Get total count for pagination
+    const [countResult] = await pool.query(
+      `SELECT COUNT(*) AS total FROM treatments 
+       WHERE (treatment LIKE ?)`,
+      [`%${search}%`]
+    );
+
+    const total = countResult[0].total;
+
+    res.status(200).json({
+      message: 'Treatments fetched successfully',
+      data,
+      total,
+    });
+
+  } catch (err) {
+    console.error('Error fetching treatments:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 
 

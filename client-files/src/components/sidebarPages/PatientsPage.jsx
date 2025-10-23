@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaUserInjured } from 'react-icons/fa';
+import { FaUserInjured, FaEye } from 'react-icons/fa';
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -32,22 +32,39 @@ function PatientsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newPatient, setNewPatient] = useState(patient_data);
 
-  
-  useEffect(() => {
-    axios
-      .post(`${API_URL}/api/patients/get-patient-list`, {
-        branch_id: branchId
-      })
-      .then((response) => {
-        setPatients(response.data.data || []); // make sure it's always an array
-      })
-      .catch((error) => {
-        console.error("Error fetching patients data:", error);
-      })
-      .finally(() => {
-        setLoading(false); // ✅ stop loading after request finishes
+  const [totalPatients, setTotalPatients] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+
+
+
+  const fetchPatients = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_URL}/api/patients/get-all-patients-list`, {
+        branch_id: branchId,
+        page: currentPage,
+        limit: patientsPerPage,
+        search: searchTerm
       });
-  }, []);
+      const { data, total, totalPages } = response.data;
+      setPatients(data);
+      setTotalPages(totalPages);
+      setTotalPatients(total);
+    } catch (error) {
+      console.error("Error fetching patients data:", error);
+      toast.error("Failed to fetch patients");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, [currentPage, searchTerm]);
+
+  useEffect(() => {
+    setCurrentPage(1); // reset page when search changes
+  }, [searchTerm]);
 
   const handleAddPatient = () => {
     const { name, sex, age, contact_num } = newPatient;
@@ -62,6 +79,7 @@ function PatientsPage() {
         toast.success("Patient added successfully!");
         setShowAddModal(false);
         setNewPatient(patient_data);
+        fetchPatients();
       })
       .catch((error) => {
         toast.error("Failed to add patient. Try again.");
@@ -69,24 +87,14 @@ function PatientsPage() {
       });
   };
 
-  // Filtering and Searching Logic
-  const filteredPatients = patients.filter(patient => {
-    const matchesSearch = patient.patient_name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = filterStatus ? patient.status.toLowerCase() == filterStatus : true;
 
-    return matchesSearch && matchesStatus;
-  });
+  const paginate = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
-  // Pagination Logic
-  const indexOfLastPlayer = currentPage * patientsPerPage;
-  const indexOfFirstPlayer = indexOfLastPlayer - patientsPerPage;
-  const currentPatients = filteredPatients.slice(indexOfFirstPlayer, indexOfLastPlayer);
-  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  var page_count = `Showing ${indexOfFirstPlayer + 1} to ${Math.min(indexOfLastPlayer, filteredPatients.length)} of ${filteredPatients.length}`
-
-
-  if (loading) { return <p></p>; }
+  // if (loading) { return <p></p>; }
   return (
     <div className="common-page-layout">
       <div className="common-page-header">
@@ -109,6 +117,15 @@ function PatientsPage() {
 
       <div className="common-table-wrapper">
         <table className="common-table">
+          <colgroup>
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "160px" }} />
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "30px" }} />
+          </colgroup>
+
           <thead>
             <tr>
               <th>Patient ID</th>
@@ -120,15 +137,21 @@ function PatientsPage() {
             </tr>
           </thead>
           <tbody>
-            {currentPatients.map(patient => (
+            {patients.map(patient => (
               <tr key={patient.id}>
                 <td>{patient.id}</td>
                 <td>{patient.patient_name}</td>
                 <td>{patient.sex}</td>
                 <td>{patient.age}</td>
                 <td>{patient.contact_num}</td>
-                <td>
-                  <button className="primary-button" onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}>View</button>
+                <td className='commn-table-action-td'>
+                  <div className='common-table-action-btn-layout'>
+                    <FaEye
+                      className='common-table-action-btn'
+                      onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}
+                    />
+                  </div>
+                  {/* <button className="primary-button" onClick={() => navigate(`/patientAppointments/${patient.id}/${patient.patient_name}`)}>View</button> */}
                 </td>
               </tr>
             ))}
@@ -138,17 +161,17 @@ function PatientsPage() {
 
       {patients.length == 0 && (
         <div className='appointments-default-message'>
-          <FaUserInjured className='appointments-default-logo' />
+          {/* <FaUserInjured className='appointments-default-logo' /> */}
           <div className='appointments-default-text'>No Patients Yet</div>
         </div>
       )}
 
-      {patients.length > 0 && (
+      {totalPatients > 0 && (
         <div className="table-footer">
           <PaginationFooter
-            page_count={page_count}
+            page_count={`Showing ${(currentPage - 1) * patientsPerPage + 1} to ${Math.min(currentPage * patientsPerPage, totalPatients)} of ${totalPatients}`}
             playersPerPage={patientsPerPage}
-            totalPlayers={filteredPatients.length}
+            totalPlayers={totalPatients}
             paginate={paginate}
             currentPage={currentPage}
             totalPages={totalPages}
@@ -156,45 +179,56 @@ function PatientsPage() {
         </div>
       )}
 
+
       {showAddModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Add Patient</h2>
-            <label>Name</label>
-            <input
-              type="text"
-              placeholder="Name"
-              onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
-            />
-            <label>Sex</label>
+        <div className="common-modal-overlay">
+          <div className="common-modal-content">
+            <div className="common-modal-header">
+              <h1>Add Patient</h1>
+            </div>
 
-            <select
-              id="sex"
-              // value={patientData.sex ?? ''}
-              onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
-            >
-              <option value="">Select Sex</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
+            <div className="common-modal-body">
+              <label>Name</label>
+              <input
+                type="text"
+                placeholder="Enter Name"
+                onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
+              />
+              <label>Sex</label>
 
-            <label>Age</label>
-            <input
-              type="number"
-              placeholder="Age"
-              onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
-            />
-            <label>Contact Number</label>
-            <input
-              type="number"
-              placeholder="Contact Number"
-              onChange={(e) => setNewPatient({ ...newPatient, contact_num: e.target.value })}
-            />
+              <select
+                id="sex"
+                // value={patientData.sex ?? ''}
+                onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
+              >
+                <option value="">Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              
+              <label>Age</label>
+              <input
+                type="number"
+                placeholder="Enter Age"
+                onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
+              />
+              <label>Contact Number</label>
+              <input
+                type="number"
+                placeholder="Enter Number"
+                onChange={(e) => setNewPatient({ ...newPatient, contact_num: e.target.value })}
+              />
+            </div>
 
-            <div className="modal-buttons">
+            <div className="common-modal-footer-layout">
+              <button className="common-modal-buttons-close" onClick={() => setShowAddModal(false)}>Close</button>
+              <button className="common-modal-buttons-success" onClick={handleAddPatient}> Add </button>
+            </div>
+
+            {/* <div className="modal-buttons">
               <button className="view-button" onClick={handleAddPatient}>Add</button>
               <button className="cancel-button" onClick={() => setShowAddModal(false)}>Cancel</button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

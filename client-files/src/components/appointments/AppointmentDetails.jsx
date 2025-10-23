@@ -21,7 +21,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 
 const INITIAL_DATA = {
-  id:'',
+  id: '',
   patient_id: '',
   name: '',
   status: '',
@@ -146,7 +146,7 @@ function PatientDetails() {
     <div className="appointment-details-page">
 
       <div className='appointment-details-page-card'>
-        <PatientDetailsSection patientData={patientData} updatePatientData={updatePatientData} setShowSketchModal={setShowSketchModal} isReadOnly={isReadOnly} />
+        <PatientDetailsSection />
       </div>
 
       <div className='appointments-page-split-layout'>
@@ -232,26 +232,6 @@ function PatientDetails() {
 
 
           <div className="common-page-footer-layout">
-            {patientData.invoice_url ? (
-              // Condition: invoice_url is truthy (exists)
-              <button
-                className="common-footer-binvoice"
-                onClick={() => window.open(patientData.invoice_url, "_blank")}
-                disabled={isReadOnly}
-              >
-                View Invoice
-              </button>
-            ) : (
-              // Else (invoice_url is falsy/null/undefined)
-              <button
-                className="common-footer-binvoice"
-                onClick={() => setShowInvoiceModal(true)}
-                disabled={isReadOnly}
-              >
-                Generate Invoice
-              </button>
-            )}
-
             <button className='common-footer-bsave' onClick={handleSave} disabled={isReadOnly}>Save</button>
           </div>
 
@@ -281,12 +261,21 @@ function PatientDetails() {
       </div>
 
       {showSketchModal && (
-        <div className="appointment-modal-overlay">
-          <div className="appointment-modal-content">
-            <PainAssessmentSketch data={patientData} onDataChange={updatePatientData} setShowSketchModal={setShowSketchModal} />
-            {/* <div className="modal-buttons">
+        <div className="common-modal-overlay">
+          <div className="common-large-modal-content">
+            <div className="common-modal-header">
+              <h2 style={{ marginLeft: '20px' }}>Pain Assessment</h2>
+            </div>
+
+
+            <div className="common-modal-body">
+              {/* <div className="appointment-modal-content"> */}
+              <PainAssessmentSketch data={patientData} onDataChange={updatePatientData} setShowSketchModal={setShowSketchModal} />
+              {/* <div className="modal-buttons">
               <button className="cancel-button" onClick={() => setShowSketchModal(false)} disabled={isReadOnly}>Cancel</button>
-            </div> */}
+              </div> */}
+            </div>
+
           </div>
         </div>
       )}

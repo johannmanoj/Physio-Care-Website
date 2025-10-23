@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { FaUsers, FaUpload, FaTrash, FaEdit } from 'react-icons/fa';
+import { FaUsers, FaUpload, FaTrash, FaEdit, FaDumbbell  } from 'react-icons/fa';
 import { Toaster, toast } from "react-hot-toast";
 import axios from 'axios';
 
@@ -23,10 +23,12 @@ function ExerciseLibPage() {
   const navigate = useNavigate();
   const { branchId } = useAuth();
 
-  const [users, setUsers] = useState([]);
+  const [exercises, setExercises] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage] = useState(10);
+  const [totalExercises, setTotalExercises] = useState(0);
+  const [exercisesPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -36,21 +38,36 @@ function ExerciseLibPage() {
   const [createExercise, setCreateExercise] = useState(INITIAL_DATA);
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchExercises();
+  }, [branchId, searchTerm, currentPage]);
 
-  const fetchUsers = () => {
-    axios.post(`${API_URL}/api/exercises/get-exercise-list`)
-      .then((response) => {
-        setUsers(response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching users:', error);
-      })
-      .finally(() => {
-        setLoading(false);
+  const fetchExercises = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_URL}/api/exercises/get-all-exercises-list`, {
+        branch_id: branchId,
+        search: searchTerm,
+        page: currentPage,
+        limit: exercisesPerPage,
       });
+      setExercises(response.data.data);
+      setTotalExercises(response.data.total);
+    } catch (error) {
+      console.error('Error fetching exercises:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const totalPages = Math.ceil(totalExercises / exercisesPerPage);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const indexOfFirstExercise = (currentPage - 1) * exercisesPerPage;
+  const indexOfLastExercise = indexOfFirstExercise + exercises.length;
+  const page_count = `Showing ${indexOfFirstExercise + 1} to ${indexOfLastExercise} of ${totalExercises}`;
+
+
+
 
   // ✅ Unified File Upload Button
   const FileUploadButton = ({ id, formState, setFormState }) => {
@@ -129,7 +146,6 @@ function ExerciseLibPage() {
     );
   };
 
-  // ✅ Create Exercise
   const handleCreateExercise = () => {
     if (!createExercise.name.trim()) {
       toast.error("Please enter exercise name");
@@ -139,7 +155,7 @@ function ExerciseLibPage() {
     axios.post(`${API_URL}/api/exercises/create-new-exercise`, createExercise)
       .then(() => {
         setCreateExercise(INITIAL_DATA);
-        fetchUsers();
+        fetchExercises();
         setShowCreateModal(false);
         toast.success("Exercise created successfully");
       })
@@ -154,7 +170,6 @@ function ExerciseLibPage() {
     setShowCreateModal(false);
   };
 
-  // ✅ Edit Exercise
   const handleEditExercise = () => {
     if (!editExercise.name.trim()) {
       toast.error("Please enter exercise name");
@@ -163,7 +178,7 @@ function ExerciseLibPage() {
 
     axios.post(`${API_URL}/api/exercises/update-exercise`, editExercise)
       .then(() => {
-        fetchUsers();
+        fetchExercises();
         setShowEditModal(false);
         toast.success("Exercise updated successfully");
       })
@@ -173,34 +188,14 @@ function ExerciseLibPage() {
       });
   };
 
-  // const handleDeleteExercise = async (id) => {
-  //   if (!window.confirm("Are you sure you want to delete this exercise?")) {
-  //     return;
-  //   }
-
-  //   try {
-  //     const res = await axios.post(`${API_URL}/api/exercises/delete-exercise`, {
-  //       record_id: id,
-  //     });
-
-  //     if (res.status === 200) {
-  //       toast.success("Exercise deleted successfully");
-  //       fetchUsers(); // refresh the list
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting exercise:", error);
-  //     toast.error("Something went wrong while deleting exercise");
-  //   }
-  // };
-
   const handleDeleteExercise = async (id) => {
     if (!window.confirm("Are you sure you want to delete this exercise?")) {
       return;
     }
 
     // 🔹 Optimistic update (remove from UI immediately)
-    const prevUsers = [...users];
-    setUsers(users.filter((u) => u.id !== id));
+    const prevUsers = [...exercises];
+    setExercises(exercises.filter((u) => u.id !== id));
 
     try {
       const res = await axios.post(`${API_URL}/api/exercises/delete-exercise`, {
@@ -214,23 +209,11 @@ function ExerciseLibPage() {
       console.error("Error deleting exercise:", error);
       toast.error("Something went wrong while deleting exercise");
       // 🔹 Rollback if API fails
-      setUsers(prevUsers);
+      setExercises(prevUsers);
     }
   };
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
-
-  if (loading) return <p></p>;
+  // if (loading) return <p></p>;
 
   return (
     <div className="common-page-layout">
@@ -262,26 +245,26 @@ function ExerciseLibPage() {
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
+            {exercises.map(ex => (
+              <tr key={ex.id}>
+                <td>{ex.id}</td>
+                <td>{ex.name}</td>
                 <td>
-                  {user.instructions && user.instructions.length > 50
-                    ? user.instructions.substring(0, 50) + "..."
-                    : user.instructions}
+                  {ex.instructions && ex.instructions.length > 50
+                    ? ex.instructions.substring(0, 50) + "..."
+                    : ex.instructions}
                 </td>
                 <td>
                   <div className='lib-tool-buttons'>
                     <button
                       title="Edit"
                       onClick={() => {
-                        setEditExercise(user);
+                        setEditExercise(ex);
                         setShowEditModal(true);
                       }}
                     ><FaEdit /></button>
                     <button
-                      onClick={() => handleDeleteExercise(user.id)}
+                      onClick={() => handleDeleteExercise(ex.id)}
                       title="Delete"
                     >
                       <FaTrash />
@@ -298,8 +281,8 @@ function ExerciseLibPage() {
       <div className="table-footer">
         <PaginationFooter
           page_count={page_count}
-          playersPerPage={usersPerPage}
-          totalPlayers={filteredUsers.length}
+          playersPerPage={exercisesPerPage}
+          totalPlayers={totalExercises}
           paginate={paginate}
           currentPage={currentPage}
           totalPages={totalPages}
@@ -308,10 +291,13 @@ function ExerciseLibPage() {
 
       {/* Edit Modal */}
       {showEditModal && (
-        <div className="trainer-modal-overlay">
-          <div className="trainer-modal-content">
-            <h2>Edit Exercise</h2>
+        <div className="common-modal-overlay">
+          <div className="common-medium-modal-content">
 
+            <div className="common-modal-header">
+              <h1>Edit Exercise</h1>
+            </div>
+            
             <div className="trainer-model-data-field-row">
               <div className="trainer-model-data-field trainer-model-data-field-1">
                 <label htmlFor="Name">Name</label>
@@ -348,19 +334,26 @@ function ExerciseLibPage() {
               </div>
             </div>
 
-            <div className="modal-buttons">
+            <div className="common-modal-footer-layout">
+              <button className="common-modal-buttons-close" onClick={() => setShowEditModal(false)}>Close</button>
+              <button className="common-modal-buttons-success" onClick={handleEditExercise}>Update</button>
+            </div>
+
+            {/* <div className="modal-buttons">
               <button className="view-button" onClick={handleEditExercise}>Update</button>
               <button className="cancel-button" onClick={() => setShowEditModal(false)}>Cancel</button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
 
       {/* Create Modal */}
       {showCreateModal && (
-        <div className="trainer-modal-overlay">
-          <div className="trainer-modal-content">
-            <h2>Create Exercise</h2>
+        <div className="common-modal-overlay">
+          <div className="common-medium-modal-content">
+            <div className="common-modal-header">
+              <h1>Create Exercise</h1>
+            </div>
 
             <div className="trainer-model-data-field-row">
               <div className="trainer-model-data-field trainer-model-data-field-1">
@@ -398,19 +391,24 @@ function ExerciseLibPage() {
               </div>
             </div>
 
-            <div className="modal-buttons">
+            <div className="common-modal-footer-layout">
+              <button className="common-modal-buttons-close" onClick={handleCreateExerciseClose}>Close</button>
+              <button className="common-modal-buttons-success" onClick={handleCreateExercise}> Add </button>
+            </div>
+
+            {/* <div className="modal-buttons">
               <button className="view-button" onClick={handleCreateExercise}>Add</button>
               <button className="cancel-button" onClick={handleCreateExerciseClose}>Close</button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
 
       {/* Empty state */}
-      {users.length === 0 && (
+      {exercises.length === 0 && (
         <div className='appointments-default-message'>
-          <FaUsers className='appointments-default-logo' />
-          <div className='appointments-default-text'>No Users Yet</div>
+          <FaDumbbell className='appointments-default-logo' />
+          <div className='appointments-default-text'>No Exercises Found</div>
         </div>
       )}
 

@@ -125,13 +125,13 @@ const InvoiceDocument = ({ patientData, selectedApptId, invoiceData = [] , invoi
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
             <Text>
               <Text style={styles.label}>Name: </Text>
-              {patientData.name || "-"}
+              {patientData.patient_name || "-"}
             </Text>
             <Text>
               <Text style={styles.label}>Age: </Text>
-              {patientData.age || "-"}{"   "}
+              {patientData.patient_age || "-"}{"   "}
               <Text style={styles.label}>Sex: </Text>
-              {patientData.sex || "-"}
+              {patientData.patient_sex || "-"}
             </Text>
           </View>
         </View>

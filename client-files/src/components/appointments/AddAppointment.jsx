@@ -123,29 +123,6 @@ function AddAppointment() {
         fetchUsers(selectedSession);
     };
 
-    // const handleAddPatient = () => {
-    //     axios.post(`${API_URL}/api/patients/add-new-patient`, newPatient)
-    //         .then(() => {
-    //             setShowAddModal(false);
-    //             setNewPatient(patient_data);
-    //             fetchPatients(); // refresh list
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error adding patient:', error);
-    //         });
-    // };
-
-    // const handleAddAppointment = () => {
-    //     axios.post(`${API_URL}/api/appointments/add-new-appointment`, newAppointment)
-    //         .then(() => {
-    //             setNewAppointment(appointment_data);
-    //             navigate("/appointments");
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error adding appointment:', error);
-    //         });
-    // };
-
     const handleAddPatient = () => {
         const { name, sex, age, contact_num } = newPatient;
 
@@ -188,10 +165,10 @@ function AddAppointment() {
     };
 
     return (
-        <div className="profile-page">
-            <div className="create-appointment-header">
+        <div className="common-page-layout">
+            <div className="common-page-header">
                 <h1>Create Appointment</h1>
-                <button className="add-patient-button" onClick={() => setShowAddModal(true)}>Add Patient</button>
+                <button className="primary-button" onClick={() => setShowAddModal(true)}>Add Patient</button>
             </div>
 
             {/* 🔍 Search by Phone */}
@@ -367,51 +344,58 @@ function AddAppointment() {
 
             </div>
 
-            <div className="profile-save">
-                <button onClick={handleAddAppointment}>Create</button>
+            <div className="common-page-footer-layout">
+                <button className='common-footer-bsave' onClick={handleAddAppointment}>Create</button>
             </div>
 
             {showAddModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Add Patient</h2>
-                        <label>Name</label>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
-                        />
-                        <label>Sex</label>
+                <div className="common-modal-overlay">
+                    <div className="common-modal-content">
 
-                        <select
-                            id="sex"
-                            onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
-                        >
-                            <option value="">Select Sex</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
+                        <div className="common-modal-header">
+                            <h1>Add Patient</h1>
+                        </div>
 
-                        <label>Age</label>
-                        <input
-                            type="number"
-                            placeholder="Age"
-                            onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
-                        />
-                        <label>Contact Number</label>
-                        <input
-                            type="number"
-                            placeholder="Contact Number"
-                            onChange={(e) => setNewPatient({ ...newPatient, contact_num: e.target.value })}
-                        />
+                        <div className="common-modal-body">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                placeholder="Enter Name"
+                                onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
+                            />
+                            <label>Sex</label>
 
-                        <div className="modal-buttons">
-                            <button className="view-button" onClick={handleAddPatient}>Add</button>
-                            <button className="cancel-button" onClick={() => setShowAddModal(false)}>Cancel</button>
+                            <select
+                                id="sex"
+                                onChange={(e) => setNewPatient({ ...newPatient, sex: e.target.value })}
+                            >
+                                <option value="">Select Sex</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+
+                            <label>Age</label>
+                            <input
+                                type="number"
+                                placeholder="Enter Age"
+                                onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
+                            />
+                            <label>Contact Number</label>
+                            <input
+                                type="number"
+                                placeholder=" Enter Number"
+                                onChange={(e) => setNewPatient({ ...newPatient, contact_num: e.target.value })}
+                            />
+                        </div>
+
+                        <div className="common-modal-footer-layout">
+                            <button className="common-modal-buttons-close" onClick={() => setShowAddModal(false)}>Close</button>
+                            <button className="common-modal-buttons-success" onClick={handleAddPatient}> Add </button>
                         </div>
                     </div>
                 </div>
             )}
+
             <Toaster
                 position="top-right"
                 toastOptions={{

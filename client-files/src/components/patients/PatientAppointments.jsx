@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
+import { FaEye } from 'react-icons/fa';
+
 import axios from 'axios';
 
 import { useAuth } from "../../context/AuthContext";
@@ -56,7 +58,7 @@ function PatientAppointments() {
     return (
         <div className="common-page-layout">
             <div className="common-page-header">
-                <h1>Patient: {patientId} ({patientName})</h1>
+                <h1>Patient Appointments: {patientName} ( ID:{patientId})</h1>
                 {/* <div className="filters">
 
                     <select
@@ -104,8 +106,14 @@ function PatientAppointments() {
                                         {appointment.status}
                                     </span>
                                 </td>
-                                <td>
-                                    <button className="primary-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button>
+                                <td className='commn-table-action-td'>
+                                    <div className='common-table-action-btn-layout'>
+                                        <FaEye
+                                            className='common-table-action-btn'
+                                            onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}
+                                        />
+                                    </div>
+                                    {/* <button className="primary-button" onClick={() => navigate(`/appointmentDetails/${appointment.patient_id}/${appointment.id}`)}>View</button> */}
                                 </td>
                             </tr>
                         ))}

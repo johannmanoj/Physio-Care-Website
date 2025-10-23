@@ -13,3 +13,53 @@
 .primary-button:hover {
   background-color: rgb(1, 130, 180);
 }
+
+
+/* .common-readonly-sections {
+  border: 2px solid #334155;
+  border-radius: 15px;
+  margin: 20px 20px;
+} */
+
+.common-field-edit-button {
+  width: 85px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 20px;
+  border: none;
+  background-color: #36455b;
+  color: rgb(210, 210, 210);
+  margin-right: 20px;
+}
+
+.common-field-edit-button:hover {
+  color: white;
+  background-color: #344258;
+
+}
+
+.common-readonly-sections h1 {
+  font-weight: bold;
+  font-size: 18px;
+  padding: 0px;
+  margin: 0px;
+  /* background-color: #1e293b; */
+  width: 100%;
+}
+
+.common-readonly-sections h2 {
+  font-weight: bold;
+  font-size: 16px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.common-readonly-sections-label {
+  margin-top: 10px;
+  color: white;
+  font-size: 16px;
+
+}

@@ -86,9 +86,10 @@ router.post('/update-invoice-url', async (req, res) => {
 router.post('/update-appointment-invoice-url', async (req, res) => {
   try {
     const { id, invoice_url } = req.body;
+    const pymt_status = "Billed"
 
-    await pool.query('UPDATE appointments SET invoice_url = ? WHERE id = ?',
-      [invoice_url, id]);
+    await pool.query('UPDATE appointments SET invoice_url=?, pymt_status=?  WHERE id=?',
+      [invoice_url, pymt_status, id]);
 
     res.status(201).json({ message: 'Patient details updated successfully' });
   } catch (err) {

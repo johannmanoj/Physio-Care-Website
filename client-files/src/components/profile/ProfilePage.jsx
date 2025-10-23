@@ -297,7 +297,7 @@ function ProfilePage() {
 
         <div className='data-field-row'>
           <div className='data-field data-field-4'>
-            <div>Current Password</div>
+            <label>Current Password</label>
             <input
               type="password"
               value={passwordData.currentpass}
@@ -305,7 +305,7 @@ function ProfilePage() {
             />
           </div>
           <div className='data-field data-field-4'>
-            <div>New Password</div>
+            <label>New Password</label>
             <input
               type="password"
               value={passwordData.newpassword}
@@ -313,7 +313,7 @@ function ProfilePage() {
             />
           </div>
           <div className='data-field data-field-4'>
-            <div>Confirm New Password</div>
+            <label>Confirm New Password</label>
             <input
               type="password"
               value={passwordData.confirmpassword}
@@ -328,23 +328,7 @@ function ProfilePage() {
       </div>
 
 
-      {/* <div className='common-page-footer-layout'>
-        <button className='common-footer-bsave' onClick={handleSave}>Save</button>
-      </div> */}
-
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: "#1e293b",
-            color: "#f8fafc",
-            border: "1px solid #334155",
-          }
-        }}
-      />
-
-
-
+      
       {showPersonalInfoModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -432,6 +416,17 @@ function ProfilePage() {
           </div>
         </div>
       )}
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#1e293b",
+            color: "#f8fafc",
+            border: "1px solid #334155",
+          }
+        }}
+      />
 
     </div>
   );

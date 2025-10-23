@@ -191,9 +191,10 @@ function AttendanceReportPage() {
             <EmployeesReportPage pageName={"AttendanceReportPage"} viewfunction={viewfunction} />
 
             {showAttendanceModal && selectedUser && (
-                <div className="modal-overlay">
+                <div className="common-modal-overlay">
                     <div className="modal-container">
                         {/* Header */}
+                        
                         <h2 className="modal-header">Attendance - {selectedUser.name}</h2>
 
                         {/* Year & Month Selection */}
@@ -264,8 +265,20 @@ function AttendanceReportPage() {
                             )}
                         </div>
 
+                        <div className="common-modal-footer-layout">
+                            <button className="common-modal-buttons-close" onClick={() => setShowAttendanceModal(false)}>Close</button>
+                            <button className="common-modal-buttons-success" onClick={() =>
+                                downloadPDF(
+                                    selectedUser,
+                                    selectedYear,
+                                    selectedMonth,
+                                    calculateFilteredAttendance
+                                )
+                            }> Download PDF </button>
+                        </div>
+
                         {/* Footer */}
-                        <div className="modal-footer">
+                        {/* <div className="modal-footer">
                             <button
                                 className="download-btn"
                                 onClick={() =>
@@ -285,7 +298,7 @@ function AttendanceReportPage() {
                             >
                                 Close
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             )}

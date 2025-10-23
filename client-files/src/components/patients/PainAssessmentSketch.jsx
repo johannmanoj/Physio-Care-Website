@@ -261,7 +261,6 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
     setSelectedShapeName(null);
   };
 
-
   const handleSaveSketch = () => {
     const annotations = {
       ellipses,
@@ -315,10 +314,6 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
         console.error('Error updating sketch:', error);
       });
   };
-
-
-
-
 
   const handleLoadSketch = () => {
     if (!selectedTitle) return;
@@ -389,18 +384,12 @@ const PainAssessmentSketch = ({ data, onDataChange, setShowSketchModal }) => {
       });
   };
 
-
-
-
-
   const handleNewSketch = () => {
     handleClear();
     setButtonView("save");
     setIsNewSketch(true); // new sketch → Save enabled, Update disabled
     setSelectedImage(null);
   };
-
-
 
   const openLoadPopup = () => {
     fetchSketches();  // 🔥 refresh list before showing popup

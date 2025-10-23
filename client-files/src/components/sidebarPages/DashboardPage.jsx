@@ -16,6 +16,7 @@ function DashboardPage() {
   const [appointmentData, setAppointmnetData] = useState([]);
   const [patientData, setPatientData] = useState([]);
   const [treatmentData, setTreatmentData] = useState([])
+  const [exerciseData, serExerciseData] = useState([])
   const { role, userId, branchId } = useAuth();
 
   useEffect(() => {
@@ -59,6 +60,16 @@ function DashboardPage() {
     axios.post(`${API_URL}/api/exercises/get-treatments-list`)
       .then((response) => {
         setTreatmentData(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching patient data:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.post(`${API_URL}/api/exercises/get-exercise-list`)
+      .then((response) => {
+        serExerciseData(response.data.data);
       })
       .catch((error) => {
         console.error('Error fetching patient data:', error);
@@ -110,12 +121,20 @@ function DashboardPage() {
           </div>
           {appointmentData.length > 0 && (
             <table className='db-appointment-table'>
+              <colgroup>
+                <col style={{ width: "40px" }} />
+                <col style={{ width: "50px" }} />
+                <col style={{ width: "50px" }} />
+                <col style={{ width: "50px" }} />
+                <col style={{ width: "50px" }} />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Appt No</th>
-                  <th>Name</th>
+                  <th>Patient ID</th>
                   <th>Date</th>
                   <th>Time</th>
+                  <th>Session</th>
                 </tr>
               </thead>
               <tbody>
@@ -123,9 +142,10 @@ function DashboardPage() {
                 {appointmentData.slice(0, 5).map((appointment) => (
                   <tr key={appointment.id}>
                     <td>{appointment.id}</td>
-                    <td>{appointment.name}</td>
+                    <td>{appointment.patient_id}</td>
                     <td>{appointment.date}</td>
                     <td>{appointment.time}</td>
+                    <td>{appointment.session_type}</td>
                   </tr>
                 ))}
               </tbody>
@@ -144,6 +164,12 @@ function DashboardPage() {
           </div>
           {patientData.length > 0 && (
             <table className='db-appointment-table'>
+              <colgroup>
+                <col style={{ width: "40px" }} />
+                <col style={{ width: "170px" }} />
+                <col style={{ width: "50px" }} />
+                <col style={{ width: "50px" }} />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Patient ID</th>
@@ -180,9 +206,14 @@ function DashboardPage() {
           </div>
           {patientData.length > 0 && (
             <table className='db-appointment-table'>
+              <colgroup>
+                <col style={{ width: "40px" }} />
+                <col style={{ width: "180px" }} />
+                <col style={{ width: "50px" }} />
+              </colgroup>
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th> Treatment ID</th>
                   <th>Treatment</th>
                   <th>Cost / hr</th>
                 </tr>
@@ -205,8 +236,38 @@ function DashboardPage() {
           )}
         </div>
         <div className='dashboard-card'>
-          <div className='dashboard-card-header'>Assessments</div>
-          <div className='dashboard-card-default-text'>No assessments Yet</div>
+          <div className='dashboard-card-header'>
+            <div className='dashboard-card-header-name'>Exercises</div>
+            <button className='dashboard-card-button' onClick={() => navigate("/exerciseLibPage")}>View All</button>
+          </div>
+          {exerciseData.length > 0 && (
+            <table className='db-appointment-table'>
+              <colgroup>
+                <col style={{ width: "20px" }} />
+                <col style={{ width: "200px" }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Exercise ID</th>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {exerciseData.slice(0, 5).map((exercise) => (
+                  <tr key={exercise.id}>
+                    <td>{exercise.id}</td>
+                    <td>{exercise.name}</td>
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {treatmentData.length == 0 && (
+            <div className='dashboard-card-default-text'>
+              <div>No Treatments Yet</div>
+            </div>
+          )}
         </div>
       </div>
     </div>

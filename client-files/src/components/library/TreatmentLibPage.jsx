@@ -16,7 +16,9 @@ function TreatmentLibPage() {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage] = useState(10);
+  const [perPage] = useState(10);
+  const [totalTreatments, setTotalTreatments] = useState(0);
+  // const [usersPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
 
   const [showAddModal, setShowAddModal] = useState(false);
@@ -24,23 +26,54 @@ function TreatmentLibPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editUser, setEditUser] = useState({ id: '', treatment: '', rate: '' });
 
-
+  // Fetch page whenever branch, search or page changes
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [branchId, searchTerm, currentPage]);
 
-  const fetchUsers = () => {
-    axios.post(`${API_URL}/api/exercises/get-treatments-list`)
-      .then((response) => {
-        setUsers(response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching users:', error);
-      })
-      .finally(() => {
-        setLoading(false); // ✅ stop loading after request finishes
+  // Reset to page 1 when searchTerm changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(`${API_URL}/api/exercises/get-all-treatments-list`, {
+        branch_id: branchId,
+        search: searchTerm,
+        page: currentPage,
+        limit: perPage,
       });
+
+      // backend should return { data: [...], total: N }
+      setUsers(res.data.data || []);
+      setTotalTreatments(typeof res.data.total === 'number' ? res.data.total : (res.data.total || 0));
+    } catch (err) {
+      console.error('Error fetching treatments:', err);
+      toast.error("Failed to fetch treatments");
+    } finally {
+      setLoading(false);
+    }
   };
+
+
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
+
+  // const fetchUsers = () => {
+  //   axios.post(`${API_URL}/api/exercises/get-treatments-list`)
+  //     .then((response) => {
+  //       setUsers(response.data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching users:', error);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false); // ✅ stop loading after request finishes
+  //     });
+  // };
 
   const handleAddUser = () => {
     const { name, rate } = newUser;
@@ -101,20 +134,20 @@ function TreatmentLibPage() {
     }
   };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.treatment.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
-  });
+  const totalPages = Math.ceil(totalTreatments / perPage);
+  const paginate = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) setCurrentPage(pageNumber);
+  };
 
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  var page_count = `Showing ${indexOfFirstUser + 1} to ${Math.min(indexOfLastUser, filteredUsers.length)} of ${filteredUsers.length}`
+  const indexOfFirst = (currentPage - 1) * perPage;
+  const indexOfLast = indexOfFirst + users.length;
+  const page_count = `Showing ${indexOfFirst + 1} to ${indexOfLast} of ${totalTreatments}`;
 
 
-  if (loading) { return <p></p>; }
+
+
+
+  // if (loading) { return <p></p>; }
   return (
     <div className="common-page-layout">
       <div className="common-page-header">
@@ -136,6 +169,12 @@ function TreatmentLibPage() {
 
       <div className="common-table-wrapper">
         <table className="common-table">
+          <colgroup>
+            <col style={{ width: "40px" }} />
+            <col style={{ width: "100px" }} />
+            <col style={{ width: "200px" }} />
+            <col style={{ width: "80px" }} />
+          </colgroup>
           <thead>
             <tr>
               <th>ID</th>
@@ -145,7 +184,7 @@ function TreatmentLibPage() {
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map(user => (
+            {users.map(user => (
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.treatment}</td>
@@ -183,8 +222,8 @@ function TreatmentLibPage() {
       <div className="table-footer">
         <PaginationFooter
           page_count={page_count}
-          playersPerPage={usersPerPage}
-          totalPlayers={filteredUsers.length}
+          playersPerPage={perPage}
+          totalPlayers={totalTreatments}
           paginate={paginate}
           currentPage={currentPage}
           totalPages={totalPages}
@@ -193,27 +232,33 @@ function TreatmentLibPage() {
 
       {/* Add User Modal */}
       {showAddModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Add New Treatment</h2>
-            <label htmlFor="Name">Name</label>
-            <input
-              type="text"
-              placeholder="Name"
-              value={newUser.name}
-              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-            />
-            <label htmlFor="Email">Rate (₹)</label>
-            <input
-              type="number"
-              placeholder="Rate"
-              value={newUser.rate}
-              onChange={(e) => setNewUser({ ...newUser, rate: e.target.value })}
-            />
+        <div className="common-modal-overlay">
+          <div className="common-modal-content">
 
-            <div className="modal-buttons">
-              <button className="view-button" onClick={handleAddUser}>Save</button>
-              <button className="cancel-button" onClick={() => setShowAddModal(false)}>Cancel</button>
+            <div className="common-modal-header">
+              <h1>Add New Treatment</h1>
+            </div>
+
+            <div className="common-modal-body">
+              <label htmlFor="Name">Name</label>
+              <input
+                type="text"
+                placeholder="Name"
+                value={newUser.name}
+                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              />
+              <label htmlFor="Email">Rate (₹)</label>
+              <input
+                type="number"
+                placeholder="Rate"
+                value={newUser.rate}
+                onChange={(e) => setNewUser({ ...newUser, rate: e.target.value })}
+              />
+            </div>
+
+            <div className="common-modal-footer-layout">
+              <button className="common-modal-buttons-close" onClick={() => setShowAddModal(false)}>Close</button>
+              <button className="common-modal-buttons-success" onClick={handleAddUser}> Add </button>
             </div>
           </div>
         </div>
@@ -221,33 +266,41 @@ function TreatmentLibPage() {
 
       {/* Edit User Modal */}
       {showEditModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Edit Treatment</h2>
-            <label htmlFor="Id">Treatment Id</label>
-            <input
-              type="text"
-              value={editUser.id}
-              readOnly
-            />
-            <label htmlFor="Name">Name</label>
-            <input
-              type="text"
-              placeholder="Name"
-              value={editUser.treatment}
-              onChange={(e) => setEditUser({ ...editUser, treatment: e.target.value })}
-            />
-            <label htmlFor="Email">Rate (₹)</label>
-            <input
-              type="number"
-              placeholder="Rate"
-              value={editUser.rate}
-              onChange={(e) => setEditUser({ ...editUser, rate: e.target.value })}
-            />
-            <div className="modal-buttons">
-              <button className="view-button" onClick={handleEditUser}>Update</button>
-              <button className="cancel-button" onClick={() => setShowEditModal(false)}>Cancel</button>
+        <div className="common-modal-overlay">
+          <div className="common-modal-content">
+
+            <div className="common-modal-header">
+              <h1>Edit Treatment</h1>
             </div>
+
+            <div className="common-modal-body">
+              <label htmlFor="Id">Treatment Id</label>
+              <input
+                type="text"
+                value={editUser.id}
+                readOnly
+              />
+              <label htmlFor="Name">Name</label>
+              <input
+                type="text"
+                placeholder="Name"
+                value={editUser.treatment}
+                onChange={(e) => setEditUser({ ...editUser, treatment: e.target.value })}
+              />
+              <label htmlFor="Email">Rate (₹)</label>
+              <input
+                type="number"
+                placeholder="Rate"
+                value={editUser.rate}
+                onChange={(e) => setEditUser({ ...editUser, rate: e.target.value })}
+              />
+            </div>
+
+            <div className="common-modal-footer-layout">
+              <button className="common-modal-buttons-close" onClick={() => setShowEditModal(false)}>Close</button>
+              <button className="common-modal-buttons-success" onClick={handleEditUser}> Update </button>
+            </div>
+
           </div>
         </div>
       )}

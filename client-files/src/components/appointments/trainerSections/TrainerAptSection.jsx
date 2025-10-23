@@ -238,16 +238,21 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
 
                 {showCreateModal && (
                     <div>
-                        <div className="trainer-modal-overlay">
-                            <div className="trainer-modal-content">
-                                <h2>Create Exercise</h2>
+                        <div className="common-modal-overlay">
+                            <div className="common-medium-modal-content">
+                                <div className="common-modal-header">
+                                    <h1>Create Exercise</h1>
+                                </div>
+
+
+
 
                                 <div className="trainer-model-data-field-row">
                                     <div className="trainer-model-data-field trainer-model-data-field-1">
                                         <label htmlFor="Name">Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Name"
+                                            placeholder="Enter Name"
                                             value={createExercise.name}
                                             onChange={(e) => setCreateExercise({ ...createExercise, name: e.target.value })}
                                         />
@@ -260,7 +265,7 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
                                             name="Instructions"
                                             value={createExercise.instructions}
                                             onChange={(e) => setCreateExercise({ ...createExercise, instructions: e.target.value })}
-                                            placeholder="How to perform"
+                                            placeholder="Enter Instructions"
                                         />
                                     </div>
                                 </div>
@@ -277,10 +282,9 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
                                     </div>
                                 </div>
 
-
-                                <div className="modal-buttons">
-                                    <button className="view-button" onClick={() => handleCreateExercise()}>Add</button>
-                                    <button className="cancel-button" onClick={() => handleCreateExerciseClose(false)}>Close</button>
+                                <div className="common-modal-footer-layout">
+                                    <button className="common-modal-buttons-close" onClick={() => handleCreateExerciseClose(false)}>Close</button>
+                                    <button className="common-modal-buttons-success" onClick={() => handleCreateExercise()}> Add </button>
                                 </div>
                             </div>
                         </div>
@@ -289,48 +293,55 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
 
                 {showAddModal && (
                     <div>
-                        <div className="modal-overlay">
-                            <div className="modal-content">
-                                <h2>Add Exercise</h2>
-                                <label htmlFor="Name">Name</label>
-                                <select
-                                    id="exercise"
-                                    value={newExercise.exercise_id}
-                                    onChange={(e) => {
-                                        const selected = exercises.find(ex => ex.id === parseInt(e.target.value));
-                                        setNewExercise({
-                                            ...newExercise,
-                                            exercise_id: selected?.id || '',
-                                            exercise_name: selected?.name || ''
-                                        });
-                                    }}
-                                >
-                                    <option value="">Select Exercise</option>
-                                    {exercises.map((exercise) => (
-                                        <option key={exercise.id} value={exercise.id}>
-                                            {exercise.name}
-                                        </option>
-                                    ))}
-                                </select>
+                        <div className="common-modal-overlay">
+                            <div className="common-modal-content">
 
-                                <label htmlFor="Reps">Reps</label>
-                                <input
-                                    type="number"
-                                    placeholder="Reps"
-                                    value={newExercise.reps}
-                                    onChange={(e) => setNewExercise({ ...newExercise, reps: e.target.value })}
-                                />
+                                <div className="common-modal-header">
+                                    <h1>Add Exercise</h1>
+                                </div>
 
-                                <label htmlFor="Name">Sets</label>
-                                <input
-                                    type="number"
-                                    placeholder="Sets"
-                                    value={newExercise.sets}
-                                    onChange={(e) => setNewExercise({ ...newExercise, sets: e.target.value })}
-                                />
-                                <div className="modal-buttons">
-                                    <button className="view-button" onClick={() => handleAddExercise()}>Add</button>
-                                    <button className="cancel-button" onClick={() => setShowAddModal(false)}>Close</button>
+                                <div className="common-modal-body">
+                                    <label htmlFor="Name">Name</label>
+                                    <select
+                                        id="exercise"
+                                        value={newExercise.exercise_id}
+                                        onChange={(e) => {
+                                            const selected = exercises.find(ex => ex.id === parseInt(e.target.value));
+                                            setNewExercise({
+                                                ...newExercise,
+                                                exercise_id: selected?.id || '',
+                                                exercise_name: selected?.name || ''
+                                            });
+                                        }}
+                                    >
+                                        <option value="">Select Exercise</option>
+                                        {exercises.map((exercise) => (
+                                            <option key={exercise.id} value={exercise.id}>
+                                                {exercise.name}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <label htmlFor="Reps">Reps</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Reps"
+                                        value={newExercise.reps}
+                                        onChange={(e) => setNewExercise({ ...newExercise, reps: e.target.value })}
+                                    />
+
+                                    <label htmlFor="Name">Sets</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Sets"
+                                        value={newExercise.sets}
+                                        onChange={(e) => setNewExercise({ ...newExercise, sets: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="common-modal-footer-layout">
+                                    <button className="common-modal-buttons-close" onClick={() => setShowAddModal(false)}>Close</button>
+                                    <button className="common-modal-buttons-success" onClick={() => handleAddExercise()}> Add </button>
                                 </div>
 
                             </div>
@@ -340,35 +351,44 @@ const TrainerAptSection = ({ patient_id, appointment_id }) => {
 
                 {showViewModal && selectedExercise && (
                     <div>
-                        <div className="trainer-modal-overlay">
-                            <div className="trainer-modal-content">
-                                <h2>{selectedExercise.name}</h2>
+                        <div className="common-modal-overlay">
+                            <div className="common-medium-modal-content">
 
-                                <div className="exercise-images-grid">
-                                    {['img_1', 'img_2', 'img_3', 'img_4'].map((key, i) =>
-                                        selectedExercise[key] ? (
-                                            <img
-                                                key={i}
-                                                src={selectedExercise[key]}
-                                                alt={`${selectedExercise.name} step ${i + 1}`}
-                                                className="exercise-image"
-                                            />
-                                        ) : null
-                                    )}
+                                <div className="common-modal-header">
+                                    <h1>{selectedExercise.name}</h1>
                                 </div>
 
-                                <div className="trainer-model-data-field-row">
-                                    <div className="trainer-model-data-field trainer-model-data-field-1">
-                                        <label htmlFor="Name">How to Perform</label>
-                                        <textarea name="" id="" readOnly>
-                                            {selectedExercise.instructions}
-                                        </textarea>
+                                <div className="common-modal-body">
+
+                                    <div className="exercise-images-grid">
+                                        {['img_1', 'img_2', 'img_3', 'img_4'].map((key, i) =>
+                                            selectedExercise[key] ? (
+                                                <img
+                                                    key={i}
+                                                    src={selectedExercise[key]}
+                                                    alt={`${selectedExercise.name} step ${i + 1}`}
+                                                    className="exercise-image"
+                                                />
+                                            ) : null
+                                        )}
                                     </div>
+
+                                    <div className="trainer-model-data-field-row">
+                                        <div className="trainer-model-data-field trainer-model-data-field-1">
+                                            <label htmlFor="Name">How to Perform</label>
+                                            <textarea name="" id="" readOnly>
+                                                {selectedExercise.instructions}
+                                            </textarea>
+                                        </div>
+                                    </div>
+
                                 </div>
 
-                                <div className="modal-buttons">
-                                    <button className="cancel-button" onClick={() => setShowViewModal(false)}>Close</button>
+                                <div className="common-modal-footer-layout">
+                                    <button className="common-modal-buttons-close" onClick={() => setShowViewModal(false)}>Close</button>
                                 </div>
+
+
 
                             </div>
                         </div>

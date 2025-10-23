@@ -8,6 +8,7 @@ import './HomePage.css';
 import '../cssCommon/PageCss.css';
 import '../cssCommon/TableCss.css';
 import '../cssCommon/ElementsCss.css';
+import '../cssCommon/ModalCss.css';
 
 import DashboardPage from '../sidebarPages/DashboardPage';
 import AppointmentsPage from '../sidebarPages/AppointmentsPage';

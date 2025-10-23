@@ -1,3 +1,9 @@
+.invoice-treatment-add-button {
+    width: 70px;
+    margin-bottom: 12px;
+    margin-left: 10px;
+}
+
 .invoice-add-button {
     background-color: #00bf8a;
     color: white;

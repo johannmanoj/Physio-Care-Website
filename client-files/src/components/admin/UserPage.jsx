@@ -43,6 +43,7 @@ const UserPage = () => {
     const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false);
     const [showEmploymentInfoModal, setShowEmploymentInfoModal] = useState(false);
     const [showBankDetailsModal, setShowBankDetailsModal] = useState(false);
+    const [showSalaryProcessingModal, setShowSalaryProcessingModal] = useState(false);
 
 
     useEffect(() => {
@@ -68,6 +69,7 @@ const UserPage = () => {
             setShowPersonalInfoModal(false)
             setShowBankDetailsModal(false)
             setShowEmploymentInfoModal(false)
+            setShowSalaryProcessingModal(false)
         } catch (err) {
             console.error('Error updating Profile:', err);
             toast.error("Something went wrong!");
@@ -193,8 +195,8 @@ const UserPage = () => {
 
 
     return (
-        <div className="user-page-container">
-            <div className='common-page-header'>
+        <div className="profile-page">
+            <div className='profile-page-header'>
                 <h1>Employee : {employeeData.id}</h1>
             </div>
 
@@ -296,41 +298,25 @@ const UserPage = () => {
 
                 <div className='profile-info-header'>
                     <h1>Salary Processing</h1>
-                    {/* <button className='profile-edit-button' onClick={() => setShowBankDetailsModal(true)}><FaPencilAlt /> Edit</button> */}
+                    <button className='profile-edit-button' onClick={() => setShowSalaryProcessingModal(true)}><FaPencilAlt /> Edit</button>
                 </div>
 
                 <div className='data-field-row'>
                     <div className='data-field data-field-3'>
-                        <label>Monthly Salary</label>
-                        <input
-                            type="number"
-                            name="monthly_salary"
-                            value={employeeData.monthly_salary ?? ''}
-                            onChange={(e) => updateEmployeeData({ monthly_salary: e.target.value })}
-                            placeholder="Monthly Salary"
-                        />
+                        <h2>Monthly Salary</h2>
+                        <div className='profile-page-sections-label'>{employeeData.monthly_salary ?? ''}</div>
                     </div>
                     <div className='data-field data-field-3'>
-                        <label>PF</label>
-                        <input
-                            type="number"
-                            name="pf"
-                            value={employeeData.pf ?? ''}
-                            onChange={(e) => updateEmployeeData({ pf: e.target.value })}
-                            placeholder="PF"
-                        />
+                        <h2>PF</h2>
+                        <div className='profile-page-sections-label'>{employeeData.pf ?? ''}</div>
                     </div>
                     <div className='data-field data-field-3'>
-                        <label>Tax</label>
-                        <input
-                            type="number"
-                            name="tax"
-                            value={employeeData.tax ?? ''}
-                            onChange={(e) => updateEmployeeData({ tax: e.target.value })}
-                            placeholder="Tax"
-                        />
+                        <h2>Tax</h2>
+                        <div className='profile-page-sections-label'>{employeeData.tax ?? ''}</div>
                     </div>
                 </div>
+
+                
 
                 <div className='data-field-row'>
                     <div className='data-field data-field-3'>
@@ -368,6 +354,31 @@ const UserPage = () => {
 
                 </div>
 
+                {workingDays !== null && (
+                <div className='data-field-row'>
+                    <div className='data-field data-field-3'>
+                        <label>Working Days</label>
+                        <input
+                            type="number"
+                            value={workingDays}
+                            onChange={handleWorkingDaysChange}
+                            placeholder="Working Days"
+                        />
+                    </div>
+
+                    <div className='data-field data-field-3'>
+                        <button
+                            className="salary-calculate-button"
+                            onClick={handleUpdateWorkingDays}
+                        >
+                            Update
+                        </button>
+                    </div>
+                </div>
+
+
+            )}
+
             </div>
 
 
@@ -375,7 +386,7 @@ const UserPage = () => {
 
 
 
-            <div className='user-page-sub-heading'>Salary Processing</div>
+            {/* <div className='user-page-sub-heading'>Salary Processing</div>
 
             <div className='data-field-row'>
                 <div className='data-field data-field-3'>
@@ -469,12 +480,12 @@ const UserPage = () => {
                 </div>
 
 
-            )}
+            )} */}
 
-            <div className="common-page-footer-layout">
+            {/* <div className="common-page-footer-layout">
                 <button className='common-footer-bsave' onClick={handleSave}>Save</button>
-            </div>
-
+            </div> */}
+                
             <Toaster
                 position="top-right"
                 toastOptions={{
@@ -499,139 +510,198 @@ const UserPage = () => {
             />
 
             {/* {showCalculateModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
+                <div className="common-modal-overlay">
+                    <div className="common-modal-content">
                         <h2>Monthly Working Days</h2>
                     </div>
                 </div>
             )} */}
 
             {showPersonalInfoModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Personal Information</h2>
-                        <label>Name</label>
-                        <input
-                            name="name"
-                            value={employeeData.name ?? ''}
-                            onChange={(e) => updateEmployeeData({ name: e.target.value })}
-                            placeholder="Name"
-                        />
-                        <label>DOB</label>
-                        <input
-                            type="date"
-                            value={employeeData.dob ?? ''}
-                            onChange={(e) => updateEmployeeData({ dob: e.target.value })}
-                        />
-                        <label>Email</label>
-                        <input
-                            name="email"
-                            value={employeeData.email ?? ''}
-                            onChange={(e) => updateEmployeeData({ email: e.target.value })}
-                            placeholder="Email"
-                        />
-                        <label>Phone</label>
-                        <input
-                            type="number"
-                            name="phone"
-                            value={employeeData.phone ?? ''}
-                            onChange={(e) => updateEmployeeData({ phone: e.target.value })}
-                            placeholder="Phone"
-                        />
+                <div className="common-modal-overlay">
+                    <div className="common-modal-content">
 
-
-                        <div className="modal-buttons">
-                            <button className="view-button" onClick={handleSave}>Save</button>
-                            <button className="cancel-button" onClick={() => setShowPersonalInfoModal(false)}>Cancel</button>
+                        <div className="common-modal-header">
+                            <h1>Personal Information</h1>
                         </div>
+
+                        <div className="common-modal-body">
+                            <label>Name</label>
+                            <input
+                                name="name"
+                                value={employeeData.name ?? ''}
+                                onChange={(e) => updateEmployeeData({ name: e.target.value })}
+                                placeholder="Name"
+                            />
+                            <label>DOB</label>
+                            <input
+                                type="date"
+                                value={employeeData.dob ?? ''}
+                                onChange={(e) => updateEmployeeData({ dob: e.target.value })}
+                            />
+                            <label>Email</label>
+                            <input
+                                name="email"
+                                value={employeeData.email ?? ''}
+                                onChange={(e) => updateEmployeeData({ email: e.target.value })}
+                                placeholder="Email"
+                            />
+                            <label>Phone</label>
+                            <input
+                                type="number"
+                                name="phone"
+                                value={employeeData.phone ?? ''}
+                                onChange={(e) => updateEmployeeData({ phone: e.target.value })}
+                                placeholder="Phone"
+                            />
+                        </div>
+
+                        <div className="common-modal-footer-layout">
+                            <button className="common-modal-buttons-close" onClick={() => setShowPersonalInfoModal(false)}>Close</button>
+                            <button className="common-modal-buttons-success" onClick={handleSave}> Save </button>
+                        </div>
+
                     </div>
                 </div>
             )}
 
             {showEmploymentInfoModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Employment Information</h2>
-                        <label>Employee ID</label>
-                        <input
-                            name="id"
-                            value={employeeData.id ?? ''}
-                            onChange={(e) => updateEmployeeData({ id: e.target.value })}
-                            readOnly
-                        />
-                        <label htmlFor="Role">Role</label>
-                        <select
-                            value={employeeData.role}
-                            onChange={(e) => updateEmployeeData({ role: e.target.value })}
-                        >
-                            <option value="">Select Role</option>
-                            {user_roles.map((role) => (
-                                <option key={role} value={role}>{role}</option>
-                            ))}
-                        </select>
-                        <label>Joining Date</label>
-                        <input
-                            type="date"
-                            value={employeeData.joining_date ?? ''}
-                            onChange={(e) => updateEmployeeData({ joining_date: e.target.value })}
-                        />
-                        <label>Leaving Date</label>
-                        <input
-                            type="date"
-                            value={employeeData.leaving_date ?? ''}
-                            onChange={(e) => updateEmployeeData({ leaving_date: e.target.value })}
-                        />
+                <div className="common-modal-overlay">
+                    <div className="common-modal-content">
 
+                        <div className="common-modal-header">
+                            <h1>Employment Information</h1>
+                        </div>
 
-                        <div className="modal-buttons">
-                            <button className="view-button" onClick={handleSave}>Save</button>
-                            <button className="cancel-button" onClick={() => setShowEmploymentInfoModal(false)}>Cancel</button>
+                        <div className="common-modal-body">
+                            <label>Employee ID</label>
+                            <input
+                                name="id"
+                                value={employeeData.id ?? ''}
+                                onChange={(e) => updateEmployeeData({ id: e.target.value })}
+                                readOnly
+                            />
+                            <label htmlFor="Role">Role</label>
+                            <select
+                                value={employeeData.role}
+                                onChange={(e) => updateEmployeeData({ role: e.target.value })}
+                            >
+                                <option value="">Select Role</option>
+                                {user_roles.map((role) => (
+                                    <option key={role} value={role}>{role}</option>
+                                ))}
+                            </select>
+                            <label>Joining Date</label>
+                            <input
+                                type="date"
+                                value={employeeData.joining_date ?? ''}
+                                onChange={(e) => updateEmployeeData({ joining_date: e.target.value })}
+                            />
+                            <label>Leaving Date</label>
+                            <input
+                                type="date"
+                                value={employeeData.leaving_date ?? ''}
+                                onChange={(e) => updateEmployeeData({ leaving_date: e.target.value })}
+                            />
+                        </div>
+
+                        <div className="common-modal-footer-layout">
+                            <button className="common-modal-buttons-close" onClick={() => setShowEmploymentInfoModal(false)}>Close</button>
+                            <button className="common-modal-buttons-success" onClick={handleSave}> Save </button>
                         </div>
                     </div>
                 </div>
             )}
 
             {showBankDetailsModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Bank Details</h2>
+                <div className="common-modal-overlay">
+                    <div className="common-modal-content">
+                        <div className="common-modal-header">
+                            <h1>Bank Details</h1>
+                        </div>
 
-                        <label>Bank Name</label>
-                        <input
-                            name="bank_name"
-                            value={employeeData.bank_name ?? ''}
-                            onChange={(e) => updateEmployeeData({ bank_name: e.target.value })}
-                            placeholder="Bank Name"
-                        />
+                        <div className="common-modal-body">
+                            <label>Bank Name</label>
+                            <input
+                                name="bank_name"
+                                value={employeeData.bank_name ?? ''}
+                                onChange={(e) => updateEmployeeData({ bank_name: e.target.value })}
+                                placeholder="Bank Name"
+                            />
 
-                        <label>Account Holder Name</label>
-                        <input
-                            name="acc_holder_name"
-                            value={employeeData.acc_holder_name ?? ''}
-                            onChange={(e) => updateEmployeeData({ acc_holder_name: e.target.value })}
-                            placeholder="Account Holder Name"
-                        />
+                            <label>Account Holder Name</label>
+                            <input
+                                name="acc_holder_name"
+                                value={employeeData.acc_holder_name ?? ''}
+                                onChange={(e) => updateEmployeeData({ acc_holder_name: e.target.value })}
+                                placeholder="Account Holder Name"
+                            />
 
-                        <label>Account Number</label>
-                        <input
-                            type="number"
-                            name="acc_number"
-                            value={employeeData.acc_number ?? ''}
-                            onChange={(e) => updateEmployeeData({ acc_number: e.target.value })}
-                            placeholder="Account Number"
-                        />
+                            <label>Account Number</label>
+                            <input
+                                type="number"
+                                name="acc_number"
+                                value={employeeData.acc_number ?? ''}
+                                onChange={(e) => updateEmployeeData({ acc_number: e.target.value })}
+                                placeholder="Account Number"
+                            />
 
-                        <label>IFSC Code</label>
-                        <input
-                            name="ifsc_code"
-                            value={employeeData.ifsc_code ?? ''}
-                            onChange={(e) => updateEmployeeData({ ifsc_code: e.target.value })}
-                            placeholder="IFSC Code"
-                        />
+                            <label>IFSC Code</label>
+                            <input
+                                name="ifsc_code"
+                                value={employeeData.ifsc_code ?? ''}
+                                onChange={(e) => updateEmployeeData({ ifsc_code: e.target.value })}
+                                placeholder="IFSC Code"
+                            />
+                        </div>
 
-                        <div className="modal-buttons">
-                            <button className="view-button" onClick={handleSave}>Save</button>
-                            <button className="cancel-button" onClick={() => setShowBankDetailsModal(false)}>Cancel</button>
+                        <div className="common-modal-footer-layout">
+                            <button className="common-modal-buttons-close" onClick={() => setShowBankDetailsModal(false)}>Close</button>
+                            <button className="common-modal-buttons-success" onClick={handleSave}> Save </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showSalaryProcessingModal && (
+                <div className="common-modal-overlay">
+                    <div className="common-modal-content">
+                        <div className="common-modal-header">
+                            <h1>Bank Details</h1>
+                        </div>
+
+                        <div className="common-modal-body">
+                            <label>Monthly Salary</label>
+                            <input
+                                type="number"
+                                name="monthly_salary"
+                                value={employeeData.monthly_salary ?? ''}
+                                onChange={(e) => updateEmployeeData({ monthly_salary: e.target.value })}
+                                placeholder="Monthly Salary"
+                            />
+
+                            <label>PF</label>
+                            <input
+                                type="number"
+                                name="pf"
+                                value={employeeData.pf ?? ''}
+                                onChange={(e) => updateEmployeeData({ pf: e.target.value })}
+                                placeholder="PF"
+                            />
+
+                            <label>Tax</label>
+                            <input
+                                type="number"
+                                name="tax"
+                                value={employeeData.tax ?? ''}
+                                onChange={(e) => updateEmployeeData({ tax: e.target.value })}
+                                placeholder="Tax"
+                            />
+                        </div>
+
+                        <div className="common-modal-footer-layout">
+                            <button className="common-modal-buttons-close" onClick={() => setShowSalaryProcessingModal(false)}>Close</button>
+                            <button className="common-modal-buttons-success" onClick={handleSave}> Save </button>
                         </div>
                     </div>
                 </div>
